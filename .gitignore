@@ -4,3 +4,9 @@
 /RedSocial-war/nbproject/private/
 /RedSocial-ejb/nbproject/private/
 /nbproject/private/
+/build/
+/RedSocial-war/build/
+/RedSocial-war/dist/
+/RedSocial-ejb/dist/
+/RedSocial-ejb/build/
+/dist/
