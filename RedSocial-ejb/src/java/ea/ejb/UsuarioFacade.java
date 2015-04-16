@@ -6,9 +6,12 @@
 package ea.ejb;
 
 import ea.entity.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,4 +31,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
+    //Azahar: Método para buscar usuarios en el login.
+    //Devuelve el usuario si lo encuentra, y si no devuelve null.
+    public Usuario login(String email, String pass){
+        Usuario user = null;
+              
+        Query query = em.createNamedQuery("Usuario.findByEmailAndPassword");
+        query.setParameter("email", email);
+        query.setParameter("password", pass);
+          
+        try{
+            user = (Usuario) query.getSingleResult();                  
+        }
+        catch(NoResultException e){}
+        return user;
+    }    
 }
