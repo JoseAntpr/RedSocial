@@ -4,7 +4,16 @@
     Author     : Azahar
 --%>
 
+
+<%@page import="ea.entity.Post"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    List<Post> lista;
+
+    lista = (List) request.getAttribute("listaPost");
+
+%>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -80,10 +89,10 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="#"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
-								<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
+								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
 							  </li>
 							  <li>
 								<a href="#"><span class="badge">Notificación</span></a>
@@ -107,7 +116,31 @@
 								 <!-- main col left --> 
 								 <div class="col-sm-5">
 								   
-									  <div class="panel panel-default">
+                                                                     <%for (int i=lista.size()-1;i>=0;i--) {
+                                                                         Post p=lista.get(i);
+                                                                         
+                                                                     %>        
+                                                                    <div class="panel panel-default">
+                                                                        
+
+                                                                                <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
+										<div class="panel-body">
+										  
+                                                                                  <p><%= p.getFecha()%></p>
+                                                                                  <p><%= p.getDescripcion()%></p>
+                                                                                  <p>Información:</p>
+										  <p>45 Followers, <%= i+1%> Posts</p>
+										  
+										<p>
+                                                                                    <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
+										</p>
+                                                                                </div>
+                                                                                
+                                                                    </div>
+                                                                    <%
+                                                                        }
+                                                                    %>  
+									  <!--<div class="panel panel-default">
 										<div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
 										<div class="panel-body">
 										  <p class="lead">Urbanization</p>
@@ -117,8 +150,14 @@
 											<img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
 										  </p>
 										</div>
-									  </div>
+                                                                                
+									  </div>-->
 
+                                                                          
+                                                                          
+                                                                          
+                                                                          
+                                                                          
 								   
 									  <div class="panel panel-default">
 										<div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootstrap Examples</h4></div>

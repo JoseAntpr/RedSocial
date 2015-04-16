@@ -74,11 +74,11 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="#"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
-							  <li>
+							  <!--<li>
 								<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
-							  </li>
+							  </li>-->
 							  <li>
 								<a href="#"><span class="badge">Notificación</span></a>
 							  </li>
@@ -106,7 +106,6 @@
                                                                           <div class="well"> 
 										   <form class="form-horizontal" role="form" name="add" action="PostAddServlet" method="post" > <!-- enctype="multipart/form-data" -->
 											<h4>¿Qué estás pensando?</h4>
-                                                                                            <input class="form-control" type="text" name="titulo" placeholder="Escriba el título" />
                                                                                             <div class="form-group" style="padding:14px;">
                                                                                             <textarea class="form-control" name="descripcion" placeholder="Escriba el contenido del post"></textarea>
                                                                                             

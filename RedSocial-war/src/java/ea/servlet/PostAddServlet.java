@@ -12,8 +12,10 @@ import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,6 +34,7 @@ public class PostAddServlet extends HttpServlet {
 
     @EJB
     private PostFacade postFacade;
+    @EJB
     private UsuarioFacade usuarioFacade;
     
     /**
@@ -48,35 +51,53 @@ public class PostAddServlet extends HttpServlet {
         
         //get session of the request
         HttpSession session = request.getSession();
-
+        List<Post> listaPost;
+        
+        
+        BigDecimal idUsuario=new BigDecimal(1.0);
+       
+//        listaPost = this.postFacade.findByMuroIdUsuario(id_usuario);
+        
+        
         //Obtener ID de usuario logeado para pasar a MuroServlet
 //        String id=session.getId();
 //        Usuario u=usuarioFacade.find(id);
         
-        String tit=request.getParameter("titulo");
         String descrip=request.getParameter("descripcion");
         String img=request.getParameter("imagen");
         
-        BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0+"");
+        BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0);
+        
         //Añadir post con facade persist a base de datos
-        Post p=new Post(idPost);
+        Post p=new Post();
+        p.setIdPost(idPost);
         p.setDescripcion(descrip); //request.getParameter("postContenido")
         p.setFecha(new Date());
-        p.setImagen(tit);
+        p.setImagen(img);
         
-      
-        //this.postFacade.create(post);
+        //Lista Post de un Usuario
+        Usuario usuario=usuarioFacade.find(idUsuario);
+        listaPost=(List)usuario.getPostCollection();
         
-        //Creo que no es necesario se hace en MuroServlet
-        //Collection postCollection=usuario.getPostCollection();
-        //postCollection.add(post);
+        //Actualizamos la lista de usuarios en Post
+        ArrayList<Usuario> listaUsers = new ArrayList();
+        listaUsers.add(usuario);
+        p.setUsuarioCollection(listaUsers); 
         
-        //usuarioFacade.edit(u);
+        //Actualizamos la lista de Post del Usuario
+        listaPost.add(p);
         
+        //Añadimos el post a la BD
+        postFacade.create(p);
+    
         
+        // Actualizamos la relacion USUARIO-POST (MURO)
+        usuarioFacade.edit(usuario);
+        
+   
         //Enviarle al MuroServlet la id de usuario
 //        request.setAttribute("idUsuario", u.getIdUsuario());
-        
+       
         
         //Redirect to MuroServlet que mostrará con findAll todos los post en muro.jsp
         response.sendRedirect(request.getContextPath() + "/MuroServlet");

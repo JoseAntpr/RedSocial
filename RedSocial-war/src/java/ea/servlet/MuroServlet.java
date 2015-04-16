@@ -6,9 +6,12 @@
 package ea.servlet;
 
 import ea.ejb.PostFacade;
+import ea.ejb.UsuarioFacade;
 import ea.entity.Post;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -24,7 +27,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MuroServlet", urlPatterns = {"/MuroServlet"})
 public class MuroServlet extends HttpServlet {
-
+    
+    @EJB
+    private UsuarioFacade usuarioFacade;
     @EJB
     private PostFacade postFacade;
     
@@ -44,14 +49,22 @@ public class MuroServlet extends HttpServlet {
         String id_usuario;
         List<Post> listaPost;
         
-        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-                                                      // menú superior del muro
+//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
+//                                                      // menú superior del muro
+//        id_usuario="1.0";
         
-        listaPost = this.postFacade.findByMuroIdUsuario(id_usuario);
+        BigDecimal idUsuario=new BigDecimal(1.0);
+        
+        // Añadimos el post a la coleccion de post del miembro creador
+        Usuario usuario=usuarioFacade.find(idUsuario);
+        listaPost=(List)usuario.getPostCollection();
+        
+        
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
+       
         rd.forward(request, response);      
         
     }

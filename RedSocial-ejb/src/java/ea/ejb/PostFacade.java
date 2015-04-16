@@ -30,16 +30,16 @@ public class PostFacade extends AbstractFacade<Post> {
         super(Post.class);
     }
     
-        public List<Post> findByMuroIdUsuario (String id_usuario) {
-        Query q;
-        List<Post> listaPost;        
-        
-        q = em.createQuery("SELECT p FROM Post p, Muro m WHERE p.idPost=m.idPost AND m.idUsuario= :ID");
-        // Mirar lo del Muro ya que no está la clase en ea.entity
-        q.setParameter("ID", id_usuario);
-        listaPost = q.getResultList();
-        return listaPost;
-        
-    }
+//    public List<Post> findByMuroIdUsuario (String id_usuario) {
+//        Query q;
+//        List<Post> listaPost;        
+//        
+//        q = em.createQuery("SELECT p FROM Post p, Muro m WHERE p.idPost=m.idPost AND m.idUsuario= :ID");
+//        // Mirar lo del Muro ya que no está la clase en ea.entity
+//        q.setParameter("ID", id_usuario);
+//        listaPost = q.getResultList();
+//        return listaPost;
+//        
+//    }
     
 }
