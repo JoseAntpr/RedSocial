@@ -47,6 +47,8 @@ public class MuroServlet extends HttpServlet {
             throws ServletException, IOException {
        
         String id_usuario;
+        id_usuario = "1.0";
+        
         List<Post> listaPost;
         
 //        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
