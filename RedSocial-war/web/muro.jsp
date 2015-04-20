@@ -12,7 +12,6 @@
     List<Post> lista;
 
     lista = (List) request.getAttribute("listaPost");
-
 %>
 <!DOCTYPE html>
 <html lang="en">

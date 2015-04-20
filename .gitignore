@@ -9,4 +9,5 @@
 /RedSocial-war/dist/
 /RedSocial-ejb/dist/
 /RedSocial-ejb/build/
+/RedSocial-ejb/setup/glassfish-resources.xml
 /dist/
