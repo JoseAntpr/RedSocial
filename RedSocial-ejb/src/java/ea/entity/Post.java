@@ -7,15 +7,13 @@ package ea.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,11 +22,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author fran
+ * @author Jesus
  */
 @Entity
 @Table(name = "POST")
@@ -60,13 +57,12 @@ public class Post implements Serializable {
     @Size(max = 256)
     @Column(name = "IMAGEN")
     private String imagen;
-    @JoinTable(name = "MURO", joinColumns = {
-        @JoinColumn(name = "ID_POST", referencedColumnName = "ID_POST")}, inverseJoinColumns = {
-        @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")})
-    @ManyToMany
-    private Collection<Usuario> usuarioCollection;
-    @ManyToMany(mappedBy = "postCollection")
-    private Collection<Grupo> grupoCollection;
+    @JoinColumn(name = "ID_GRUPO", referencedColumnName = "ID_GRUPO")
+    @ManyToOne
+    private Grupo idGrupo;
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
+    @ManyToOne(optional = false)
+    private Usuario idUsuario;
 
     public Post() {
     }
@@ -113,22 +109,20 @@ public class Post implements Serializable {
         this.imagen = imagen;
     }
 
-    @XmlTransient
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
+    public Grupo getIdGrupo() {
+        return idGrupo;
     }
 
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
+    public void setIdGrupo(Grupo idGrupo) {
+        this.idGrupo = idGrupo;
     }
 
-    @XmlTransient
-    public Collection<Grupo> getGrupoCollection() {
-        return grupoCollection;
+    public Usuario getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setGrupoCollection(Collection<Grupo> grupoCollection) {
-        this.grupoCollection = grupoCollection;
+    public void setIdUsuario(Usuario idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Override

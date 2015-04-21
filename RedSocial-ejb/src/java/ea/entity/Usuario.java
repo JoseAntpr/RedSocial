@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author fran
+ * @author Jesus
  */
 @Entity
 @Table(name = "USUARIO")
@@ -44,9 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByLocalidad", query = "SELECT u FROM Usuario u WHERE u.localidad = :localidad"),
     @NamedQuery(name = "Usuario.findByProvincia", query = "SELECT u FROM Usuario u WHERE u.provincia = :provincia"),
     @NamedQuery(name = "Usuario.findByPais", query = "SELECT u FROM Usuario u WHERE u.pais = :pais"),
-    @NamedQuery(name = "Usuario.findByFechaIngreso", query = "SELECT u FROM Usuario u WHERE u.fechaIngreso = :fechaIngreso"),
-    //Azahar: Añado esta consulta para buscar usuarios en el login.
-    @NamedQuery(name = "Usuario.findByEmailAndPassword", query = "SELECT u FROM Usuario u WHERE u.email = :email AND u.password = :password")})
+    @NamedQuery(name = "Usuario.findByFechaIngreso", query = "SELECT u FROM Usuario u WHERE u.fechaIngreso = :fechaIngreso")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -95,8 +95,6 @@ public class Usuario implements Serializable {
     @Column(name = "FECHA_INGRESO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaIngreso;
-    @ManyToMany(mappedBy = "usuarioCollection")
-    private Collection<Post> postCollection;
     @JoinTable(name = "SEGUIDOR", joinColumns = {
         @JoinColumn(name = "ID_SEGUIDOR", referencedColumnName = "ID_USUARIO")}, inverseJoinColumns = {
         @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")})
@@ -108,6 +106,8 @@ public class Usuario implements Serializable {
     private Collection<Grupo> grupoCollection;
     @ManyToMany(mappedBy = "usuarioCollection")
     private Collection<Roles> rolesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+    private Collection<Post> postCollection;
 
     public Usuario() {
     }
@@ -207,15 +207,6 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Post> getPostCollection() {
-        return postCollection;
-    }
-
-    public void setPostCollection(Collection<Post> postCollection) {
-        this.postCollection = postCollection;
-    }
-
-    @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
     }
@@ -249,6 +240,15 @@ public class Usuario implements Serializable {
 
     public void setRolesCollection(Collection<Roles> rolesCollection) {
         this.rolesCollection = rolesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Post> getPostCollection() {
+        return postCollection;
+    }
+
+    public void setPostCollection(Collection<Post> postCollection) {
+        this.postCollection = postCollection;
     }
 
     @Override

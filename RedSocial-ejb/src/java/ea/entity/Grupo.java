@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author fran
+ * @author Jesus
  */
 @Entity
 @Table(name = "GRUPO")
@@ -57,16 +58,13 @@ public class Grupo implements Serializable {
     @Size(max = 256)
     @Column(name = "IMAGEN")
     private String imagen;
-    @JoinTable(name = "MURO_GRUPO", joinColumns = {
-        @JoinColumn(name = "ID_GRUPO", referencedColumnName = "ID_GRUPO")}, inverseJoinColumns = {
-        @JoinColumn(name = "ID_POST", referencedColumnName = "ID_POST")})
-    @ManyToMany
-    private Collection<Post> postCollection;
     @JoinTable(name = "MIEMBRO", joinColumns = {
         @JoinColumn(name = "ID_GRUPO", referencedColumnName = "ID_GRUPO")}, inverseJoinColumns = {
         @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")})
     @ManyToMany
     private Collection<Usuario> usuarioCollection;
+    @OneToMany(mappedBy = "idGrupo")
+    private Collection<Post> postCollection;
 
     public Grupo() {
     }
@@ -114,21 +112,21 @@ public class Grupo implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Post> getPostCollection() {
-        return postCollection;
-    }
-
-    public void setPostCollection(Collection<Post> postCollection) {
-        this.postCollection = postCollection;
-    }
-
-    @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {
         return usuarioCollection;
     }
 
     public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
         this.usuarioCollection = usuarioCollection;
+    }
+
+    @XmlTransient
+    public Collection<Post> getPostCollection() {
+        return postCollection;
+    }
+
+    public void setPostCollection(Collection<Post> postCollection) {
+        this.postCollection = postCollection;
     }
 
     @Override

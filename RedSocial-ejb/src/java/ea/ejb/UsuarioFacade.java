@@ -6,7 +6,6 @@
 package ea.ejb;
 
 import ea.entity.Usuario;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author fran
+ * @author Jesus
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -45,5 +44,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
         catch(NoResultException e){}
         return user;
-    }    
+    } 
+    
 }
