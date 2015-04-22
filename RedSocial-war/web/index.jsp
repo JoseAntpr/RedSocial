@@ -1,6 +1,6 @@
 <%
 	//redirect to the grupo servlet
-	response.sendRedirect("GrupoServlet");
+	response.sendRedirect("MuroServlet");
     
     
 %>
