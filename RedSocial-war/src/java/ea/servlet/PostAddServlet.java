@@ -79,10 +79,10 @@ public class PostAddServlet extends HttpServlet {
         Usuario usuario=usuarioFacade.find(idUsuario);
         listaPost=(List)usuario.getPostCollection();
         
-        //Actualizamos la lista de usuarios en Post
-        ArrayList<Usuario> listaUsers = new ArrayList();
-        listaUsers.add(usuario);
-        p.setUsuarioCollection(listaUsers); 
+//        //Actualizamos la lista de usuarios en Post
+//        ArrayList<Usuario> listaUsers = new ArrayList();
+//        listaUsers.add(usuario);
+//        p.setUsuarioCollection(listaUsers); 
         
         //Actualizamos la lista de Post del Usuario
         listaPost.add(p);
