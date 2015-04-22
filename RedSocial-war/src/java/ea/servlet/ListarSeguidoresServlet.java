@@ -6,7 +6,6 @@
 package ea.servlet;
 
 import ea.ejb.UsuarioFacade;
-import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,12 +23,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Joseantpr
  */
-@WebServlet(name = "BuscarUsuarioServlet", urlPatterns = {"/BuscarUsuarioServlet"})
-public class BuscarUsuarioServlet extends HttpServlet {
+@WebServlet(name = "ListarSeguidoresServlet", urlPatterns = {"/ListarSeguidoresServlet"})
+public class ListarSeguidoresServlet extends HttpServlet {
     
     @EJB
     private UsuarioFacade usuarioFacade;
-   
+    
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,24 +42,35 @@ public class BuscarUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+         List<Usuario> ListaSeguidores=null;
+        
+        String x= request.getParameter("x");
+        BigDecimal idUsuario=new BigDecimal(3.0);
+        
+        
+       if(x.equals("seguidores")){
+          Usuario usuario=usuarioFacade.find(idUsuario);
+        
+        ListaSeguidores=(List)usuario.getUsuarioCollection1();
        
+       }else if(x.equals("Seguir")){
+         Usuario usuario=usuarioFacade.find(idUsuario);
+         ListaSeguidores=(List)usuario.getUsuarioCollection();
+                
+        }else if(x.equals("usuariosSeguir")){
+             ListaSeguidores=usuarioFacade.findAll();
+            
+        }
         
-        List<Usuario> listaUsuario;
-        
-        BigDecimal idUsuario=new BigDecimal(1.0);
-        
-         listaUsuario=usuarioFacade.findAll();
-        
-        
-        
-        
-        request.setAttribute("listaUsuario", listaUsuario); //Para mandar listaPost a muro.jsp
+        request.setAttribute("listaSeguidores", ListaSeguidores); 
         
         RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/listaUsuarios.jsp");
+        rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
        
-        rd.forward(request, response); 
+        rd.forward(request, response);
         
+      
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

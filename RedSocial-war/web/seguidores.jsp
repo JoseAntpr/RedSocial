@@ -1,9 +1,8 @@
 <%-- 
-    Document   : listaUsuarios
-    Created on : 21-abr-2015, 19:04:34
+    Document   : seguidores.jsp
+    Created on : 22-abr-2015, 17:03:46
     Author     : Joseantpr
 --%>
-
 
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.List"%>
@@ -11,7 +10,7 @@
 <%
     List<Usuario> listaUsuario;
 
-    listaUsuario = (List) request.getAttribute("listaUsuario");
+    listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -121,10 +120,12 @@
 
 
                                         <%
-                                            BigDecimal idUsuario = new BigDecimal(1.0);
-                                            for (int i = 0; i < listaUsuario.size() - 1; i++) {
-                                                if (listaUsuario.get(i).getIdUsuario() != idUsuario) {
-                                                    Usuario u = listaUsuario.get(i);%> 
+                                            BigDecimal idUsuario = new BigDecimal(3.0);
+                                            for (int i = 0; i < listaUsuario.size(); i++) {
+                                                if (!listaUsuario.get(i).getIdUsuario().equals(idUsuario) ) {
+                                                    Usuario u = listaUsuario.get(i);
+                                                    
+                                        %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
@@ -137,9 +138,10 @@
 
                                             </div>
                                         </div> 
-                                        <%  }
-
+                                        <%  
+                                                }
                                             }%> 
+                                            
 
 
 
