@@ -6,6 +6,7 @@
 package ea.ejb;
 
 import ea.entity.Post;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,12 +31,12 @@ public class PostFacade extends AbstractFacade<Post> {
         super(Post.class);
     }
     
-    public List<Post> findByMuroIdUsuario (String id_usuario) {
+    public List<Post> findByMuroIdUsuario (BigDecimal id_usuario) {
         Query q;
         List<Post> listaPost;        
         
-        q = em.createQuery("SELECT p FROM Post p WHERE p.usuario.idUsuario :ID ORDER BY p.idPost DESC");
-        // Mirar lo del Muro ya que no está la clase en ea.entity
+        q = em.createQuery("SELECT p FROM Post p WHERE p.idUsuario.idUsuario=:ID ORDER BY p.idPost DESC");
+        
         q.setParameter("ID", id_usuario);
         listaPost = q.getResultList();
         return listaPost;

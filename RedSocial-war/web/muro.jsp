@@ -115,7 +115,9 @@
 								 <!-- main col left --> 
 								 <div class="col-sm-5">
 								   
-                                                                     <%for (int i=lista.size()-1;i>=0;i--) {
+                                                                     
+                                                                     
+                                                                     <%for (int i=0;i<lista.size();i++) { 
                                                                          Post p=lista.get(i);
                                                                          
                                                                      %>        
@@ -128,7 +130,7 @@
                                                                                   <p><%= p.getFecha()%></p>
                                                                                   <p><%= p.getDescripcion()%></p>
                                                                                   <p>Información:</p>
-										  <p>45 Followers, <%= i+1%> Posts</p>
+										  <p>45 Followers, <%= p.getIdPost() %> Posts</p>
 										  
 										<p>
                                                                                     <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">

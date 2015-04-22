@@ -47,20 +47,18 @@ public class MuroServlet extends HttpServlet {
             throws ServletException, IOException {
        
         String id_usuario;
-        id_usuario = "1.0";
         
         List<Post> listaPost;
         
 //        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
 //                                                      // menú superior del muro
-//        id_usuario="1.0";
-        
         BigDecimal idUsuario=new BigDecimal(1.0);
         
-        // Añadimos el post a la coleccion de post del miembro creador
-        Usuario usuario=usuarioFacade.find(idUsuario);
-        listaPost=(List)usuario.getPostCollection();
+//        // Añadimos el post a la coleccion de post del miembro creador
+//        Usuario usuario=usuarioFacade.find(idUsuario);
+//        listaPost=(List)usuario.getPostCollection();
         
+        listaPost=postFacade.findByMuroIdUsuario(idUsuario);
         
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         

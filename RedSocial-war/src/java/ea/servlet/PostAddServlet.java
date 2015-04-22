@@ -68,16 +68,17 @@ public class PostAddServlet extends HttpServlet {
         
         BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0);
         
-        //Añadir post con facade persist a base de datos
-        Post p=new Post();
-        p.setIdPost(idPost);
-        p.setDescripcion(descrip); //request.getParameter("postContenido")
-        p.setFecha(new Date());
-        p.setImagen(img);
-        
         //Lista Post de un Usuario
         Usuario usuario=usuarioFacade.find(idUsuario);
         listaPost=(List)usuario.getPostCollection();
+        
+        //Añadir post con facade persist a base de datos
+        Post p=new Post();
+        p.setIdPost(idPost);
+        p.setIdUsuario(usuario);
+        p.setDescripcion(descrip); //request.getParameter("postContenido")
+        p.setFecha(new Date());
+        p.setImagen(img);
         
 //        //Actualizamos la lista de usuarios en Post
 //        ArrayList<Usuario> listaUsers = new ArrayList();
@@ -89,9 +90,8 @@ public class PostAddServlet extends HttpServlet {
         
         //Añadimos el post a la BD
         postFacade.create(p);
-    
         
-        // Actualizamos la relacion USUARIO-POST (MURO)
+//        // Actualizamos la relacion USUARIO-POST (MURO)
         usuarioFacade.edit(usuario);
         
    
