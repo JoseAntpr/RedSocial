@@ -5,7 +5,6 @@
  */
 package ea.servlet;
 
-import ea.ejb.PostFacade;
 import ea.ejb.UsuarioFacade;
 import ea.entity.Post;
 import ea.entity.Usuario;
@@ -23,17 +22,15 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Jesus
+ * @author Joseantpr
  */
-@WebServlet(name = "MuroServlet", urlPatterns = {"/MuroServlet"})
-public class MuroServlet extends HttpServlet {
+@WebServlet(name = "BuscarUsuarioServlet", urlPatterns = {"/BuscarUsuarioServlet"})
+public class BuscarUsuarioServlet extends HttpServlet {
     
     @EJB
     private UsuarioFacade usuarioFacade;
-    @EJB
-    private PostFacade postFacade;
-    
-    
+   
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,29 +43,22 @@ public class MuroServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        String id_usuario;
-        id_usuario = "1.0";
         
-        List<Post> listaPost;
-        
-//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-//                                                      // menú superior del muro
-//        id_usuario="1.0";
+        List<Usuario> listaUsuario;
         
         BigDecimal idUsuario=new BigDecimal(1.0);
         
-        // Añadimos el post a la coleccion de post del miembro creador
-        Usuario usuario=usuarioFacade.find(idUsuario);
-        listaPost=(List)usuario.getPostCollection();
+         listaUsuario=usuarioFacade.findAll();
         
         
-        request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
+        
+        
+        request.setAttribute("listaUsuario", listaUsuario); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
+        rd = this.getServletContext().getRequestDispatcher("/listaUsuarios.jsp");
        
         rd.forward(request, response); 
-        
         
     }
 
