@@ -5,9 +5,7 @@
  */
 package ea.servlet;
 
-import ea.ejb.PostFacade;
 import ea.ejb.UsuarioFacade;
-import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,17 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Jesus
+ * @author Joseantpr
  */
-@WebServlet(name = "MuroServlet", urlPatterns = {"/MuroServlet"})
-public class MuroServlet extends HttpServlet {
+@WebServlet(name = "ListarSeguidoresServlet", urlPatterns = {"/ListarSeguidoresServlet"})
+public class ListarSeguidoresServlet extends HttpServlet {
     
     @EJB
     private UsuarioFacade usuarioFacade;
-    @EJB
-    private PostFacade postFacade;
     
     
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,29 +42,35 @@ public class MuroServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+         List<Usuario> ListaSeguidores=null;
+        
+        String x= request.getParameter("x");
+        BigDecimal idUsuario=new BigDecimal(3.0);
+        
+        
+       if(x.equals("seguidores")){
+          Usuario usuario=usuarioFacade.find(idUsuario);
+        
+        ListaSeguidores=(List)usuario.getUsuarioCollection1();
        
-        String id_usuario;
+       }else if(x.equals("Seguir")){
+         Usuario usuario=usuarioFacade.find(idUsuario);
+         ListaSeguidores=(List)usuario.getUsuarioCollection();
+                
+        }else if(x.equals("usuariosSeguir")){
+             ListaSeguidores=usuarioFacade.findAll();
+            
+        }
         
-        List<Post> listaPost;
-        
-//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-//                                                      // menú superior del muro
-        BigDecimal idUsuario=new BigDecimal(1.0);
-        
-//        // Añadimos el post a la coleccion de post del miembro creador
-//        Usuario usuario=usuarioFacade.find(idUsuario);
-//        listaPost=(List)usuario.getPostCollection();
-        
-        listaPost=postFacade.findByMuroIdUsuario(idUsuario);
-        
-        request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
+        request.setAttribute("listaSeguidores", ListaSeguidores); 
         
         RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
+        rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
        
-        rd.forward(request, response); 
+        rd.forward(request, response);
         
-        
+      
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
