@@ -38,19 +38,25 @@ public class GrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // IDs
         BigDecimal id_grupo = new BigDecimal("1.0");
         Grupo grupo = grupoFacade.find(id_grupo);
         
+        // Posts del grupo actual
         Collection postCollection;
         postCollection = grupo.getPostCollection();
         request.setAttribute("postGrupo", postCollection);
        
+        // Miembros del grupo actual
         Collection miembroCollection;
         miembroCollection = grupo.getUsuarioCollection();
         request.setAttribute("miembrosGrupo", miembroCollection);
-
+        
+        // Nombre del grupo actual
         request.setAttribute("nombreGrupo", grupo.getNombre());
         
+        // Lista de todos los grupos
         Collection listaGrupos;
         listaGrupos = grupoFacade.findAll();
         request.setAttribute("listaGrupo", listaGrupos);
