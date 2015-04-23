@@ -9,7 +9,12 @@
 <%@page import="ea.entity.Usuario"%>
 <%
     List<Usuario> listaUsuario;
-
+   
+    Usuario usuarioPropio;
+    
+    usuarioPropio=(Usuario) request.getAttribute("usuario");
+    
+    
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
 
@@ -34,32 +39,34 @@
 
                     <!-- sidebar -->
                     <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-
-                        <ul class="nav">
-                            <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-                        </ul>
-
-                        <ul class="nav hidden-xs" id="lg-menu"></br></br>
-                            <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                            <li class="active">Nombre Apellido</li></br>
-
-                            <li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
-                            <li><a href="#grupos"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                            <li><a href="#amigos"><i class="glyphicon glyphicon-list"></i> Amigos</a></li></br>
-
-                        </ul>
-                        <ul class="list-unstyled hidden-xs" id="sidebar-footer">
-                        </ul>
-
-                        <!-- tiny only nav-->
-                        <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                            <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
-                        </ul>
-
-                    </div>
+					  
+						<ul class="nav">
+							<li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
+						</ul>
+					   
+						<ul class="nav hidden-xs" id="lg-menu"></br></br>
+                                                    <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
+                                                        <li class="active">Nombre Apellido</li></br>
+                                                        
+							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
+                                                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
+                                                        <li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
+                                                     
+						</ul>
+						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
+						</ul>
+					  
+						<!-- tiny only nav-->
+					  <ul class="nav visible-xs" id="xs-menu">
+							<li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
+							<li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
+							<li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
+							<li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
+						</ul>
+					  
+					</div>
                     <!-- /sidebar -->
 
                     <!-- main right col -->
@@ -74,14 +81,15 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </button>
-                                <a href="http://usebootstrap.com/theme/facebook" class="navbar-brand logo">Rs</a>
+                                <a  class="navbar-brand logo">Rs</a>
                             </div>
                             <nav class="collapse navbar-collapse" role="navigation">
                                 <form class="navbar-form navbar-left">
                                     <div class="input-group input-group-sm" style="max-width:360px;">
                                         <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                            <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
+                                           <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
                                         </div>
                                     </div>
                                 </form>
@@ -121,15 +129,25 @@
 
                                         <%
                                             BigDecimal idUsuario = new BigDecimal(3.0);
+                                            String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
-                                                if (!listaUsuario.get(i).getIdUsuario().equals(idUsuario) ) {
+                                           
+                                                if (!listaUsuario.get(i).getIdUsuario().equals(usuarioPropio.getIdUsuario()) ) {
                                                     Usuario u = listaUsuario.get(i);
+                                                
+                                                    s=usuarioPropio.siguesUsuario(u);
+                                                
+                                                    
+                                                    
                                                     
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
+                                                <%if(s.equals("siguiendo")){ %>
+                                                <button  class="btn btn-primary pull-right" type="submit">Siguiendo</button>
+                                                <% }else{%>
                                                 <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
-                                                
+                                                <%}%>
                                                 <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
 
                                             </div>
