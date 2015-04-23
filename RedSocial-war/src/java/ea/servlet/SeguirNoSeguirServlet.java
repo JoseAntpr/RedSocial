@@ -65,7 +65,7 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuario);
               usuarioFacade.edit(usuarioPropio);
               
-              //response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x=usuariosSeguir");
+              
               response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
            }
             
