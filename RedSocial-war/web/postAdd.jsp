@@ -1,9 +1,11 @@
+<%@page import="java.math.BigDecimal"%>
+<%@page import="ea.entity.Usuario"%>
 66<%-- 
     Document   : postAdd
     Created on : 21-mar-2015, 13:39:52
     Author     : Jesus
 --%>
-
+    
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,12 +30,11 @@
 					   
 						<ul class="nav hidden-xs" id="lg-menu"></br></br>
                                                     <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                                                        <li class="active">Nombre Apellido</li></br>
                                                         
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores%>"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
                                                         <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
@@ -83,7 +84,7 @@
 								<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
 							  </li>-->
 							  <li>
-								<a href="#"><span class="badge">Notificación</span></a>
+								<a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
 							  </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
