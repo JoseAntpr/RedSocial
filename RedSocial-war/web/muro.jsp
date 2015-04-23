@@ -91,7 +91,7 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
 								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
@@ -138,7 +138,8 @@
 										<p>
                                                                                     <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
                                                                                 
-                                                                                <form name="delete" action="PostDeleteServlet" method="post">                                                                   
+                                                                                <form name="delete" action="PostDeleteServlet" method="post">    
+                                                                                    <input type="hidden" value="usuario" name="tipo_borrado"/>
                                                                                     <input type="hidden" value="<%=p.getIdPost()%>" name="idGuardada"/> <!--Guardamos la id para recuperarla al borrar post-->
                                                                                     <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
                                                                                 </form>
