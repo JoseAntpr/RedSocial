@@ -12,6 +12,7 @@ import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -50,22 +51,19 @@ public class MuroServlet extends HttpServlet {
         
         List<Post> listaPost;
         
-
+        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
         BigDecimal idUsuario=new BigDecimal(1.0);
         
 //      
-        if(idUsuarioMiMuro.equals(idUsuario)){
+        if(idUsuarioMuro.equals(idUsuario)){
             listaPost=postFacade.findByMuroIdUsuario(idUsuario);
 
         }else{
             
-            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMiMuro);
+            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
         }
         
        
-        
-        listaPost=postFacade.findByMuroIdUsuario(idUsuario);
-        
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;
