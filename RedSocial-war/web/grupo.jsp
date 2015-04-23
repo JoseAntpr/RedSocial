@@ -96,7 +96,7 @@ p<%--
                                 </form>
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
                                     </li>
                                     <li>
                                         <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
@@ -141,7 +141,7 @@ p<%--
                                             <div class="panel-heading"> <h4>Miembros</h4></div>
                                             <% for (Usuario m : listaMiembros) {%>
                                             <div class="panel-body">
-                                                <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="#"><%= m.getNombre()%></a>
+                                                <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="MuroServlet?usuarioMuro=<%=m.getIdUsuario() %>"><%= m.getNombre()%></a>
                                                 <div class="clearfix"></div>
                                                 <hr>
                                             </div>

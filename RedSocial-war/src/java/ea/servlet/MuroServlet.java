@@ -51,27 +51,33 @@ public class MuroServlet extends HttpServlet {
         
         List<Post> listaPost;
         
-        BigDecimal idUsuarioMiMuro =new BigDecimal(request.getParameter("usuarioMuro"));
-//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-//                                                      // menú superior del muro
-        BigDecimal idUsuario=new BigDecimal(1.0);
+        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
+        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
+        
         
 //      
-        if(idUsuarioMiMuro.equals(idUsuario)){
+        if(idUsuarioMuro.equals(idUsuario)){
             listaPost=postFacade.findByMuroIdUsuario(idUsuario);
 
         }else{
             
-            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMiMuro);
+            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
         }
         
-        
+        request.setAttribute("idmuro", idUsuarioMuro);
+        request.setAttribute("idSesion", idUsuario);
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
+        
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
        
         rd.forward(request, response);
- 
+            
+        
+        
+      
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

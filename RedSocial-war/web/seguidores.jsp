@@ -133,7 +133,7 @@
 
 
                                         <%
-                                            BigDecimal idUsuario = new BigDecimal(3.0);
+                                           
                                             String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
                                            
@@ -164,7 +164,7 @@
                                                 <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                 </form>
                                                 <%}%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuro=<%= u.getIdUsuario()%>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                 
 
                                             </div>
