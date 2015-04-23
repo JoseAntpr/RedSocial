@@ -49,7 +49,7 @@ public class MuroServlet extends HttpServlet {
        
         
         
-        List<Post> listaPost=null;
+        List<Post> listaPost;
         
         BigDecimal idUsuarioMiMuro =new BigDecimal(request.getParameter("usuarioMuro"));
 //        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
@@ -61,6 +61,7 @@ public class MuroServlet extends HttpServlet {
             listaPost=postFacade.findByMuroIdUsuario(idUsuario);
 
         }else{
+            
             listaPost=postFacade.findByMuroIdUsuario(idUsuarioMiMuro);
         }
         
