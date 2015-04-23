@@ -210,6 +210,16 @@ public class Usuario implements Serializable {
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
+    
+    public String siguesUsuario(Usuario u){
+        String s="nosiguiendo";
+        for(int i=0;i<this.getUsuarioCollection().size();i++){
+            if(this.getUsuarioCollection().contains(u)){
+                s="siguiendo";
+            }
+        }
+        return s;
+    }
 
     @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {

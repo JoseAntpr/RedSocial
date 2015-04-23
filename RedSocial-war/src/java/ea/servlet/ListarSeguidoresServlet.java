@@ -44,27 +44,26 @@ public class ListarSeguidoresServlet extends HttpServlet {
             throws ServletException, IOException {
         
          List<Usuario> ListaSeguidores=null;
-        
-        String x= request.getParameter("x");
+        Usuario usuario=null;
+        String x= (String) request.getParameter("x");
         BigDecimal idUsuario=new BigDecimal(3.0);
-        
+        usuario=usuarioFacade.find(idUsuario);
         
        if(x.equals("seguidores")){
-          Usuario usuario=usuarioFacade.find(idUsuario);
+           
         
         ListaSeguidores=(List)usuario.getUsuarioCollection1();
        
        }else if(x.equals("Seguir")){
-         Usuario usuario=usuarioFacade.find(idUsuario);
+         
          ListaSeguidores=(List)usuario.getUsuarioCollection();
                 
         }else if(x.equals("usuariosSeguir")){
              ListaSeguidores=usuarioFacade.findAll();
             
         }
-        
+        request.setAttribute("usuario", usuario);
         request.setAttribute("listaSeguidores", ListaSeguidores); 
-        
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
        

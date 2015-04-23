@@ -9,7 +9,12 @@
 <%@page import="ea.entity.Usuario"%>
 <%
     List<Usuario> listaUsuario;
-
+   
+    Usuario usuarioPropio;
+    
+    usuarioPropio=(Usuario) request.getAttribute("usuario");
+    
+    
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
 
@@ -45,9 +50,9 @@
                                                         
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                                                        <li><form>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></form></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Sigues</a></li></br>
+                                                        <li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -124,15 +129,25 @@
 
                                         <%
                                             BigDecimal idUsuario = new BigDecimal(3.0);
+                                            String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
-                                                if (!listaUsuario.get(i).getIdUsuario().equals(idUsuario) ) {
+                                           
+                                                if (!listaUsuario.get(i).getIdUsuario().equals(usuarioPropio.getIdUsuario()) ) {
                                                     Usuario u = listaUsuario.get(i);
+                                                
+                                                    s=usuarioPropio.siguesUsuario(u);
+                                                
+                                                    
+                                                    
                                                     
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
+                                                <%if(s.equals("siguiendo")){ %>
+                                                <button  class="btn btn-primary pull-right" type="submit">Siguiendo</button>
+                                                <% }else{%>
                                                 <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
-                                                
+                                                <%}%>
                                                 <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
 
                                             </div>

@@ -46,9 +46,8 @@
                                                         
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                                                        <li><form>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></form></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Sigues</a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -206,7 +205,7 @@
 								  </div>
 								  
 								  <!-- main col right -->
-								  <div class="col-sm-7">
+								<!--  <div class="col-sm-7">
 									   
 										<div class="well"> 
 										   <form class="form">
@@ -216,7 +215,7 @@
 											  <span class="input-group-btn"><button class="btn btn-lg btn-primary" type="button">OK</button></span>
 											</div>
 										  </form>
-										</div>
+										</div>-->
 							  
 									   <!--<div class="panel panel-default">
 										 <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootply Editor &amp; Code Library</h4></div>
