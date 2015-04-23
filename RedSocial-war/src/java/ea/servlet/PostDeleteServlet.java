@@ -41,13 +41,22 @@ public class PostDeleteServlet extends HttpServlet {
         
         HttpSession session=request.getSession();
         
+        String tipoBorrado=request.getParameter("tipo_borrado");
+        
         String idGuardada=request.getParameter("idGuardada");
         BigDecimal idPost=new BigDecimal(idGuardada);
         
         postFacade.deletePost(idPost);
         
+        if(tipoBorrado.equals("usuario")){
+            response.sendRedirect(request.getContextPath()+"/MuroServlet");
+        }else if(tipoBorrado.equals("grupo")){
+            response.sendRedirect(request.getContextPath()+"/GrupoServlet");
+        }
         
-        response.sendRedirect(request.getContextPath()+"/MuroServlet");
+        
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
