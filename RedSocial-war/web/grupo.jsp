@@ -52,6 +52,7 @@ p<%--
                             <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
+                            <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
                             <% for(Grupo g : listaGrupo){ %>
                                 <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a></li>
                             <% } %>
