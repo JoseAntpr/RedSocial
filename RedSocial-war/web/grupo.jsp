@@ -52,12 +52,13 @@ p<%--
                             <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
+                            <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
                             <% for(Grupo g : listaGrupo){ %>
                                 <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a></li>
                             <% } %>
                             
                         </ul>
-                        
+
                         <!-- tiny only nav-->
                         <ul class="nav visible-xs" id="xs-menu">
                             <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
@@ -89,7 +90,7 @@ p<%--
                                         <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
                                         <div class="input-group-btn">
                                             <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                           <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
+                                            <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
                                         </div>
                                     </div>
                                 </form>
@@ -152,7 +153,7 @@ p<%--
                                     <div class="col-sm-7">
 
                                         <div class="well"> 
-                                            <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post">
+                                            <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                                                 <h4>¿Que te cuentas?</h4>
                                                 <div class="form-group" style="padding:14px;">
                                                     <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
@@ -168,14 +169,22 @@ p<%--
                                             </form>
                                         </div>
                                         <% for (int i = listaPost.size() - 1; i >= 0; i--) {
-                                                 Post p = listaPost.get(i);
-                                            //for (Post p : listaPost) {
+                                                Post p = listaPost.get(i);
+                                                //for (Post p : listaPost) {
                                         %>
                                         <div class="panel panel-default">
+                                            <% if (p.getImagen() != null) {%>
                                             <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
                                             <div class="panel-body">
-                                                
+                                                <% }%>
+
                                                 <p><%=p.getDescripcion()%></p>
+
+                                                <form name="delete" action="PostDeleteServlet" method="post">                                                                   
+                                                    <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
+                                                    <input type="hidden" name="tipo_borrado" value="grupo"/>
+                                                    <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                </form>
 
                                                 <!--<p>
                                                       <img src="assets/img/photo.jpg" height="28px" width="28px">

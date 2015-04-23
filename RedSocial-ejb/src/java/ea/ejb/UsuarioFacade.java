@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Jesus
+ * @author fran
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -45,6 +45,5 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         catch(NoResultException e){}
         return user;
     } 
-     
     
 }
