@@ -51,13 +51,13 @@
                             <div class="full col-sm-6">
                                 <!-- content -->                      
                                 <div class="row">                                   
-                                    <form method="POST" action="NuevoUsuarioServlet">
+                                    <form method="POST" action="CrearGrupoServlet" id="miFormulario">
                                         <h4 class="form-signin-heading">Crear grupo:</h4> 
                                         <div class="col-sm-8">
                                         <input type="text" name="nombre" placeholder="Nombre"  class="form-control" required autofocus></br>
                                         </div>
                                         <div class="col-sm-4">
-                                        <select name="privacidad" class="form-control">
+                                        <select form="miFormulario" name="privacidad" class="form-control ">
                                             <option value="publico">Público</option>
                                             <option value="privado">Privado</option>
                                         </select>
