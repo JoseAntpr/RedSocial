@@ -54,7 +54,11 @@
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores </a>
+                                                                
+                                                                
+                                                        </li>
+                                                        
                                                         <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
@@ -162,7 +166,7 @@
                                                 <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                 </form>
                                                 <%}%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
+                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="#"><%= u.getNombre() + " " + u.getApellidos()%></a></h4>
 
                                             </div>
                                             <div class="panel-body">

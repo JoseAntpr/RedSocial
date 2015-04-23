@@ -46,7 +46,7 @@ public class MuroServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        String id_usuario;
+        
         
         List<Post> listaPost;
         
@@ -58,6 +58,8 @@ public class MuroServlet extends HttpServlet {
 //        Usuario usuario=usuarioFacade.find(idUsuario);
 //        listaPost=(List)usuario.getPostCollection();
         
+       
+        
         listaPost=postFacade.findByMuroIdUsuario(idUsuario);
         
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
@@ -65,7 +67,11 @@ public class MuroServlet extends HttpServlet {
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
        
-        rd.forward(request, response); 
+        rd.forward(request, response);
+            
+        
+        
+      
         
         
     }
