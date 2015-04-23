@@ -1,4 +1,4 @@
-<%-- 
+66<%-- 
     Document   : postAdd
     Created on : 21-mar-2015, 13:39:52
     Author     : Jesus
@@ -111,7 +111,7 @@
                                                                                             
                                                                                             </div>
                                                                                             <button  class="btn btn-primary pull-right" type="submit">Post</button>
-                                                                                            <input type="file" name="imgagen" value="Introduzca"/>
+                                                                                            <input type="file" name="imagen" value="Introduzca"/>
                                                                                             
                                                                                             <!--<ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-film"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>-->
                                                                                    </form>

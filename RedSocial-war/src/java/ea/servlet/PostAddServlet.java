@@ -66,7 +66,8 @@ public class PostAddServlet extends HttpServlet {
         String descrip=request.getParameter("descripcion");
         String img=request.getParameter("imagen");
         
-        BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0);
+        BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0); //Falla al crear el post
+        //Hay que utilizar las sesiones para  que al eliminar y crear no repita idPost
         
         //Lista Post de un Usuario
         Usuario usuario=usuarioFacade.find(idUsuario);
@@ -74,7 +75,7 @@ public class PostAddServlet extends HttpServlet {
         
         //Añadir post con facade persist a base de datos
         Post p=new Post();
-        p.setIdPost(idPost);
+//        p.setIdPost(idPost);
         p.setIdUsuario(usuario);
         p.setDescripcion(descrip); //request.getParameter("postContenido")
         p.setFecha(new Date());

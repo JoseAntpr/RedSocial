@@ -43,4 +43,13 @@ public class PostFacade extends AbstractFacade<Post> {
         
     }
     
+    public void deletePost(BigDecimal id_post){
+        Query q;
+        
+        q=em.createQuery("DELETE FROM Post p WHERE p.idPost=:ID");
+        q.setParameter("ID", id_post);
+        
+        q.executeUpdate();
+    }
+    
 }
