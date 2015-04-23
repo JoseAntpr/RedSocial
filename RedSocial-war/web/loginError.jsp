@@ -3,7 +3,9 @@
     Created on : 19-mar-2015, 11:02:07
     Author     : Azahar
 --%>
-
+<%
+    String mensaje = (String) request.getAttribute("mensaje");
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +52,7 @@
                             <div class="full col-sm-4">
                                 <!-- content -->                      
                                 <div class="row">                                   
-                                    Usuario o contrasña incorrecto, por favor intentelo de nuevo.</br>
+                                    <% out.println(mensaje); %></br>
                                     <a href="login.jsp">Volver.</a>
                                 </div><!--/row-->
                             </div><!-- /col-94-->
