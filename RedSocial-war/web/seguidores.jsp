@@ -148,9 +148,16 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <%if(s.equals("siguiendo")){ %>
-                                                <button  class="btn btn-success pull-right" type="submit">Siguiendo</button>
+                                                
+                                                <form action="SeguirNoSeguirServlet" method="post">  
+                                                <input type="hidden" value="<%=u%>" name="usuarioDesSiguiendo" >
+                                                <input  class="btn btn-success pull-right" type="submit" name="Siguiendo" value="Siguiendo">
+                                                </form>
                                                 <% }else{%>
-                                                <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
+                                                <form action="SeguirNoSeguirServlet" method="post">
+                                                <input type="hidden" value="<%=u%>" name="usuarioSiguiendo" >
+                                                <input  class="btn btn-primary pull-right" type="submit" name="Seguir" value="Seguir">
+                                                </form>
                                                 <%}%>
                                                 <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
 
