@@ -5,16 +5,12 @@
  */
 package ea.servlet;
 
-import ea.ejb.PostFacade;
 import ea.ejb.UsuarioFacade;
-import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,16 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Jesus
+ * @author Joseantpr
  */
-@WebServlet(name = "MuroServlet", urlPatterns = {"/MuroServlet"})
-public class MuroServlet extends HttpServlet {
-    
+@WebServlet(name = "SeguirNoSeguirServlet", urlPatterns = {"/SeguirNoSeguirServlet"})
+public class SeguirNoSeguirServlet extends HttpServlet {
     @EJB
     private UsuarioFacade usuarioFacade;
-    @EJB
-    private PostFacade postFacade;
-    
+
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,35 +38,37 @@ public class MuroServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
-        
-        
-        List<Post> listaPost;
-        
-//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-//                                                      // menú superior del muro
-        BigDecimal idUsuario=new BigDecimal(1.0);
-        
-//        // Añadimos el post a la coleccion de post del miembro creador
-//        Usuario usuario=usuarioFacade.find(idUsuario);
-//        listaPost=(List)usuario.getPostCollection();
-        
-       
-        
-        listaPost=postFacade.findByMuroIdUsuario(idUsuario);
-        
-        request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
-        
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
-       
-        rd.forward(request, response);
+            BigDecimal idUsuarioPropio=new BigDecimal(3.0);
+            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
+            BigDecimal idUsuario;
+            Usuario usuario;
+            String ruta= (String) request.getParameter("ruta");
+            String button = (String) request.getParameter("botonSeguir");
             
-        
-        
-      
-        
-        
+            
+           if(button.equals("Seguir")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().add(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().add(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+           }else if(button.equals("Siguiendo")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().remove(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().remove(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              //response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x=usuariosSeguir");
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+           }
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

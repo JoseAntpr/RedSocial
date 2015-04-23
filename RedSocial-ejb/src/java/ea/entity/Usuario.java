@@ -217,10 +217,10 @@ public class Usuario implements Serializable {
      * @return 
      */
     public String siguesUsuario(Usuario u){
-        String s="nosiguiendo";
+        String s="no";
         for(int i=0;i<this.getUsuarioCollection().size();i++){
             if(this.getUsuarioCollection().contains(u)){
-                s="siguiendo";
+                s="si";
             }
         }
         return s;

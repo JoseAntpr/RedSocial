@@ -13,12 +13,11 @@
 <%
     
     List<Usuario> listaUsuario;
-   
+    String ruta;
     Usuario usuarioPropio;
     
     usuarioPropio=(Usuario) request.getAttribute("usuario");
-    
-    
+    ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
 
@@ -55,7 +54,11 @@
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores </a>
+                                                                
+                                                                
+                                                        </li>
+                                                        
                                                         <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
@@ -147,19 +150,23 @@
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <%if(s.equals("siguiendo")){ %>
+                                                <%if(s.equals("si")){ %>
                                                 
                                                 <form action="SeguirNoSeguirServlet" method="post">  
-                                                <input type="hidden" value="<%=u%>" name="usuarioDesSiguiendo" >
-                                                <input  class="btn btn-success pull-right" type="submit" name="Siguiendo" value="Siguiendo">
+                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >
+                                                <input type="hidden" value="Siguiendo" name="botonSeguir" >
+                                               <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                <input  class="btn btn-success pull-right" type="submit" name="boton" value="Siguiendo">
                                                 </form>
                                                 <% }else{%>
                                                 <form action="SeguirNoSeguirServlet" method="post">
-                                                <input type="hidden" value="<%=u%>" name="usuarioSiguiendo" >
-                                                <input  class="btn btn-primary pull-right" type="submit" name="Seguir" value="Seguir">
+                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioSeguir" >
+                                                <input type="hidden" value="Seguir" name="botonSeguir" >
+                                                <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                 </form>
                                                 <%}%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
+                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="#"><%= u.getNombre() + " " + u.getApellidos()%></a></h4>
 
                                             </div>
                                             <div class="panel-body">
