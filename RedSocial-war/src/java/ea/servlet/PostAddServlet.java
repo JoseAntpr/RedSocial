@@ -55,7 +55,7 @@ public class PostAddServlet extends HttpServlet {
         
         session.getAttribute("username");
         
-        BigDecimal idUsuario=new BigDecimal(1.0);
+         BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
        
 //        listaPost = this.postFacade.findByMuroIdUsuario(id_usuario);
         
@@ -69,8 +69,7 @@ public class PostAddServlet extends HttpServlet {
         
         if(!descrip.equals("")){
         
-            BigDecimal idPost=new BigDecimal(postFacade.count()+1*1.0); //Falla al crear el post
-            //Hay que utilizar las sesiones para  que al eliminar y crear no repita idPost
+            
 
             //Lista Post de un Usuario
             Usuario usuario=usuarioFacade.find(idUsuario);
@@ -105,7 +104,7 @@ public class PostAddServlet extends HttpServlet {
 
             //Redirect to MuroServlet que mostrará con findAll todos los post en muro.jsp
 
-            response.sendRedirect(request.getContextPath() + "/MuroServlet?usuarioMuro=1");
+            response.sendRedirect(request.getContextPath() + "/MuroServlet?usuarioMuro="+idUsuario);
         }else{
             response.sendRedirect(request.getContextPath() + "/postAdd.jsp");
         }

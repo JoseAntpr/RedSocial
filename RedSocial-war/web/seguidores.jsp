@@ -133,7 +133,7 @@
 
 
                                         <%
-                                            BigDecimal idUsuario = new BigDecimal(3.0);
+                                           
                                             String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
                                            

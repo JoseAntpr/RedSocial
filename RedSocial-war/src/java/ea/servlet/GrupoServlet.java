@@ -40,7 +40,7 @@ public class GrupoServlet extends HttpServlet {
             throws ServletException, IOException {
         
         // IDs
-        BigDecimal id_grupo = new BigDecimal("1.0");
+        BigDecimal id_grupo = (BigDecimal) request.getSession().getAttribute("idUser");;
         Grupo grupo = grupoFacade.find(id_grupo);
         
         // Posts del grupo actual

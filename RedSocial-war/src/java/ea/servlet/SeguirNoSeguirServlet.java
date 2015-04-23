@@ -38,7 +38,7 @@ public class SeguirNoSeguirServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            BigDecimal idUsuarioPropio=new BigDecimal(1.0);
+            BigDecimal idUsuarioPropio=(BigDecimal) request.getSession().getAttribute("idUser");
             Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
             BigDecimal idUsuario;
             Usuario usuario;

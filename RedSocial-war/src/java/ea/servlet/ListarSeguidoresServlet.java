@@ -48,7 +48,7 @@ public class ListarSeguidoresServlet extends HttpServlet {
         String x= (String) request.getParameter("x");
         
         
-        BigDecimal idUsuario=new BigDecimal(1.0);
+        BigDecimal idUsuario=(BigDecimal) request.getSession().getAttribute("idUser");;
         usuario=usuarioFacade.find(idUsuario);
         
        if(x.equals("seguidores")){

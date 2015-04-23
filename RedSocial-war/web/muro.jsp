@@ -5,13 +5,16 @@
 --%>
 
 
+<%@page import="java.math.BigDecimal"%>
 <%@page import="ea.entity.Usuario"%>
 <%@page import="ea.entity.Post"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
+    BigDecimal idUsuario;
     
+    idUsuario=(BigDecimal) request.getAttribute("idSesion");
     lista = (List) request.getAttribute("listaPost");
 %>
 <!DOCTYPE html>
@@ -91,7 +94,7 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet?usuarioMuro=<%= idUsuario %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
 								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>

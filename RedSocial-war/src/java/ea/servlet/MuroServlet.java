@@ -52,7 +52,8 @@ public class MuroServlet extends HttpServlet {
         List<Post> listaPost;
         
         BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
-        BigDecimal idUsuario=new BigDecimal(1.0);
+        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
+        
         
 //      
         if(idUsuarioMuro.equals(idUsuario)){
@@ -63,7 +64,8 @@ public class MuroServlet extends HttpServlet {
             listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
         }
         
-       
+        request.setAttribute("idmuro", idUsuarioMuro);
+        request.setAttribute("idSesion", idUsuario);
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;

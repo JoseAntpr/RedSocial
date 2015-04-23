@@ -39,7 +39,8 @@ public class PostDeleteServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session=request.getSession();
+        
+        
         
         String tipoBorrado=request.getParameter("tipo_borrado");
         
@@ -49,7 +50,7 @@ public class PostDeleteServlet extends HttpServlet {
         postFacade.deletePost(idPost);
         
         if(tipoBorrado.equals("usuario")){
-            response.sendRedirect(request.getContextPath()+"/MuroServlet");
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
         }else if(tipoBorrado.equals("grupo")){
             response.sendRedirect(request.getContextPath()+"/GrupoServlet");
         }
