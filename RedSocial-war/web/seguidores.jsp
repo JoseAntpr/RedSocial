@@ -100,7 +100,7 @@
                                 </form>
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                        <a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
                                     </li>
                                     <!--<li>
                                           <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
@@ -164,7 +164,7 @@
                                                 <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                 </form>
                                                 <%}%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuro=<%= u.getIdUsuario()%>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="#">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                 
 
                                             </div>

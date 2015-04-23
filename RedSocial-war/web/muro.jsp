@@ -91,7 +91,7 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
 								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
