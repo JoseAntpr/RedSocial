@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jesus
+ * @author fran
  */
 @Entity
 @Table(name = "GRUPO")
@@ -38,13 +38,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Grupo.findAll", query = "SELECT g FROM Grupo g"),
     @NamedQuery(name = "Grupo.findByIdGrupo", query = "SELECT g FROM Grupo g WHERE g.idGrupo = :idGrupo"),
+    @NamedQuery(name = "Grupo.findByIdAdministrador", query = "SELECT g FROM Grupo g WHERE g.idAdministrador = :idAdministrador"),
     @NamedQuery(name = "Grupo.findByNombre", query = "SELECT g FROM Grupo g WHERE g.nombre = :nombre"),
     @NamedQuery(name = "Grupo.findByPrivacidad", query = "SELECT g FROM Grupo g WHERE g.privacidad = :privacidad"),
     @NamedQuery(name = "Grupo.findByImagen", query = "SELECT g FROM Grupo g WHERE g.imagen = :imagen")})
 public class Grupo implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    
     @Id
     @Basic(optional = false)
     @NotNull
@@ -52,6 +52,10 @@ public class Grupo implements Serializable {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "secuencia_grupo")
     @SequenceGenerator(name="secuencia_grupo", sequenceName = "GRUPO_SEQ", allocationSize=1)
     private BigDecimal idGrupo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_ADMINISTRADOR")
+    private BigInteger idAdministrador;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
@@ -79,8 +83,9 @@ public class Grupo implements Serializable {
         this.idGrupo = idGrupo;
     }
 
-    public Grupo(BigDecimal idGrupo, String nombre, BigInteger privacidad) {
+    public Grupo(BigDecimal idGrupo, BigInteger idAdministrador, String nombre, BigInteger privacidad) {
         this.idGrupo = idGrupo;
+        this.idAdministrador = idAdministrador;
         this.nombre = nombre;
         this.privacidad = privacidad;
     }
@@ -91,6 +96,14 @@ public class Grupo implements Serializable {
 
     public void setIdGrupo(BigDecimal idGrupo) {
         this.idGrupo = idGrupo;
+    }
+
+    public BigInteger getIdAdministrador() {
+        return idAdministrador;
+    }
+
+    public void setIdAdministrador(BigInteger idAdministrador) {
+        this.idAdministrador = idAdministrador;
     }
 
     public String getNombre() {

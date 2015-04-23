@@ -5,12 +5,13 @@
 --%>
 
 
+<%@page import="ea.entity.Usuario"%>
 <%@page import="ea.entity.Post"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
-
+    
     lista = (List) request.getAttribute("listaPost");
 %>
 <!DOCTYPE html>
@@ -46,8 +47,8 @@
                                                         
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores  </a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo </a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -90,7 +91,7 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
 								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>

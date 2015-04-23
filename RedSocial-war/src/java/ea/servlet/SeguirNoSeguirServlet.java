@@ -5,13 +5,12 @@
  */
 package ea.servlet;
 
-import ea.ejb.GrupoFacade;
-import ea.entity.Grupo;
+import ea.ejb.UsuarioFacade;
+import ea.entity.Usuario;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.Collection;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,13 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author fran
+ * @author Joseantpr
  */
-@WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
-public class GrupoServlet extends HttpServlet {
+@WebServlet(name = "SeguirNoSeguirServlet", urlPatterns = {"/SeguirNoSeguirServlet"})
+public class SeguirNoSeguirServlet extends HttpServlet {
     @EJB
-    private GrupoFacade grupoFacade;
+    private UsuarioFacade usuarioFacade;
 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,33 +38,37 @@ public class GrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // IDs
-        BigDecimal id_grupo = new BigDecimal("1.0");
-        Grupo grupo = grupoFacade.find(id_grupo);
-        
-        // Posts del grupo actual
-        Collection postCollection;
-        postCollection = grupo.getPostCollection();
-        request.setAttribute("postGrupo", postCollection);
-       
-        // Miembros del grupo actual
-        Collection miembroCollection;
-        miembroCollection = grupo.getUsuarioCollection();
-        request.setAttribute("miembrosGrupo", miembroCollection);
-        
-        // Nombre del grupo actual
-        request.setAttribute("nombreGrupo", grupo.getNombre());
-        
-        // Lista de todos los grupos
-        Collection listaGrupos;
-        listaGrupos = grupoFacade.findAll();
-        request.setAttribute("listaGrupo", listaGrupos);
-        
-        // Request Dispatcher
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");
-        rd.forward(request, response);
+            BigDecimal idUsuarioPropio=new BigDecimal(3.0);
+            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
+            BigDecimal idUsuario;
+            Usuario usuario;
+            String ruta= (String) request.getParameter("ruta");
+            String button = (String) request.getParameter("botonSeguir");
+            
+            
+           if(button.equals("Seguir")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().add(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().add(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+           }else if(button.equals("Siguiendo")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().remove(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().remove(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+           }
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

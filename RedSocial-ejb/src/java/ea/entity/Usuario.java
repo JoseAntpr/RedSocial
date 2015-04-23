@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jesus
+ * @author fran
  */
 @Entity
 @Table(name = "USUARIO")
@@ -211,11 +211,16 @@ public class Usuario implements Serializable {
         this.fechaIngreso = fechaIngreso;
     }
     
+    /**
+     * Creado por Jose
+     * @param u
+     * @return 
+     */
     public String siguesUsuario(Usuario u){
-        String s="nosiguiendo";
+        String s="no";
         for(int i=0;i<this.getUsuarioCollection().size();i++){
             if(this.getUsuarioCollection().contains(u)){
-                s="siguiendo";
+                s="si";
             }
         }
         return s;

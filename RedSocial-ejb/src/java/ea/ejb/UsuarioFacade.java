@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Jesus
+ * @author fran
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {

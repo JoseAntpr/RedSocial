@@ -4,17 +4,20 @@
     Author     : Joseantpr
 --%>
 
+<%@page import="ea.ejb.UsuarioFacade"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.List"%>
 <%@page import="ea.entity.Usuario"%>
+
+
 <%
+    
     List<Usuario> listaUsuario;
-   
+    String ruta;
     Usuario usuarioPropio;
     
     usuarioPropio=(Usuario) request.getAttribute("usuario");
-    
-    
+    ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
 
@@ -51,7 +54,9 @@
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores </a>      
+                                                        </li>
+                                                        
                                                         <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
@@ -95,7 +100,7 @@
                                 </form>
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
                                     </li>
                                     <!--<li>
                                           <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
@@ -143,12 +148,24 @@
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <%if(s.equals("siguiendo")){ %>
-                                                <button  class="btn btn-primary pull-right" type="submit">Siguiendo</button>
+                                                <%if(s.equals("si")){ %>
+                                                
+                                                <form action="SeguirNoSeguirServlet" method="post">  
+                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >
+                                                <input type="hidden" value="Siguiendo" name="botonSeguir" >
+                                               <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                <input  class="btn btn-success pull-right" type="submit" name="boton" value="Siguiendo">
+                                                </form>
                                                 <% }else{%>
-                                                <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
+                                                <form action="SeguirNoSeguirServlet" method="post">
+                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioSeguir" >
+                                                <input type="hidden" value="Seguir" name="botonSeguir" >
+                                                <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
+                                                </form>
                                                 <%}%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <%= u.getNombre() + " " + u.getApellidos()%></h4>
+                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuro=<%= u.getIdUsuario()%>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                
 
                                             </div>
                                             <div class="panel-body">
