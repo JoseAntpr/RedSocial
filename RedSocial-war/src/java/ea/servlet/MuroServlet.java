@@ -53,7 +53,14 @@ public class MuroServlet extends HttpServlet {
 
         BigDecimal idUsuario=new BigDecimal(1.0);
         
-      
+//      
+        if(idUsuarioMiMuro.equals(idUsuario)){
+            listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+
+        }else{
+            
+            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMiMuro);
+        }
         
        
         
