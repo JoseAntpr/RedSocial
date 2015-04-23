@@ -9,7 +9,9 @@ import ea.ejb.UsuarioFacade;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,8 +39,7 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession sesion=request.getSession();
+            throws ServletException, IOException {      
         
         String email = (String) request.getParameter("email");            
         String password = (String) request.getParameter("password");
@@ -48,13 +49,19 @@ public class LoginServlet extends HttpServlet {
             
             Usuario user = usuarioFacade.login(email, password);
             
+            //Si el usuario existe en la base de datos
             if (user !=null){
-                String nombreUser = user.getNombre();
-                request.getSession().setAttribute("username", nombreUser);
-                this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response); 
+                
+                BigDecimal idUser = user.getIdUsuario();
+                request.getSession().setAttribute("idUser", idUser);
+                this.getServletContext().getRequestDispatcher("/MuroServlet").forward(request, response); 
             }
+            //Si ha no ha encontrado el usuario:
             else{
-                 this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
+                
+                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
+                request.setAttribute("mensaje", mensaje);                
+                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
             }
             
         }      
