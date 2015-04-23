@@ -62,6 +62,7 @@ public class ListarSeguidoresServlet extends HttpServlet {
              ListaSeguidores=usuarioFacade.findAll();
             
         }
+        
         request.setAttribute("usuario", usuario);
         request.setAttribute("listaSeguidores", ListaSeguidores); 
         RequestDispatcher rd;

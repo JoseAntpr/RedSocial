@@ -45,5 +45,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         catch(NoResultException e){}
         return user;
     } 
+     
     
 }

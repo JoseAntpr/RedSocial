@@ -4,10 +4,14 @@
     Author     : Joseantpr
 --%>
 
+<%@page import="ea.ejb.UsuarioFacade"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.List"%>
 <%@page import="ea.entity.Usuario"%>
+
+
 <%
+    
     List<Usuario> listaUsuario;
    
     Usuario usuarioPropio;
@@ -144,7 +148,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <%if(s.equals("siguiendo")){ %>
-                                                <button  class="btn btn-primary pull-right" type="submit">Siguiendo</button>
+                                                <button  class="btn btn-success pull-right" type="submit">Siguiendo</button>
                                                 <% }else{%>
                                                 <button  class="btn btn-primary pull-right" type="submit">Seguir</button>
                                                 <%}%>
