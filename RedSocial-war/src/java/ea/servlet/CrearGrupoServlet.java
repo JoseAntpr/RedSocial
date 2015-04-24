@@ -40,9 +40,8 @@ public class CrearGrupoServlet extends HttpServlet {
         
         grupoFacade.nuevoGrupo(nombre, privacidad);
         
-        
-        
         this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
+        //this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
