@@ -26,10 +26,10 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return em;
     }
     
-    public Grupo nuevoGrupo(String nombre,String privacidad){
+    public Grupo nuevoGrupo(BigDecimal administrador,String nombre,String privacidad){
         Grupo grupo = new Grupo();
         
-        grupo.setIdAdministrador(BigInteger.ONE);
+        grupo.setIdAdministrador(new BigInteger(administrador.toString()));
         grupo.setNombre(nombre);
         grupo.setImagen("imagen");
         
