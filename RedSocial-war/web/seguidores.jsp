@@ -15,7 +15,9 @@
     List<Usuario> listaUsuario;
     String ruta;
     Usuario usuarioPropio;
+    Usuario usuarioSesion;
     
+    usuarioSesion=(Usuario) request.getAttribute("usuarioS");
     usuarioPropio=(Usuario) request.getAttribute("usuario");
     ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
@@ -49,15 +51,17 @@
 					   
 						<ul class="nav hidden-xs" id="lg-menu"></br></br>
                                                     <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                                                        <li class="active">Nombre Apellido</li></br>
-                                                        
+                                                        <li class="active"><%= usuarioPropio.getNombre()+" "+usuarioPropio.getApellidos() %></li></br>
+                                                        <li class="active">Vive en <%= usuarioPropio.getLocalidad()+", "+usuarioPropio.getProvincia()+", "+usuarioPropio.getPais() %></li></br>
+                                                        <li class="active">Fecha ingreso:  <%= usuarioPropio.getFechaIngreso() %></li></br>
+							
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores </a>      
+                                                                <a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%=usuarioPropio.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioPropio.getUsuarioCollection1().size() %></b> </a>      
                                                         </li>
                                                         
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%=usuarioPropio.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioPropio.getUsuarioCollection().size() %></b></a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -93,25 +97,25 @@
                                     <div class="input-group input-group-sm" style="max-width:360px;">
                                         <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
                                         <div class="input-group-btn">
-                                            <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
+                                            <a href="#" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
                                            <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
                                         </div>
                                     </div>
                                 </form>
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                        <a href="MuroServlet?usuarioMuro=<%=usuarioSesion.getIdUsuario() %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
                                     </li>
                                     <!--<li>
                                           <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
                                     </li>-->
                                     <li>
-                                        <a href="#"><span class="badge">Notificación</span></a>
+                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= usuarioSesion.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
                                     </li>
                                 </ul>
                                 <ul class="nav navbar-nav navbar-right">
                                     <li>
-                                        <a href="#"><span class="glyphicon glyphicon-off"></span></a>
+                                        <a href="#"><%= usuarioSesion.getNombre()+" "+usuarioSesion.getApellidos() %></span></a>
                                     </li>
                                 </ul>
                             </nav>
@@ -137,14 +141,11 @@
                                             String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
                                            
-                                                if (!listaUsuario.get(i).getIdUsuario().equals(usuarioPropio.getIdUsuario()) ) {
+                                                if (!listaUsuario.get(i).getIdUsuario().equals(usuarioSesion.getIdUsuario()) ) {
                                                     Usuario u = listaUsuario.get(i);
                                                 
                                                     s=usuarioPropio.siguesUsuario(u);
-                                                
-                                                    
-                                                    
-                                                    
+                                 
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">

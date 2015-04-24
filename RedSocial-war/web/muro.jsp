@@ -12,9 +12,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
-    BigDecimal idUsuario;
+    Usuario uMuro;
+    Usuario u;
     
-    idUsuario=(BigDecimal) request.getAttribute("idSesion");
+    u=(Usuario) request.getAttribute("usuarioSesion");
+    uMuro=(Usuario) request.getAttribute("usuarioMuro");
+            
     lista = (List) request.getAttribute("listaPost");
 %>
 <!DOCTYPE html>
@@ -46,12 +49,13 @@
 					   
 						<ul class="nav hidden-xs" id="lg-menu"></br></br>
                                                     <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                                                        <li class="active">Nombre Apellido</li></br>
-                                                        
+                                                        <li class="active"><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></li></br>
+                                                        <li class="active">Vive en <%= uMuro.getLocalidad()+", "+uMuro.getProvincia()+", "+uMuro.getPais() %></li></br>
+                                                        <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso() %></li></br>
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores  </a></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo </a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size() %> </b></a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -87,25 +91,29 @@
 								<div class="input-group input-group-sm" style="max-width:360px;">
 								  <input class="form-control" placeholder="Search" name="buscar" id="srch-term" type="text">
 								  <div class="input-group-btn">
-                                                                      <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
+                                                                      <a href="#" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
                                                                               <!--<button  class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button> -->
 								  </div>
 								</div>
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet?usuarioMuro=<%= idUsuario %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario() %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
+                                                              <%    if(u.getIdUsuario().equals(uMuro.getIdUsuario())){ %>
 								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+                                                                <% }else{%>
+                                                                
+                                                                <%}%>
 							  </li>
 							  <li>
-								<a href="#"><span class="badge">Notificación</span></a>
+								<a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= u.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
 							  </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 							  <li>
-								<a href="#"><span class="glyphicon glyphicon-off"></span></a>
+								<a href="#"><%= u.getNombre()+" "+u.getApellidos() %></span></a>
 							  </li>
 							</ul>
 							</nav>
@@ -132,11 +140,10 @@
 
                                                                                 <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
 										<div class="panel-body">
-										  
-                                                                                  <p><%= p.getFecha()%></p>
+                                                                                  <p><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></p>
+                                                                                  <p><%= p.getFecha() %></p>
                                                                                   <p><%= p.getDescripcion()%></p>
-                                                                                  <p>Información:</p>
-										  <p>45 Followers, <%= p.getIdPost() %> Posts</p>
+                                                                                  
 										  
 										<p>
                                                                                     <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
