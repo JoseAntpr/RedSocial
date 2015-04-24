@@ -52,7 +52,7 @@
                                 <div class="row">                                   
                                     <form method="POST" action="LoginServlet">
                                         <h4 class="form-signin-heading">Iniciar sesión:</h4> 
-                                        <input type="text" name="email" placeholder="email"  class="form-control" required autofocus></br>
+                                        <input type="text" name="email" placeholder="Email"  class="form-control" required autofocus></br>
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required></br>
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
                                     </form>                                    

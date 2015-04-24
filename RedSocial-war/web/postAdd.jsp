@@ -5,7 +5,9 @@
     Created on : 21-mar-2015, 13:39:52
     Author     : Jesus
 --%>
-    
+<% 
+    BigDecimal idUsuarioSesion=new BigDecimal(request.getParameter("idUsuario"));
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -78,14 +80,18 @@
 							</form>
 							<ul class="nav navbar-nav">
 							  <li>
-								<a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+								<a href="MuroServlet?usuarioMuro=<%=idUsuarioSesion%>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <!--<li>
 								<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
 							  </li>-->
 							  <li>
-								<a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
+								<a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%=idUsuarioSesion%>"><span class="badge">Usuarios</span></a>
 							  </li>
+                                                          <li>
+								<a href="#"><span class="badge">Grupos</span></a>
+							  
+                                                          </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 							  <li>

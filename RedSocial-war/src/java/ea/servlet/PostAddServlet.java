@@ -103,7 +103,7 @@ public class PostAddServlet extends HttpServlet {
 
 
             //Redirect to MuroServlet que mostrará con findAll todos los post en muro.jsp
-
+            
             response.sendRedirect(request.getContextPath() + "/MuroServlet?usuarioMuro="+idUsuario);
         }else{
             response.sendRedirect(request.getContextPath() + "/postAdd.jsp");
