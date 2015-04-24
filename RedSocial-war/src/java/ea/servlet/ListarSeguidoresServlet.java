@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -25,11 +26,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListarSeguidoresServlet", urlPatterns = {"/ListarSeguidoresServlet"})
 public class ListarSeguidoresServlet extends HttpServlet {
-    
+
     @EJB
     private UsuarioFacade usuarioFacade;
-    
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,44 +41,46 @@ public class ListarSeguidoresServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-         List<Usuario> ListaSeguidores=null;
-        Usuario usuario=null;
-        String x= (String) request.getParameter("x");
-        
-        
-        BigDecimal idUsuario=new BigDecimal( request.getParameter("uMuro"));
-        BigDecimal idUsuarioSesion=(BigDecimal) request.getSession().getAttribute("idUser");
-        Usuario usuarioSesion=usuarioFacade.find(idUsuarioSesion);
-        usuario=usuarioFacade.find(idUsuario);
-        
-       if(x.equals("seguidores")){
-           
-        
-        ListaSeguidores=(List)usuario.getUsuarioCollection1();
-        
-       }else if(x.equals("Seguir")){
-         
-         ListaSeguidores=(List)usuario.getUsuarioCollection();
-         
-                
-        }else if(x.equals("usuariosSeguir")){
-             ListaSeguidores=usuarioFacade.findAll();
-            
+
+        HttpSession sesion = request.getSession();
+
+        List<Usuario> ListaSeguidores = null;
+        String x = (String) request.getParameter("x");
+
+//        BigDecimal idUsuario=new BigDecimal( request.getParameter("uMuro"));
+//        BigDecimal idUsuarioSesion=(BigDecimal) request.getSession().getAttribute("idUser");
+//        Usuario usuarioSesion=usuarioFacade.find(idUsuarioSesion);
+//        usuario=usuarioFacade.find(idUsuario);
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+
+        // proviene de seguidores.jsp
+        if (x.equals("usuariosSeguir")) {
+            usuarioMuro = usuario;
         }
-        
-       
-       
+
+        if (x.equals("seguidores")) {
+
+            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection1();
+
+        } else if (x.equals("Seguir")) {
+
+            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection();
+
+        } else if (x.equals("usuariosSeguir")) {
+            ListaSeguidores = usuarioFacade.findAll();
+
+        }
+
         request.setAttribute("x", x);
-        request.setAttribute("usuario", usuario);
-        request.setAttribute("usuarioS", usuarioSesion);
-        request.setAttribute("listaSeguidores", ListaSeguidores); 
+//        request.setAttribute("usuario", usuarioMuro);
+//        request.setAttribute("usuarioS", usuario);
+        request.setAttribute("listaSeguidores", ListaSeguidores);
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
-       
+
         rd.forward(request, response);
-        
-      
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

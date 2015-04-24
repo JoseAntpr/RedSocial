@@ -18,26 +18,26 @@
 	</form>
 	<ul class="nav navbar-nav">
             <li>
-                <a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario() %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                <a href="MuroServlet?inicio=true"><i class="glyphicon glyphicon-home"></i> Inicio</a>
             </li>
             <li>
-                <% if(u.getIdUsuario().equals(uMuro.getIdUsuario())){ %>
-                    <a href="postAdd.jsp?idUsuario=<%=u.getIdUsuario()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+                <% if(usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){ %>
+                    <a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
                 <% }else{}%>
             </li>
             <li>
-                <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= u.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
+                <a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
             </li>
             <li>
 		<a href="#"><span class="badge">Grupos</span></a>
             </li>
 	</ul>
 	<ul class="nav navbar-nav navbar-right">
-            <li class="dropdown" id="fat-menu"> <a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><%= u.getNombre()+" "+u.getApellidos() %> <b class="caret"></b></a>
+            <li class="dropdown" id="fat-menu"> <a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><%= usuario.getNombre()+" "+usuario.getApellidos() %> <b class="caret"></b></a>
                 <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
                     <li role="presentation">
                         <form method="POST" action="EditarUsuarioServlet"> 
-                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= u.getIdUsuario()%>"/>                                                                                                                                                   
+                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= usuario.getIdUsuario()%>"/>                                                                                                                                                   
                             <button class="btn btn-link" type="submit">Editar perfil</button>
                         </form>
                     </li>

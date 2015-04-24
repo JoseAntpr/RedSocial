@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -38,9 +39,14 @@ public class SeguirNoSeguirServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            BigDecimal idUsuarioPropio=(BigDecimal) request.getSession().getAttribute("idUser");
-            BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuariomuro")) ;
-            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
+        HttpSession sesion = request.getSession();
+        Usuario usuarioPropio = (Usuario) sesion.getAttribute("usuario");
+        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+        
+        
+//            BigDecimal idUsuarioPropio=(BigDecimal) request.getSession().getAttribute("idUser");
+//            BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuariomuro")) ;
+//            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
             
             BigDecimal idUsuario;
             Usuario usuario;
@@ -57,7 +63,8 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuario);
               usuarioFacade.edit(usuarioPropio);
               
-              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+//              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
            }else if(button.equals("Siguiendo")){
               idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
               usuario = usuarioFacade.find(idUsuario);
@@ -68,7 +75,8 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuarioPropio);
               
               
-              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+//              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+                response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
            }
             
     }

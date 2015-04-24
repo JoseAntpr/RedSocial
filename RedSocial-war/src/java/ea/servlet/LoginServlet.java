@@ -47,17 +47,21 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-            Usuario user = usuarioFacade.login(email, password);
+            Usuario usuario = usuarioFacade.login(email, password);
             
             //Si el usuario existe en la base de datos
-            if (user !=null){
+            if (usuario !=null){
                 
-                BigDecimal idUser = user.getIdUsuario();
+                BigDecimal idUsuario = usuario.getIdUsuario();
                 
-                request.getSession().setAttribute("user", user); 
-                request.getSession().setAttribute("idUser", idUser);
+                HttpSession sesion = request.getSession();
+                sesion.setAttribute("usuario", usuario); 
+                sesion.setAttribute("usuarioMuro", usuario);
+//                request.getSession().setAttribute("idUser", idUser);
               
-                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+//                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+                response.sendRedirect(request.getContextPath()+"/MuroServlet");
+            
             }
             //Si ha no ha encontrado el usuario:
             else{

@@ -11,11 +11,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
-    Usuario uMuro;
-    Usuario u;
-
-    u = (Usuario) request.getAttribute("usuarioSesion");
-    uMuro = (Usuario) request.getAttribute("usuarioMuro");
+    
+    HttpSession sesion = request.getSession();
+//    u = (Usuario) request.getAttribute("usuarioSesion");
+    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+//    usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
+    Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
     
@@ -47,14 +48,19 @@
                     </ul>
                     <ul class="nav hidden-xs" id="lg-menu"></br></br>
                         <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                        <li class="active"><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></li></br>
-                        <li class="active">Vive en <%= uMuro.getLocalidad()+", "+uMuro.getProvincia()+", "+uMuro.getPais() %></li></br>
-                        <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso() %></li></br>
+                        <li class="active"><%= usuarioMuro.getNombre()+" "+usuarioMuro.getApellidos() %></li></br>
+                        <li class="active">Vive en <%= usuarioMuro.getLocalidad()+", "+usuarioMuro.getProvincia()+", "+usuarioMuro.getPais() %></li></br>
+                        <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso() %></li></br>
 			<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
-                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                        <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size() %></b>  </a></li>
-                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size() %> </b></a></li></br>
-                    </ul>
+                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-align-right"></i> Grupos</a></li>
+                        <!--
+                        <li><a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
+                        -->
+                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
+                        
+                        </ul>
                     <ul class="list-unstyled hidden-xs" id="sidebar-footer"></ul>
                     <!-- tiny only nav-->
                     <ul class="nav visible-xs" id="xs-menu">
@@ -90,7 +96,7 @@
                                             <img src="<%= p.getImagen()%>" class="img-responsive">
                                         </div>
                                         <div class="panel-body">
-                                            <p><%= uMuro.getNombre() + " " + uMuro.getApellidos()%></p>
+                                            <p><%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></p>
                                             <p><%= p.getFecha()%></p>
                                             <p><%= p.getDescripcion()%></p>
                                                 
