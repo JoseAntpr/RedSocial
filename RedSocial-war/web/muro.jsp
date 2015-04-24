@@ -124,7 +124,7 @@
                                                                 <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
                                                                     <li role="presentation">
                                                                         <form method="POST" action="EditarUsuarioServlet"> 
-                                                                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= uMuro.getIdUsuario() %>"/>                                                                                                                                                   
+                                                                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= u.getIdUsuario()%>"/>                                                                                                                                                   
                                                                             <button class="btn btn-link" type="submit">Editar perfil</button>
                                                                         </form>
                                                                     </li>

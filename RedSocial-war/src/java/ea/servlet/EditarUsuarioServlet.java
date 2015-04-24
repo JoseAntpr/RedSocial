@@ -41,9 +41,10 @@ public class EditarUsuarioServlet extends HttpServlet {
 
       
         BigDecimal idUser = new BigDecimal(request.getParameter("idUser"));
-        Usuario user =usuarioFacade.find(idUser);
-        
-        request.setAttribute("user", user);
+        Usuario user = usuarioFacade.find(idUser);
+
+         request.setAttribute("usuarioSesion", user);
+        request.setAttribute("usuarioMuro", user);
         
         this.getServletContext().getRequestDispatcher("/editarUsuario.jsp").forward(request, response); 
             
