@@ -27,6 +27,7 @@ public class PostDeleteServlet extends HttpServlet {
     @EJB
     private PostFacade postFacade;
     
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
