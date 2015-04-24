@@ -40,7 +40,7 @@ public class GrupoServlet extends HttpServlet {
             throws ServletException, IOException {
         
         // IDs
-        BigDecimal id_grupo = (BigDecimal) request.getSession().getAttribute("idUser");
+        BigDecimal id_grupo = (BigDecimal) grupoFacade.findAll().get(0).getIdGrupo();
         Grupo grupo = grupoFacade.find(id_grupo);
         
         // Posts del grupo actual
@@ -54,7 +54,7 @@ public class GrupoServlet extends HttpServlet {
         request.setAttribute("miembrosGrupo", miembroCollection);
         
         // Nombre del grupo actual
-        request.setAttribute("nombreGrupo", grupo.getNombre());
+        request.setAttribute("grupo", grupo);
         
         // Lista de todos los grupos
         Collection listaGrupos;
