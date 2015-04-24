@@ -26,6 +26,9 @@ listaGrupos = (List) request.getAttribute("listaGrupos");
 
 List<Grupo> listaGruposMiembro;
 listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
+
+Usuario userLogin;
+userLogin = (Usuario) request.getSession().getAttribute("user");
 %>
 
 
@@ -52,7 +55,7 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
             <div class="box">
                 <div class="row row-offcanvas row-offcanvas-left">
 
-                    <!-- sidebar -->
+                    <!-- LISTADO GRUPOS -->
                     <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
                         <ul class="nav">
@@ -68,11 +71,12 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
                                             <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"></input>
                                             <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar" href=""></input>
                                         </form>
-                                            
-                                        <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
-                                            <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
-                                            <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
-                                        </form>
+                                        <% if (g.getIdAdministrador().equals(userLogin.getIdUsuario())){ %>    
+                                            <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
+                                                <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
+                                                <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
+                                            </form>
+                                        <% } %>
                                     </li>
                                 <% }else{ %>
                                     <li class="active list-group">
@@ -102,53 +106,8 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
                     <!-- main right col -->
                     <div class="column col-sm-10 col-xs-11" id="main">
 
-                        <!-- top nav -->
-                        <div class="navbar navbar-blue navbar-static-top">  
-                            <div class="navbar-header">
-                                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <span class="sr-only">Toggle</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                                <a class="navbar-brand logo">Rs</a>
-                            </div>
-                            <nav class="collapse navbar-collapse" role="navigation">
-                                <form class="navbar-form navbar-left">
-                                    <div class="input-group input-group-sm" style="max-width:360px;">
-                                        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                                        <div class="input-group-btn">
-                                            <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                            <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
-                                        </div>
-                                    </div>
-                                </form>
-                                <ul class="nav navbar-nav">
-                                    <li>
-                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-                                    </li>
-                                   <li>
-                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=1"><span class="badge">Usuarios</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">Grupos</span></a>
-                                    </li>
-                                </ul>
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- /top nav -->
+                       <!-- top nav -->
+                        <%@include file="navBar.jsp" %>
 
                         <div class="padding">
                             <div class="full col-sm-9">

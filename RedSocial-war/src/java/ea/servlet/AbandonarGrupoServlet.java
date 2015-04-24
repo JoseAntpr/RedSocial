@@ -10,11 +10,9 @@ import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author fran
  */
-@WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
-public class GrupoServlet extends HttpServlet {
+@WebServlet(name = "AbandonarGrupoServlet", urlPatterns = {"/AbandonarGrupoServlet"})
+public class AbandonarGrupoServlet extends HttpServlet {
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
@@ -44,54 +42,19 @@ public class GrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        //Recuperamos la sesion completa
-        HttpSession session = request.getSession();
-//        
-//        Usuario user = (Usuario)session.getAttribute("user");
-//        BigDecimal id_usuario = user.getIdUsuario();
-        
+        HttpSession sesion = request.getSession();
+        Usuario userLogin = (Usuario)sesion.getAttribute("user");
 
+        BigDecimal idGrupoAbandonar = new BigDecimal(request.getParameter("idGrupoAbandonar"));
+        Grupo grupoAbandonar = grupoFacade.find(idGrupoAbandonar);
         
-        //prueba
-//        BigDecimal id_usuario = new BigDecimal(1.0);
-//        Usuario user = usuarioFacade.find(id_usuario);
+        userLogin.getGrupoCollection().remove(grupoAbandonar);
+        usuarioFacade.edit(userLogin);
         
-        Usuario user = (Usuario)session.getAttribute("user");
+        grupoAbandonar.getUsuarioCollection().remove(userLogin);
+        grupoFacade.edit(grupoAbandonar);
         
-//        List<Grupo> listaGruposMiembro = grupoFacade.findGruposByIdMiembro(id_usuario);
-        List<Grupo> listaGruposMiembro = (List)user.getGrupoCollection();
-        Grupo grupo = listaGruposMiembro.get(0);
-        
-        
-        
-        
-        
-        // Posts del grupo actual
-        Collection postCollection;
-        postCollection = grupo.getPostCollection();
-        request.setAttribute("postGrupo", postCollection);
-       
-        // Miembros del grupo actual
-        Collection miembroCollection;
-        miembroCollection = grupo.getUsuarioCollection();
-        request.setAttribute("miembrosGrupo", miembroCollection);
-        
-        // Nombre del grupo actual
-        request.setAttribute("grupo", grupo);
-        
-        // Lista de todos los grupos
-        Collection listaGrupos;
-        listaGrupos = grupoFacade.findAll();
-        request.setAttribute("listaGrupos", listaGrupos);
-        
-        // Lista de Grupos donde user es miembro
-        request.setAttribute("listaGruposMiembro", listaGruposMiembro);
-        
-        // Request Dispatcher
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");
-        rd.forward(request, response);
+        this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
