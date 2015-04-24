@@ -40,11 +40,11 @@ public class EditarUsuarioServlet extends HttpServlet {
             throws ServletException, IOException {
 
       
-        BigDecimal idUser = new BigDecimal(request.getParameter("idUser"));
-        Usuario user = usuarioFacade.find(idUser);
+        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("idUsuarioMuro"));
+        Usuario usuarioMuro = usuarioFacade.find(idUsuarioMuro);
 
-         request.setAttribute("usuarioSesion", user);
-        request.setAttribute("usuarioMuro", user);
+         //request.setAttribute("usuarioSesion", user);
+        request.setAttribute("usuarioMuro", usuarioMuro);
         
         this.getServletContext().getRequestDispatcher("/editarUsuario.jsp").forward(request, response); 
             

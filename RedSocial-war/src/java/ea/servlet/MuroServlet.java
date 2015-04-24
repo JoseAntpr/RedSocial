@@ -50,24 +50,24 @@ public class MuroServlet extends HttpServlet {
        
         HttpSession sesion = request.getSession();
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+        //Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
         
         // inicion proviene de seguidoes
-        boolean inicio = new Boolean(request.getParameter("inicio"));
-        if(inicio){
+       // boolean inicio = new Boolean(request.getParameter("inicio"));
+        /*if(inicio){
             usuarioMuro = usuario;
-        }
+        }*/
         
         List<Post> listaPost=null;
        
         
-//        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
-        BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
+           BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
+        //BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
 //        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
         BigDecimal idUsuario = usuario.getIdUsuario();
         
 //        Usuario usuario =usuarioFacade.find(idUsuario);
-//        Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
+       Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
         
         String mensaje=null;
 //      
@@ -92,8 +92,8 @@ public class MuroServlet extends HttpServlet {
         request.setAttribute("mensajeErrorMuroOtro", mensaje);
 //        request.setAttribute("usuarioSesion", usuario);
 //        request.setAttribute("usuarioMuro", usuarioMuro);
-//        request.setAttribute("usuarioMuro", usuarioMuro);
-        sesion.setAttribute("usuarioMuro", usuarioMuro);
+        request.setAttribute("usuarioMuro", usuarioMuro);
+        //sesion.setAttribute("usuarioMuro", usuarioMuro);
         
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         

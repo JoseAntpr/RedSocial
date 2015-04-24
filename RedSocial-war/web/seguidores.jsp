@@ -17,10 +17,10 @@
     
     HttpSession sesion = request.getSession();
     
-    Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
+    //Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
     Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 //    usuario=(Usuario) request.getAttribute("usuarioS");
-//    usuarioMuro=(Usuario) request.getAttribute("usuario");
+    Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
     ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
@@ -60,10 +60,10 @@
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%=usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b> </a>      
+                                                                <a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b> </a>      
                                                         </li>
                                                         
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%=usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioMuro.getUsuarioCollection().size() %></b></a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioMuro.getUsuarioCollection().size() %></b></a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -119,7 +119,7 @@
                                                     if(u.getIdUsuario().equals(usuario.getIdUsuario())){
                                                     }else{
                                                     
-                                                        if(s.equals("si")){ %>
+                                                      if(s.equals("si")){ %>
                                                 
                                                 <form action="SeguirNoSeguirServlet" method="post">  
                                                 <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >

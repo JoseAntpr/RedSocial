@@ -12,11 +12,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
-    Usuario uMuro;
-    Usuario u;
+    Usuario usuarioMuro;
+    Usuario usuario;
+    
 
-    u = (Usuario) request.getAttribute("usuarioSesion");
-    uMuro = (Usuario) request.getAttribute("usuarioMuro");
+    usuario = (Usuario) session.getAttribute("usuario");
+    usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
     
@@ -48,13 +49,13 @@
                     </ul>
                     <ul class="nav hidden-xs" id="lg-menu"></br></br>
                         <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                        <li class="active"><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></li></br>
-                        <li class="active">Vive en <%= uMuro.getLocalidad()+", "+uMuro.getProvincia()+", "+uMuro.getPais() %></li></br>
-                        <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso() %></li></br>
+                        <li class="active"><%= usuario.getNombre()+" "+usuario.getApellidos() %></li></br>
+                        <li class="active">Vive en <%= usuario.getLocalidad()+", "+usuario.getProvincia()+", "+usuario.getPais() %></li></br>
+                        <li class="active">Fecha ingreso:  <%= usuario.getFechaIngreso() %></li></br>
 			<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                        <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size() %></b>  </a></li>
-                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size() %> </b></a></li></br>
+                        <li><a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%= usuario.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuario.getUsuarioCollection1().size() %></b>  </a></li>
+                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%= usuario.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuario.getUsuarioCollection().size() %> </b></a></li></br>
                     </ul>
                     <ul class="list-unstyled hidden-xs" id="sidebar-footer"></ul>
                     <!-- tiny only nav-->
@@ -84,25 +85,25 @@
                                 <form method="POST" action="GuardarUsuarioServlet">
                                     <h4 class="form-signin-heading">Editar perfil:</h4> 
                                     <div class="col-sm-4">
-                                    Nombre <input type="text" name="nombre" placeholder="<%= u.getNombre() %>"  class="form-control" required autofocus></br>
+                                    Nombre <input type="text" name="nombre" placeholder="<%= usuario.getNombre() %>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-6">
-                                    Appelidos <input type="text" name="apellidos" placeholder="<%= u.getApellidos()%>"  class="form-control" required autofocus></br>
+                                    Appelidos <input type="text" name="apellidos" placeholder="<%= usuario.getApellidos()%>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-6">
-                                    Direccion <input type="text" name="direccion" placeholder="<%= u.getDireccion()%>"  class="form-control" required autofocus></br>
+                                    Direccion <input type="text" name="direccion" placeholder="<%= usuario.getDireccion()%>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-4">
-                                    Localidad <input type="text" name="localidad" placeholder="<%= u.getLocalidad()%>"  class="form-control" required autofocus></br>
+                                    Localidad <input type="text" name="localidad" placeholder="<%= usuario.getLocalidad()%>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-4">
-                                    Provincia <input type="text" name="provincia" placeholder="<%= u.getProvincia()%>"  class="form-control" required autofocus></br>
+                                    Provincia <input type="text" name="provincia" placeholder="<%= usuario.getProvincia()%>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-4">
-                                    Pais <input type="text" name="pais" placeholder="<%= u.getPais()%>"  class="form-control" required autofocus></br>
+                                    Pais <input type="text" name="pais" placeholder="<%= usuario.getPais()%>"  class="form-control" required autofocus></br>
                                     </div>
                                     <div class="col-sm-10">
-                                    Email <input type="text" name="email" placeholder="<%= u.getEmail()%>"  class="form-control" required autofocus></br>
+                                    Email <input type="text" name="email" placeholder="<%= usuario.getEmail()%>"  class="form-control" required autofocus></br>
                                     </div>                                                                    
                                     <div class="col-sm-4">
                                     <button class="btn btn-success btn-block" type="submit">Guardar</button>

@@ -56,11 +56,11 @@ public class LoginServlet extends HttpServlet {
                 
                 HttpSession sesion = request.getSession();
                 sesion.setAttribute("usuario", usuario); 
-                sesion.setAttribute("usuarioMuro", usuario);
+                //sesion.setAttribute("usuarioMuro", usuario);
 //                request.getSession().setAttribute("idUser", idUser);
               
-//                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-                response.sendRedirect(request.getContextPath()+"/MuroServlet");
+                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
+               // response.sendRedirect(request.getContextPath()+"/MuroServlet");
             
             }
             //Si ha no ha encontrado el usuario:
