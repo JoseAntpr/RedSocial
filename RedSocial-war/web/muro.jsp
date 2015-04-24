@@ -101,8 +101,8 @@
 								<a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario() %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
 							  </li>
 							  <li>
-                                                              <%    if(u.getIdUsuario().equals(uMuro.getIdUsuario())){ %>
-								<a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+                                                                <% if(u.getIdUsuario().equals(uMuro.getIdUsuario())){ %>
+								<a href="postAdd.jsp?idUsuario=<%=u.getIdUsuario()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
                                                                 <% }else{%>
                                                                 
                                                                 <%}%>

@@ -51,20 +51,17 @@ public class NuevoUsuarioServlet extends HttpServlet {
         Usuario user = usuarioFacade.buscarEmail(email);
         
         if (user == null) {
-           usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
-        
+            user=usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
+           
+            BigDecimal idUser = user.getIdUsuario();
+            request.getSession().setAttribute("idUser", idUser);
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
         }else{
-             String mensaje = "El email ya esta registrado en nuestra red social.";
-             request.setAttribute("mensaje", mensaje);                
-             this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
-        }
-        
-        
-        
-        
-        // BigDecimal idUser = user.getIdUsuario();
-        // request.getSession().setAttribute("idUser", idUser);
-         this.getServletContext().getRequestDispatcher("/MuroServlet.jsp").forward(request, response);
+            String mensaje = "El email ya esta registrado en nuestra red social.";
+            request.setAttribute("mensaje", mensaje);                
+            this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
+        } 
+               
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
