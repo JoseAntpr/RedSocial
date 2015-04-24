@@ -6,10 +6,11 @@
     Author     : Jesus
 --%>
 <% 
-    BigDecimal idUsuarioSesion=new BigDecimal(request.getParameter("idUsuario"));
-    String nombre=(String)request.getParameter("nombre");
-    String apellidos=(String)request.getParameter("apellidos");
+    HttpSession sesion = request.getSession();
+    Usuario usuario = (Usuario)sesion.getAttribute("usuario");
+    Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
     
+//    BigDecimal idUsuarioSesion=new BigDecimal(request.getParameter("idUsuario"));
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -61,48 +62,7 @@
 					<div class="column col-sm-10 col-xs-11" id="main">
 						
 						<!-- top nav -->
-						<div class="navbar navbar-blue navbar-static-top">  
-							<div class="navbar-header">
-							  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							  </button>
-							  <a  class="navbar-brand logo">Rs</a>
-							</div>
-							<nav class="collapse navbar-collapse" role="navigation">
-							<form class="navbar-form navbar-left">
-								<div class="input-group input-group-sm" style="max-width:360px;">
-								  <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-								  <div class="input-group-btn">
-                                                                      <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-									<!--<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
-								  </div>
-								</div>
-							</form>
-							<ul class="nav navbar-nav">
-							  <li>
-								<a href="MuroServlet?usuarioMuro=<%=idUsuarioSesion%>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-							  </li>
-							  <!--<li>
-								<a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
-							  </li>-->
-							  <li>
-								<a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%=idUsuarioSesion%>"><span class="badge">Usuarios</span></a>
-							  </li>
-                                                          <li>
-								<a href="#"><span class="badge">Grupos</span></a>
-							  
-                                                          </li>
-							</ul>
-							<ul class="nav navbar-nav navbar-right">
-							  <li>
-								<a href="#"><span class="glyphicon glyphicon-off"></span></a>
-							  </li>
-							</ul>
-							</nav>
-						</div>
+                                                <%@include file="navBar.jsp" %>
 						<!-- /top nav -->
 					  
 						<div class="padding">

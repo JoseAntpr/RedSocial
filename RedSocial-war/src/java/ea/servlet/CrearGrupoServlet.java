@@ -7,6 +7,7 @@ package ea.servlet;
 
 import ea.ejb.GrupoFacade;
 import java.io.IOException;
+import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +39,9 @@ public class CrearGrupoServlet extends HttpServlet {
         String nombre = (String) request.getParameter("nombre");            
         String privacidad = (String) request.getParameter("privacidad");
         
-        grupoFacade.nuevoGrupo(nombre, privacidad);
+        BigDecimal sesion = (BigDecimal) request.getSession().getAttribute("idUser");
+        
+        grupoFacade.nuevoGrupo(sesion,nombre, privacidad);
         
         this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
         //this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);

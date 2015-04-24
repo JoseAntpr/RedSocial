@@ -8,9 +8,11 @@ package ea.ejb;
 import ea.entity.Grupo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,10 +28,10 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return em;
     }
     
-    public Grupo nuevoGrupo(String nombre,String privacidad){
+    public Grupo nuevoGrupo(BigDecimal administrador,String nombre,String privacidad){
         Grupo grupo = new Grupo();
         
-        grupo.setIdAdministrador(BigInteger.ONE);
+        grupo.setIdAdministrador(new BigInteger(administrador.toString()));
         grupo.setNombre(nombre);
         grupo.setImagen("imagen");
         
@@ -50,5 +52,6 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
     public GrupoFacade() {
         super(Grupo.class);
     }
+    
     
 }

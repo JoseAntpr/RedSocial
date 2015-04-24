@@ -39,10 +39,13 @@ public class EliminarGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
-        Grupo grupo = grupoFacade.find(idGrupo);
+//        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
+//        Grupo grupo = grupoFacade.find(idGrupo);
+
+        BigDecimal idGrupoEliminiar = new BigDecimal(request.getParameter("idGrupoEliminar"));
+        Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
         
-        grupoFacade.eliminarGrupo(grupo);
+        grupoFacade.eliminarGrupo(grupoEliminar);
         
         this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
     }

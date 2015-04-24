@@ -11,17 +11,27 @@ p<%--
 --%>
 
 <%-- declaracion  y asignación de variables --%>
-<%!List<Post> listaPost;%>
-<% listaPost = (List) request.getAttribute("postGrupo");%>
+<%
+List<Post> listaPost;
+listaPost = (List) request.getAttribute("postGrupo");
 
-<%!List<Usuario> listaMiembros;%>
-<% listaMiembros = (List) request.getAttribute("miembrosGrupo");%>
+List<Usuario> listaMiembros;
+listaMiembros = (List) request.getAttribute("miembrosGrupo");
 
-<%!Grupo grupo;%>
-<% grupo =(Grupo) request.getAttribute("grupo");%>
+Grupo grupo;
+grupo =(Grupo) request.getAttribute("grupo");
 
-<%!List<Grupo> listaGrupo;%>
-<% listaGrupo = (List) request.getAttribute("listaGrupo");%>
+List<Grupo> listaGrupos;
+listaGrupos = (List) request.getAttribute("listaGrupos");
+
+List<Grupo> listaGruposMiembro;
+listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
+
+Usuario userLogin;
+userLogin = (Usuario) request.getSession().getAttribute("user");
+%>
+
+
 
 
 <%-- Enumeration atributosSesion = session.getAttributeNames(); --%>
@@ -45,7 +55,7 @@ p<%--
             <div class="box">
                 <div class="row row-offcanvas row-offcanvas-left">
 
-                    <!-- sidebar -->
+                    <!-- LISTADO GRUPOS -->
                     <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
                         <ul class="nav">
@@ -53,9 +63,32 @@ p<%--
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="crearGrupo.jsp"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
-                            <% for(Grupo g : listaGrupo){ %>
-                                <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a></li>
-                            <% } %>
+                            <% for(Grupo g : listaGrupos){ 
+                                if(listaGruposMiembro.contains(g)){ %>
+                                    <li class="active list-group">
+                                        <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
+                                        <form class="pull-right col-xs-offset-1" method="post" action="AbandonarGrupoServlet">
+                                            <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"></input>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar" href=""></input>
+                                        </form>
+                                        <% if (g.getIdAdministrador().equals(userLogin.getIdUsuario())){ %>    
+                                            <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
+                                                <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
+                                                <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
+                                            </form>
+                                        <% } %>
+                                    </li>
+                                <% }else{ %>
+                                    <li class="active list-group">
+                                        <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
+                                        <form class="pull-right col-xs-offset-1" method="post" action="UnirseGrupoServlet">
+                                            <input type="hidden" name="idGrupoUnir" value="<%=g.getIdGrupo()%>"></input>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="unir" value="Unirse" href=""></input>
+                                        </form>
+                                    </li>
+                                    
+                                <% }
+                            } %>
                             
                         </ul>
 
@@ -73,53 +106,8 @@ p<%--
                     <!-- main right col -->
                     <div class="column col-sm-10 col-xs-11" id="main">
 
-                        <!-- top nav -->
-                        <div class="navbar navbar-blue navbar-static-top">  
-                            <div class="navbar-header">
-                                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <span class="sr-only">Toggle</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                                <a class="navbar-brand logo">Rs</a>
-                            </div>
-                            <nav class="collapse navbar-collapse" role="navigation">
-                                <form class="navbar-form navbar-left">
-                                    <div class="input-group input-group-sm" style="max-width:360px;">
-                                        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                                        <div class="input-group-btn">
-                                            <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                            <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
-                                        </div>
-                                    </div>
-                                </form>
-                                <ul class="nav navbar-nav">
-                                    <li>
-                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-                                    </li>
-                                   <li>
-                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=1"><span class="badge">Usuarios</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">Grupos</span></a>
-                                    </li>
-                                </ul>
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                            <li><a href="">More</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- /top nav -->
+                       <!-- top nav -->
+                        <%@include file="navBar.jsp" %>
 
                         <div class="padding">
                             <div class="full col-sm-9">
@@ -160,15 +148,11 @@ p<%--
                                                 <h4>¿Que te cuentas?</h4>
                                                 <div class="form-group" style="padding:14px;">
                                                     <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
-                                                    <input class="form-control" name="image_post_grupo" type="file" />
+                                                    <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
+                                                    <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
+                                                    <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
                                                 </div>
-                                                <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
-                                                <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
-                                                <ul class="list-inline">
-                                                    <li>
-                                                        <a href=""><i class="glyphicon glyphicon-upload" ></i></a>
-                                                    </li>
-                                                </ul>
+                                                
                                             </form>
                                         </div>
                                         <% for (int i = listaPost.size() - 1; i >= 0; i--) {
