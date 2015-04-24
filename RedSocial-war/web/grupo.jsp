@@ -17,8 +17,8 @@ p<%--
 <%!List<Usuario> listaMiembros;%>
 <% listaMiembros = (List) request.getAttribute("miembrosGrupo");%>
 
-<%!String nombreGrupo;%>
-<% nombreGrupo = (String) request.getAttribute("nombreGrupo");%>
+<%!Grupo grupo;%>
+<% grupo =(Grupo) request.getAttribute("grupo");%>
 
 <%!List<Grupo> listaGrupo;%>
 <% listaGrupo = (List) request.getAttribute("listaGrupo");%>
@@ -52,7 +52,7 @@ p<%--
                             <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
-                            <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
+                            <li class="active"><a href="crearGrupo.jsp"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
                             <% for(Grupo g : listaGrupo){ %>
                                 <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a></li>
                             <% } %>
@@ -96,13 +96,13 @@ p<%--
                                 </form>
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                                    </li>
+                                   <li>
+                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=1"><span class="badge">Usuarios</span></a>
                                     </li>
                                     <li>
-                                        <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">badge</span></a>
+                                        <a href="#"><span class="badge">Grupos</span></a>
                                     </li>
                                 </ul>
                                 <ul class="nav navbar-nav navbar-right">
@@ -133,15 +133,18 @@ p<%--
                                         <div class="panel panel-default">
                                             <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
                                             <div class="panel-body">
-                                                <p class="lead"><%= nombreGrupo%></p>
+                                                <p class="lead"><%= grupo.getNombre()%></p>
                                                 <p><%= listaMiembros.size()%> Miembros, <%= listaPost.size()%> Posts</p>
+                                                <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
+                                                 <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="panel panel-default">
                                             <div class="panel-heading"> <h4>Miembros</h4></div>
                                             <% for (Usuario m : listaMiembros) {%>
                                             <div class="panel-body">
-                                                <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="#"><%= m.getNombre()%></a>
+                                                <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="MuroServlet?usuarioMuro=<%=m.getIdUsuario() %>"><%= m.getNombre()%></a>
                                                 <div class="clearfix"></div>
                                                 <hr>
                                             </div>

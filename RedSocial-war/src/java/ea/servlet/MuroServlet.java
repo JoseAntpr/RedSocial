@@ -12,6 +12,7 @@ import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -46,26 +47,47 @@ public class MuroServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        String id_usuario;
         
-        List<Post> listaPost;
         
-//        id_usuario = request.getParameter("idUsuario");//id usuario del muro al haber clicado en post
-//                                                      // menú superior del muro
-        BigDecimal idUsuario=new BigDecimal(1.0);
+        List<Post> listaPost=null;
         
-//        // Añadimos el post a la coleccion de post del miembro creador
-//        Usuario usuario=usuarioFacade.find(idUsuario);
-//        listaPost=(List)usuario.getPostCollection();
+        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
+        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
         
-        listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+        Usuario usuario =usuarioFacade.find(idUsuario);
+        Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
+        String mensaje=null;
+//      
+        if(idUsuarioMuro.equals(idUsuario)){
+            listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+
+        }else{
+            if(usuario.siguesUsuario(usuarioMuro).equals("si")){
+                
+                listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
+                
+                
+            }else{
+                listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+                usuarioMuro=usuario;
+                mensaje = "Error, no puedes ver el muro de un usuario que no sigues."; 
+            }
+        }
+        
+        request.setAttribute("mensajeErrorMuroOtro", mensaje);
+        request.setAttribute("usuarioSesion", usuario);
+        request.setAttribute("usuarioMuro", usuarioMuro);
         
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
        
-        rd.forward(request, response); 
+        rd.forward(request, response);
+            
+        
+        
+      
         
         
     }

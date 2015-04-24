@@ -5,29 +5,28 @@
  */
 package ea.servlet;
 
-import ea.ejb.UsuarioFacade;
-import ea.entity.Usuario;
+import ea.ejb.GrupoFacade;
+import ea.entity.Grupo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Azahar
+ * @author Jose Sánchez Aranda
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    
+@WebServlet(name = "EliminarGrupoServlet", urlPatterns = {"/EliminarGrupoServlet"})
+public class EliminarGrupoServlet extends HttpServlet {
     @EJB
-    private UsuarioFacade usuarioFacade;    
+    private GrupoFacade grupoFacade;
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,34 +38,14 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {      
+            throws ServletException, IOException {
+        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
+        Grupo grupo = grupoFacade.find(idGrupo);
         
-        String email = (String) request.getParameter("email");            
-        String password = (String) request.getParameter("password");
+        grupoFacade.eliminarGrupo(grupo);
         
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            Usuario user = usuarioFacade.login(email, password);
-            
-            //Si el usuario existe en la base de datos
-            if (user !=null){
-                
-                BigDecimal idUser = user.getIdUsuario();
-                request.getSession().setAttribute("idUser", idUser);
-                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-            }
-            //Si ha no ha encontrado el usuario:
-            else{
-                
-                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
-                request.setAttribute("mensaje", mensaje);                
-                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
-            }
-            
-        }      
+        this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

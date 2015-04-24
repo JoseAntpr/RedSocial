@@ -11,24 +11,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Azahar
+ * @author Joseantpr
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    
+@WebServlet(name = "SeguirNoSeguirServlet", urlPatterns = {"/SeguirNoSeguirServlet"})
+public class SeguirNoSeguirServlet extends HttpServlet {
     @EJB
-    private UsuarioFacade usuarioFacade;    
+    private UsuarioFacade usuarioFacade;
 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,34 +37,41 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {      
-        
-        String email = (String) request.getParameter("email");            
-        String password = (String) request.getParameter("password");
-        
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+            throws ServletException, IOException {
+            BigDecimal idUsuarioPropio=(BigDecimal) request.getSession().getAttribute("idUser");
+            BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuariomuro")) ;
+            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
             
-            Usuario user = usuarioFacade.login(email, password);
+            BigDecimal idUsuario;
+            Usuario usuario;
+            String ruta= (String) request.getParameter("ruta");
+            String button = (String) request.getParameter("botonSeguir");
             
-            //Si el usuario existe en la base de datos
-            if (user !=null){
-                
-                BigDecimal idUser = user.getIdUsuario();
-                request.getSession().setAttribute("idUser", idUser);
-                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-            }
-            //Si ha no ha encontrado el usuario:
-            else{
-                
-                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
-                request.setAttribute("mensaje", mensaje);                
-                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
-            }
             
-        }      
+           if(button.equals("Seguir")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().add(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().add(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+           }else if(button.equals("Siguiendo")){
+              idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.getUsuarioCollection1().remove(usuarioPropio);
+              usuarioPropio.getUsuarioCollection().remove(usuario);
+              
+              usuarioFacade.edit(usuario);
+              usuarioFacade.edit(usuarioPropio);
+              
+              
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&uMuro="+idUsuarioMuro);
+           }
+            
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -52,12 +52,49 @@
                                 <div class="row">                                   
                                     <form method="POST" action="LoginServlet">
                                         <h4 class="form-signin-heading">Iniciar sesión:</h4> 
-                                        <input type="text" name="email" placeholder="email"  class="form-control" required autofocus></br>
+                                        <input type="text" name="email" placeholder="Email"  class="form-control" required autofocus></br>
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required></br>
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
                                     </form>                                    
                                 </div><!--/row-->
                             </div><!-- /col-94-->
+                            
+                            <div class="full col-sm-6">
+                                <!-- content -->                      
+                                <div class="row">                                   
+                                    <form method="POST" action="NuevoUsuarioServlet">
+                                        <h4 class="form-signin-heading">Registrate:</h4> 
+                                        <div class="col-sm-4">
+                                        <input type="text" name="nombre" placeholder="Nombre"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="apellidos" placeholder="Apellidos"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="direccion" placeholder="Direccion"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <input type="text" name="localidad" placeholder="Localidad"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <input type="text" name="provincia" placeholder="Provincia"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <input type="text" name="pais" placeholder="País"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="email" placeholder="Email"  class="form-control" required autofocus></br>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required></br>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <button class="btn btn-success btn-block" type="submit">Entrar</button>
+                                        </div>
+                                    </form>                                    
+                                </div><!--/row-->
+                            </div><!-- /col-94-->
+                            
                         </div><!-- /padding -->
                     </div>
                 <!-- /main -->				  

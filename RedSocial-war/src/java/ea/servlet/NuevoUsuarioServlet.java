@@ -11,23 +11,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Azahar
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    
+@WebServlet(name = "NuevoUsuarioServlet", urlPatterns = {"/NuevoUsuarioServlet"})
+public class NuevoUsuarioServlet extends HttpServlet {
     @EJB
-    private UsuarioFacade usuarioFacade;    
+    private UsuarioFacade usuarioFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,34 +36,33 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {      
-        
-        String email = (String) request.getParameter("email");            
-        String password = (String) request.getParameter("password");
-        
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            Usuario user = usuarioFacade.login(email, password);
-            
-            //Si el usuario existe en la base de datos
-            if (user !=null){
-                
-                BigDecimal idUser = user.getIdUsuario();
-                request.getSession().setAttribute("idUser", idUser);
-                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-            }
-            //Si ha no ha encontrado el usuario:
-            else{
-                
-                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
-                request.setAttribute("mensaje", mensaje);                
-                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
-            }
-            
-        }      
+        
+        String nombre = (String) request.getParameter("nombre"); 
+        String apellidos = (String) request.getParameter("apellidos"); 
+        String direccion = (String) request.getParameter("direccion"); 
+        String localidad = (String) request.getParameter("localidad"); 
+        String provincia = (String) request.getParameter("provincia"); 
+        String pais = (String) request.getParameter("pais"); 
+        String email = (String) request.getParameter("email"); 
+        String password = (String) request.getParameter("password"); 
+        
+        Usuario user = usuarioFacade.buscarEmail(email);
+        
+        if (user == null) {
+            user=usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
+           
+            BigDecimal idUser = user.getIdUsuario();
+            request.getSession().setAttribute("idUser", idUser);
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+        }else{
+            String mensaje = "El email ya esta registrado en nuestra red social.";
+            request.setAttribute("mensaje", mensaje);                
+            this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
+        } 
+               
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

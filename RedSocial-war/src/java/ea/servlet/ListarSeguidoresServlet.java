@@ -46,24 +46,33 @@ public class ListarSeguidoresServlet extends HttpServlet {
          List<Usuario> ListaSeguidores=null;
         Usuario usuario=null;
         String x= (String) request.getParameter("x");
-        BigDecimal idUsuario=new BigDecimal(3.0);
+        
+        
+        BigDecimal idUsuario=new BigDecimal( request.getParameter("uMuro"));
+        BigDecimal idUsuarioSesion=(BigDecimal) request.getSession().getAttribute("idUser");
+        Usuario usuarioSesion=usuarioFacade.find(idUsuarioSesion);
         usuario=usuarioFacade.find(idUsuario);
         
        if(x.equals("seguidores")){
            
         
         ListaSeguidores=(List)usuario.getUsuarioCollection1();
-       
+        
        }else if(x.equals("Seguir")){
          
          ListaSeguidores=(List)usuario.getUsuarioCollection();
+         
                 
         }else if(x.equals("usuariosSeguir")){
              ListaSeguidores=usuarioFacade.findAll();
             
         }
         
+       
+       
+        request.setAttribute("x", x);
         request.setAttribute("usuario", usuario);
+        request.setAttribute("usuarioS", usuarioSesion);
         request.setAttribute("listaSeguidores", ListaSeguidores); 
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
