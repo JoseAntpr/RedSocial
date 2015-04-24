@@ -53,7 +53,10 @@ public class LoginServlet extends HttpServlet {
             if (user !=null){
                 
                 BigDecimal idUser = user.getIdUsuario();
+                
+                request.getSession().setAttribute("user", user); 
                 request.getSession().setAttribute("idUser", idUser);
+              
                 response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
             }
             //Si ha no ha encontrado el usuario:
