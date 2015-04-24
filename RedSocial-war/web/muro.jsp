@@ -120,9 +120,18 @@
                                                           </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
-							  <li>
-								<a href="#"><%= u.getNombre()+" "+u.getApellidos() %></span></a>
-							  </li>
+							 <li class="dropdown" id="fat-menu"> <a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><%= u.getNombre()+" "+u.getApellidos() %> <b class="caret"></b></a>
+                                                                <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
+                                                                    <li role="presentation">
+                                                                        <form method="POST" action="EditarUsuarioServlet"> 
+                                                                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= u.getIdUsuario()%>"/>                                                                                                                                                   
+                                                                            <button class="btn btn-link" type="submit">Editar perfil</button>
+                                                                        </form>
+                                                                    </li>
+                                                                    <li class="divider" role="presentation"></li>
+                                                                    <li role="presentation"><a href="LogoutServlet" tabindex="-1" role="menuitem">Cerrar Sesión</a></li>
+                                                                </ul>
+                                                            </li>	
 							</ul>
 							</nav>
 						</div>
