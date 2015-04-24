@@ -17,8 +17,8 @@ p<%--
 <%!List<Usuario> listaMiembros;%>
 <% listaMiembros = (List) request.getAttribute("miembrosGrupo");%>
 
-<%!String nombreGrupo;%>
-<% nombreGrupo = (String) request.getAttribute("nombreGrupo");%>
+<%!Grupo grupo;%>
+<% grupo =(Grupo) request.getAttribute("grupo");%>
 
 <%!List<Grupo> listaGrupo;%>
 <% listaGrupo = (List) request.getAttribute("listaGrupo");%>
@@ -133,8 +133,11 @@ p<%--
                                         <div class="panel panel-default">
                                             <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
                                             <div class="panel-body">
-                                                <p class="lead"><%= nombreGrupo%></p>
+                                                <p class="lead"><%= grupo.getNombre()%></p>
                                                 <p><%= listaMiembros.size()%> Miembros, <%= listaPost.size()%> Posts</p>
+                                                <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
+                                                 <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="panel panel-default">

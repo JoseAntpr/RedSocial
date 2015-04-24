@@ -41,6 +41,11 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         create(grupo);
         return grupo;
     }
+    
+    public void eliminarGrupo(Grupo grupo){
+        System.err.println("El id de grupo es " + grupo.getIdGrupo());
+        remove(grupo);
+    }
 
     public GrupoFacade() {
         super(Grupo.class);
