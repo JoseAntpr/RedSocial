@@ -49,21 +49,32 @@ public class MuroServlet extends HttpServlet {
        
         
         
-        List<Post> listaPost;
+        List<Post> listaPost=null;
         
         BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
         BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
         
         Usuario usuario =usuarioFacade.find(idUsuario);
         Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
+        String mensaje=null;
 //      
         if(idUsuarioMuro.equals(idUsuario)){
             listaPost=postFacade.findByMuroIdUsuario(idUsuario);
 
         }else{
-            
-            listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
+            if(usuario.siguesUsuario(usuarioMuro).equals("si")){
+                
+                listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
+                
+                
+            }else{
+                listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+                usuarioMuro=usuario;
+                mensaje = "Error, no puedes ver el muro de un usuario que no sigues."; 
+            }
         }
+        
+        request.setAttribute("mensajeErrorMuroOtro", mensaje);
         request.setAttribute("usuarioSesion", usuario);
         request.setAttribute("usuarioMuro", usuarioMuro);
         

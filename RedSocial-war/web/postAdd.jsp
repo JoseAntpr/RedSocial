@@ -88,6 +88,10 @@
 							  <li>
 								<a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%=idUsuarioSesion%>"><span class="badge">Usuarios</span></a>
 							  </li>
+                                                          <li>
+								<a href="#"><span class="badge">Grupos</span></a>
+							  
+                                                          </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 							  <li>

@@ -19,6 +19,8 @@
     uMuro = (Usuario) request.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
+    
+    String mensaje=(String)request.getAttribute("mensajeErrorMuroOtro");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,7 +111,13 @@
 							  </li>
 							  <li>
 								<a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= u.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
-							  </li>
+							  
+                                                          </li>
+                                                          
+                                                          <li>
+								<a href="#"><span class="badge">Grupos</span></a>
+							  
+                                                          </li>
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 							  <li>
@@ -122,7 +130,15 @@
 					  
 						<div class="padding">
 							<div class="full col-sm-9">
-							  
+                                                            <%    
+                                                            if(mensaje!=null){                                             
+                                                            %>
+                                                            
+                                                                <p><%=mensaje%></p>
+                                                            
+                                                            <%    
+                                                            }     
+                                                            %>
 								<!-- content -->                      
 								<div class="row">
 								  
@@ -136,128 +152,25 @@
                                                                          
                                                                      %>        
                                                                     <div class="panel panel-default">
-                                                                        
-
-                    <!-- sidebar -->
-                    <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-
-                        <ul class="nav">
-                            <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-                        </ul>
-
-                        <ul class="nav hidden-xs" id="lg-menu"></br></br>
-                            <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                            <li class="active"><%= uMuro.getNombre() + " " + uMuro.getApellidos()%></li></br>
-                            <li class="active">Vive en <%= uMuro.getLocalidad() + ", " + uMuro.getProvincia() + ", " + uMuro.getPais()%></li></br>
-                            <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso()%></li></br>
-                            <li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
-                            <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                            <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size()%></b>  </a></li>
-                            <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario()%>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size()%> </b></a></li></br>
-
-                        </ul>
-                        <ul class="list-unstyled hidden-xs" id="sidebar-footer">
-                        </ul>
-
-                        <!-- tiny only nav-->
-                        <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                            <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
-                        </ul>
-
-                    </div>
-                    <!-- /sidebar -->
-
-                    <!-- main right col -->
-                    <div class="column col-sm-10 col-xs-11" id="main">
-
-                        <!-- top nav -->
-                        <div class="navbar navbar-blue navbar-static-top">  
-                            <div class="navbar-header">
-                                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <span class="sr-only">Toggle</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                                <a  class="navbar-brand logo">Rs</a>
-                            </div>
-                            <nav class="collapse navbar-collapse" role="navigation">
-                                <form class="navbar-form navbar-left">
-                                    <div class="input-group input-group-sm" style="max-width:360px;">
-                                        <input class="form-control" placeholder="Search" name="buscar" id="srch-term" type="text">
-                                        <div class="input-group-btn">
-                                            <a href="#" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                            <!--<button  class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button> -->
-                                        </div>
-                                    </div>
-                                </form>
-                                <ul class="nav navbar-nav">
-                                    <li>
-                                        <a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario()%>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-                                    </li>
-                                    <li>
-                                        <%    if (u.getIdUsuario().equals(uMuro.getIdUsuario())) { %>
-                                        <a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
-                                        <% } else {%>
-
-                                        <%}%>
-                                    </li>
-                                    <li>
-                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= u.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">Grupos</span></a>
-                                    </li>
-                                </ul>
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li>
-                                        <a href="#"><%= u.getNombre() + " " + u.getApellidos()%></span></a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <!-- /top nav -->
-
-                        <div class="padding">
-                            <div class="full col-sm-9">
-
-                                <!-- content -->                      
-                                <div class="row">
-
-                                    <!-- main col left --> 
-                                    <div class="col-sm-5">
+                                                                        <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
+                                                                        <div class="panel-body">
+                                                                            <p><%= uMuro.getNombre() + " " + uMuro.getApellidos()%></p>
+                                                                            <p><%= p.getFecha()%></p>
+                                                                            <p><%= p.getDescripcion()%></p>
 
 
+                                                                            <p>
+                                                                                <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
 
-                                        <%for (int i = 0; i < lista.size(); i++) {
-                                                Post p = lista.get(i);
+                                                                            <form name="delete" action="PostDeleteServlet" method="post">    
+                                                                                <input type="hidden" value="usuario" name="tipo_borrado"/>
+                                                                                <input type="hidden" value="<%=p.getIdPost()%>" name="idGuardada"/> <!--Guardamos la id para recuperarla al borrar post-->
+                                                                                <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                                            </form>
+                                                                            </p>
+                                                                        </div>
 
-                                        %>        
-                                        <div class="panel panel-default">
-
-
-                                            <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
-                                            <div class="panel-body">
-                                                <p><%= uMuro.getNombre() + " " + uMuro.getApellidos()%></p>
-                                                <p><%= p.getFecha()%></p>
-                                                <p><%= p.getDescripcion()%></p>
-
-
-                                                <p>
-                                                    <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
-
-                                                <form name="delete" action="PostDeleteServlet" method="post">    
-                                                    <input type="hidden" value="usuario" name="tipo_borrado"/>
-                                                    <input type="hidden" value="<%=p.getIdPost()%>" name="idGuardada"/> <!--Guardamos la id para recuperarla al borrar post-->
-                                                    <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
-                                                </form>
-                                                </p>
-                                            </div>
-
-                                        </div>
+                                                                    </div>
                                         <%
                                             }
                                         %>  
