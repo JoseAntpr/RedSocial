@@ -54,7 +54,7 @@
                                                         <li class="active"><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></li></br>
                                                         <li class="active">Vive en <%= uMuro.getLocalidad()+", "+uMuro.getProvincia()+", "+uMuro.getPais() %></li></br>
                                                         <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso() %></li></br>
-							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
+							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes by Aza</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size() %></b>  </a></li>
                                                         <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size() %> </b></a></li></br>
@@ -104,7 +104,7 @@
 							  </li>
 							  <li>
                                                                 <% if(u.getIdUsuario().equals(uMuro.getIdUsuario())){ %>
-								<a href="postAdd.jsp?idUsuario=<%=u.getIdUsuario()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+								<a href="postAdd.jsp?idUsuario=<%=u.getIdUsuario()%>&nombre=<%=u.getNombre()%>&apellidos=<%=u.getApellidos()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
                                                                 <% }else{%>
                                                                 
                                                                 <%}%>
@@ -121,6 +121,7 @@
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 							  <li>
+                                                              <!-- NOMBRE Y APELLIDOS DEL USUARIO PARA CERRAR SESION-->
 								<a href="#"><%= u.getNombre()+" "+u.getApellidos() %></span></a>
 							  </li>
 							</ul>

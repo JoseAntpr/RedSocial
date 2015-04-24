@@ -7,6 +7,9 @@
 --%>
 <% 
     BigDecimal idUsuarioSesion=new BigDecimal(request.getParameter("idUsuario"));
+    String nombre=(String)request.getParameter("nombre");
+    String apellidos=(String)request.getParameter("apellidos");
+    
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

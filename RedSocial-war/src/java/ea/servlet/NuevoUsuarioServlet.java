@@ -61,6 +61,7 @@ public class NuevoUsuarioServlet extends HttpServlet {
             request.setAttribute("mensaje", mensaje);                
             this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
         } 
+        
                
     }
 

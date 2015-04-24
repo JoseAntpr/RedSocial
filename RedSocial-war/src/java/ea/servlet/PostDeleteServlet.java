@@ -43,8 +43,9 @@ public class PostDeleteServlet extends HttpServlet {
         
         
         String tipoBorrado=request.getParameter("tipo_borrado");
-        
         String idGuardada=request.getParameter("idGuardada");
+        
+        
         BigDecimal idPost=new BigDecimal(idGuardada);
         
         postFacade.deletePost(idPost);
