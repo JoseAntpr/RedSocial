@@ -157,15 +157,11 @@ p<%--
                                                 <h4>¿Que te cuentas?</h4>
                                                 <div class="form-group" style="padding:14px;">
                                                     <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
-                                                    <input class="form-control" name="image_post_grupo" type="file" />
+                                                    <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
+                                                    <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
+                                                    <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
                                                 </div>
-                                                <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
-                                                <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
-                                                <ul class="list-inline">
-                                                    <li>
-                                                        <a href=""><i class="glyphicon glyphicon-upload" ></i></a>
-                                                    </li>
-                                                </ul>
+                                                
                                             </form>
                                         </div>
                                         <% for (int i = listaPost.size() - 1; i >= 0; i--) {
