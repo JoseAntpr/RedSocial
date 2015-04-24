@@ -8,9 +8,11 @@ package ea.ejb;
 import ea.entity.Grupo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -50,5 +52,6 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
     public GrupoFacade() {
         super(Grupo.class);
     }
+    
     
 }

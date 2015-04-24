@@ -6,10 +6,13 @@
 package ea.servlet;
 
 import ea.ejb.GrupoFacade;
+import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -24,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
+    @EJB
+    private UsuarioFacade usuarioFacade;
     @EJB
     private GrupoFacade grupoFacade;
 
@@ -39,9 +45,25 @@ public class GrupoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // IDs
-        BigDecimal id_grupo = (BigDecimal) grupoFacade.findAll().get(0).getIdGrupo();
-        Grupo grupo = grupoFacade.find(id_grupo);
+        // Recuperamos la sesion completa
+//        HttpSession session = request.getSession();
+//        
+//        Usuario user = (Usuario)session.getAttribute("user");
+//        BigDecimal id_usuario = user.getIdUsuario();
+        
+
+        
+        //prueba
+        BigDecimal id_usuario = new BigDecimal(1.0);
+        Usuario user = usuarioFacade.find(id_usuario);
+        
+//        List<Grupo> listaGruposMiembro = grupoFacade.findGruposByIdMiembro(id_usuario);
+        List<Grupo> listaGruposMiembro = (List)user.getGrupoCollection();
+        Grupo grupo = listaGruposMiembro.get(0);
+        
+        
+        
+        
         
         // Posts del grupo actual
         Collection postCollection;
@@ -59,7 +81,10 @@ public class GrupoServlet extends HttpServlet {
         // Lista de todos los grupos
         Collection listaGrupos;
         listaGrupos = grupoFacade.findAll();
-        request.setAttribute("listaGrupo", listaGrupos);
+        request.setAttribute("listaGrupos", listaGrupos);
+        
+        // Lista de Grupos donde user es miembro
+        request.setAttribute("listaGruposMiembro", listaGruposMiembro);
         
         // Request Dispatcher
         RequestDispatcher rd;

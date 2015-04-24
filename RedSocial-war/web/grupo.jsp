@@ -11,17 +11,24 @@ p<%--
 --%>
 
 <%-- declaracion  y asignación de variables --%>
-<%!List<Post> listaPost;%>
-<% listaPost = (List) request.getAttribute("postGrupo");%>
+<%
+List<Post> listaPost;
+listaPost = (List) request.getAttribute("postGrupo");
 
-<%!List<Usuario> listaMiembros;%>
-<% listaMiembros = (List) request.getAttribute("miembrosGrupo");%>
+List<Usuario> listaMiembros;
+listaMiembros = (List) request.getAttribute("miembrosGrupo");
 
-<%!Grupo grupo;%>
-<% grupo =(Grupo) request.getAttribute("grupo");%>
+Grupo grupo;
+grupo =(Grupo) request.getAttribute("grupo");
 
-<%!List<Grupo> listaGrupo;%>
-<% listaGrupo = (List) request.getAttribute("listaGrupo");%>
+List<Grupo> listaGrupos;
+listaGrupos = (List) request.getAttribute("listaGrupos");
+
+List<Grupo> listaGruposMiembro;
+listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
+%>
+
+
 
 
 <%-- Enumeration atributosSesion = session.getAttributeNames(); --%>
@@ -53,9 +60,31 @@ p<%--
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="crearGrupo.jsp"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
-                            <% for(Grupo g : listaGrupo){ %>
-                                <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a></li>
-                            <% } %>
+                            <% for(Grupo g : listaGrupos){ 
+                                if(listaGruposMiembro.contains(g)){ %>
+                                    <li class="active list-group">
+                                        <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
+                                        <form class="pull-right col-xs-offset-1" method="post" action="AbandonarGrupoServlet">
+                                            <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"></input>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar" href=""></input>
+                                        </form>
+                                            
+                                        <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
+                                            <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
+                                        </form>
+                                    </li>
+                                <% }else{ %>
+                                    <li class="active list-group">
+                                        <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
+                                        <form class="pull-right col-xs-offset-1" method="post" action="UnirseGrupoServlet">
+                                            <input type="hidden" name="idGrupoUnir" value="<%=g.getIdGrupo()%>"></input>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="unir" value="Unirse" href=""></input>
+                                        </form>
+                                    </li>
+                                    
+                                <% }
+                            } %>
                             
                         </ul>
 

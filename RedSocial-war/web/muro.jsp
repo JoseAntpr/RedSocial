@@ -115,7 +115,7 @@
                                                           </li>
                                                           
                                                           <li>
-								<a href="#"><span class="badge">Grupos</span></a>
+								<a href="GrupoServlet"><span class="badge">Grupos</span></a>
 							  
                                                           </li>
 							</ul>
