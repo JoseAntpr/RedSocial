@@ -4,6 +4,7 @@
     Author     : Azahar
 --%>
 
+
 <%@page import="java.math.BigDecimal"%>
 <%@page import="ea.entity.Usuario"%>
 <%@page import="ea.entity.Post"%>
@@ -11,12 +12,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
-    
-    HttpSession sesion = request.getSession();
-//    u = (Usuario) request.getAttribute("usuarioSesion");
-    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-//    usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
-    Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+    Usuario uMuro;
+    Usuario u;
+
+    u = (Usuario) request.getAttribute("usuarioSesion");
+    uMuro = (Usuario) request.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
     
@@ -48,19 +48,14 @@
                     </ul>
                     <ul class="nav hidden-xs" id="lg-menu"></br></br>
                         <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                        <li class="active"><%= usuarioMuro.getNombre()+" "+usuarioMuro.getApellidos() %></li></br>
-                        <li class="active">Vive en <%= usuarioMuro.getLocalidad()+", "+usuarioMuro.getProvincia()+", "+usuarioMuro.getPais() %></li></br>
-                        <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso() %></li></br>
+                        <li class="active"><%= uMuro.getNombre()+" "+uMuro.getApellidos() %></li></br>
+                        <li class="active">Vive en <%= uMuro.getLocalidad()+", "+uMuro.getProvincia()+", "+uMuro.getPais() %></li></br>
+                        <li class="active">Fecha ingreso:  <%= uMuro.getFechaIngreso() %></li></br>
 			<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
-                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-align-right"></i> Grupos</a></li>
-                        <!--
-                        <li><a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
-                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
-                        -->
-                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
-                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
-                        
-                        </ul>
+                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
+                        <li><a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%= uMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=uMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%= uMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=uMuro.getUsuarioCollection().size() %> </b></a></li></br>
+                    </ul>
                     <ul class="list-unstyled hidden-xs" id="sidebar-footer"></ul>
                     <!-- tiny only nav-->
                     <ul class="nav visible-xs" id="xs-menu">
@@ -85,33 +80,35 @@
                                    <p><%=mensaje%></p>
                             <%  } %>
                             <!-- content -->                      
-                            <div class="row">
-				<!-- main col left --> 
-                                <div class="col-sm-5">
-                                    <%for (int i=0;i<lista.size();i++) { 
-                                        Post p=lista.get(i);
-                                     %>        
-                                     <div class="panel panel-default">
-                                        <div class="panel-thumbnail">
-                                            <img src="<%= p.getImagen()%>" class="img-responsive">
-                                        </div>
-                                        <div class="panel-body">
-                                            <p><%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></p>
-                                            <p><%= p.getFecha()%></p>
-                                            <p><%= p.getDescripcion()%></p>
-                                                
-                                            <p><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
-                                                <form name="delete" action="PostDeleteServlet" method="post">    
-                                                    <input type="hidden" value="usuario" name="tipo_borrado"/>
-                                                    <input type="hidden" value="<%=p.getIdPost()%>" name="idGuardada"/> <!--Guardamos la id para recuperarla al borrar post-->
-                                                    <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
-                                                </form>
-                                            </p>
-                                        </div>
+                                <div class="col-sm-8">                                   
+                                <form method="POST" action="GuardarUsuarioServlet">
+                                    <h4 class="form-signin-heading">Editar perfil:</h4> 
+                                    <div class="col-sm-4">
+                                    Nombre <input type="text" name="nombre" placeholder="<%= u.getNombre() %>"  class="form-control" required autofocus></br>
                                     </div>
-                                    <% } %>  
-                                </div>
-                            </div>
+                                    <div class="col-sm-6">
+                                    Appelidos <input type="text" name="apellidos" placeholder="<%= u.getApellidos()%>"  class="form-control" required autofocus></br>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    Direccion <input type="text" name="direccion" placeholder="<%= u.getDireccion()%>"  class="form-control" required autofocus></br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    Localidad <input type="text" name="localidad" placeholder="<%= u.getLocalidad()%>"  class="form-control" required autofocus></br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    Provincia <input type="text" name="provincia" placeholder="<%= u.getProvincia()%>"  class="form-control" required autofocus></br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                    Pais <input type="text" name="pais" placeholder="<%= u.getPais()%>"  class="form-control" required autofocus></br>
+                                    </div>
+                                    <div class="col-sm-10">
+                                    Email <input type="text" name="email" placeholder="<%= u.getEmail()%>"  class="form-control" required autofocus></br>
+                                    </div>                                                                    
+                                    <div class="col-sm-4">
+                                    <button class="btn btn-success btn-block" type="submit">Guardar</button>
+                                    </div>
+                                </form>                                    
+                            </div><!--/row-->
                         </div><!-- /col-9 -->  
                     </div><!-- /padding -->
                 </div><!-- /main right col -->
@@ -119,7 +116,6 @@
            <!-- /main -->
         </div>
     </div>
-
     <script type="text/javascript" src="assets/js/jquery.js"></script>
     <script type="text/javascript" src="assets/js/bootstrap.js"></script>
     <script type="text/javascript">

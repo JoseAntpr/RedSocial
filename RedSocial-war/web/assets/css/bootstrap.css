@@ -1886,6 +1886,13 @@ textarea.form-control{
 .form-group{
 	margin-bottom:15px
 }
+.form-group textarea{
+    margin-bottom: 1em;
+}
+.form-group input[type="file"]{
+    height: 2.5em;
+    float: left;
+}
 
 .radio,.checkbox{
 	display:block;

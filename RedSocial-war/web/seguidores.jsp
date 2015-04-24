@@ -14,11 +14,13 @@
     
     List<Usuario> listaUsuario;
     String ruta;
-    Usuario usuarioPropio;
-    Usuario usuarioSesion;
     
-    usuarioSesion=(Usuario) request.getAttribute("usuarioS");
-    usuarioPropio=(Usuario) request.getAttribute("usuario");
+    HttpSession sesion = request.getSession();
+    
+    Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
+    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+//    usuario=(Usuario) request.getAttribute("usuarioS");
+//    usuarioMuro=(Usuario) request.getAttribute("usuario");
     ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
@@ -51,17 +53,17 @@
 					   
 						<ul class="nav hidden-xs" id="lg-menu"></br></br>
                                                     <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
-                                                        <li class="active"><%= usuarioPropio.getNombre()+" "+usuarioPropio.getApellidos() %></li></br>
-                                                        <li class="active">Vive en <%= usuarioPropio.getLocalidad()+", "+usuarioPropio.getProvincia()+", "+usuarioPropio.getPais() %></li></br>
-                                                        <li class="active">Fecha ingreso:  <%= usuarioPropio.getFechaIngreso() %></li></br>
+                                                        <li class="active"><%= usuarioMuro.getNombre()+" "+usuarioMuro.getApellidos() %></li></br>
+                                                        <li class="active">Vive en <%= usuarioMuro.getLocalidad()+", "+usuarioMuro.getProvincia()+", "+usuarioMuro.getPais() %></li></br>
+                                                        <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso() %></li></br>
 							
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%=usuarioPropio.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioPropio.getUsuarioCollection1().size() %></b> </a>      
+                                                                <a href="ListarSeguidoresServlet?x=seguidores&uMuro=<%=usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b> </a>      
                                                         </li>
                                                         
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%=usuarioPropio.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioPropio.getUsuarioCollection().size() %></b></a></li></br>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&uMuro=<%=usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioMuro.getUsuarioCollection().size() %></b></a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
@@ -82,47 +84,8 @@
                     <div class="column col-sm-10 col-xs-11" id="main">
 
                         <!-- top nav -->
-                        <div class="navbar navbar-blue navbar-static-top">  
-                            <div class="navbar-header">
-                                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <span class="sr-only">Toggle</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                                <a  class="navbar-brand logo">Rs</a>
-                            </div>
-                            <nav class="collapse navbar-collapse" role="navigation">
-                                <form class="navbar-form navbar-left">
-                                    <div class="input-group input-group-sm" style="max-width:360px;">
-                                        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                                        <div class="input-group-btn">
-                                            <a href="#" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                           <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
-                                        </div>
-                                    </div>
-                                </form>
-                                <ul class="nav navbar-nav">
-                                    <li>
-                                        <a href="MuroServlet?usuarioMuro=<%=usuarioSesion.getIdUsuario() %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-                                    </li>
-                                    <!--<li>
-                                          <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
-                                    </li>-->
-                                    <li>
-                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=<%= usuarioSesion.getIdUsuario()%>"><span class="badge">Usuarios</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">Grupos</span></a>
-                                    </li>
-                                </ul>
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li>
-                                        <a href="#"><%= usuarioSesion.getNombre()+" "+usuarioSesion.getApellidos() %></span></a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        <%@include file="navBar.jsp" %>
+                        
                         <!-- /top nav -->
 
                         <div class="padding">
@@ -147,13 +110,13 @@
                                                 
                                                     Usuario u = listaUsuario.get(i);
                                                 
-                                                    s=usuarioSesion.siguesUsuario(u);
+                                                    s=usuario.siguesUsuario(u);
                                              
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <%
-                                                    if(u.getIdUsuario().equals(usuarioSesion.getIdUsuario())){
+                                                    if(u.getIdUsuario().equals(usuario.getIdUsuario())){
                                                     }else{
                                                     
                                                         if(s.equals("si")){ %>
@@ -161,7 +124,7 @@
                                                 <form action="SeguirNoSeguirServlet" method="post">  
                                                 <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >
                                                 <input type="hidden" value="Siguiendo" name="botonSeguir" >
-                                                <input type="hidden" value="<%= usuarioPropio.getIdUsuario() %>" name="usuariomuro" >
+                                                <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
                                                <input type="hidden" value="<%= ruta %>" name="ruta" >
                                                 <input  class="btn btn-success pull-right" type="submit" name="boton" value="Siguiendo">
                                                 </form>
@@ -169,7 +132,7 @@
                                                 <form action="SeguirNoSeguirServlet" method="post">
                                                 <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioSeguir" >
                                                 <input type="hidden" value="Seguir" name="botonSeguir" >
-                                                <input type="hidden" value="<%= usuarioPropio.getIdUsuario() %>" name="usuariomuro" >
+                                                <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
                                                 <input type="hidden" value="<%= ruta %>" name="ruta" >
                                                 <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                 </form>

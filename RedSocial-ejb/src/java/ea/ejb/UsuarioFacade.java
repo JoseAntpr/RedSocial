@@ -67,7 +67,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
      public Usuario nuevoUser(String nombre, String apellidos, String direccion, String localidad, String provincia, String pais, String email, String password) {
        
        
-            //  BigDecimal bg = new BigDecimal(7.0);
+             BigDecimal bg = new BigDecimal(11.0);
                 
              Usuario user = new Usuario();         
              
@@ -79,7 +79,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
               user.setPais(pais);
               user.setEmail(email);
               user.setPassword(password);
-             // user.setIdUsuario(bg);
+              user.setIdUsuario(bg);
               user.setFechaIngreso(new Date());  
 
               create(user);  
