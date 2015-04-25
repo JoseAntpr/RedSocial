@@ -39,7 +39,8 @@ public class LogoutServlet extends HttpServlet {
           juntos.
         */
         
-        request.getSession().setAttribute("user", null);       
+//        request.getSession().setAttribute("user", null); 
+        request.getSession().invalidate();
         this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response); 
     }
 
