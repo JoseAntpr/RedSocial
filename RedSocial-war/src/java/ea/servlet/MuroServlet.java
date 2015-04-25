@@ -61,7 +61,7 @@ public class MuroServlet extends HttpServlet {
         List<Post> listaPost=null;
        
         
-           BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
+        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
         //BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
 //        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
         BigDecimal idUsuario = usuario.getIdUsuario();

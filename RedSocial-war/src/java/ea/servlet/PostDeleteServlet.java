@@ -6,9 +6,11 @@
 package ea.servlet;
 
 import ea.ejb.PostFacade;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -52,7 +54,8 @@ public class PostDeleteServlet extends HttpServlet {
         postFacade.deletePost(idPost);
         
         if(tipoBorrado.equals("usuario")){
-            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+            Usuario usuario=(Usuario)request.getSession().getAttribute("usuario");
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
         }else if(tipoBorrado.equals("grupo")){
             response.sendRedirect(request.getContextPath()+"/GrupoServlet");
         }
