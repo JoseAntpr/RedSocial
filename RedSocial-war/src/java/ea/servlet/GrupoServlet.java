@@ -11,6 +11,7 @@ import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
@@ -48,19 +49,24 @@ public class GrupoServlet extends HttpServlet {
         //Recuperamos la sesion completa
         HttpSession session = request.getSession();
 //        
-//        Usuario user = (Usuario)session.getAttribute("user");
-//        BigDecimal id_usuario = user.getIdUsuario();
+//        Usuario usuario = (Usuario)session.getAttribute("usuario");
+//        BigDecimal id_usuario = usuario.getIdUsuario();
         
 
         
         //prueba
 //        BigDecimal id_usuario = new BigDecimal(1.0);
-//        Usuario user = usuarioFacade.find(id_usuario);
+//        Usuario usuario = usuarioFacade.find(id_usuario);
         
-        Usuario user = (Usuario)session.getAttribute("user");
+        Usuario usuario = (Usuario)session.getAttribute("usuario");
+        String id= request.getParameter("usuarioMuro");
+        BigDecimal idUsuarioMuro= new BigDecimal(id);
+        
+        Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
         
 //        List<Grupo> listaGruposMiembro = grupoFacade.findGruposByIdMiembro(id_usuario);
-        List<Grupo> listaGruposMiembro = (List)user.getGrupoCollection();
+        List<Grupo> listaGruposMiembro = (List)usuario.getGrupoCollection();
+        
         Grupo grupo = listaGruposMiembro.get(0);
         
         
@@ -85,9 +91,10 @@ public class GrupoServlet extends HttpServlet {
         listaGrupos = grupoFacade.findAll();
         request.setAttribute("listaGrupos", listaGrupos);
         
-        // Lista de Grupos donde user es miembro
+        // Lista de Grupos donde usuario es miembro
         request.setAttribute("listaGruposMiembro", listaGruposMiembro);
         
+        request.setAttribute("usuarioMuro", usuarioMuro);
         // Request Dispatcher
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");

@@ -53,9 +53,9 @@ public class PostAddServlet extends HttpServlet {
         HttpSession session = request.getSession();
         List<Post> listaPost;
         
-        session.getAttribute("username");
+//        session.getAttribute("username");
         
-         BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
+         BigDecimal idUsuario =((Usuario) session.getAttribute("usuario")).getIdUsuario(); 
        
 //        listaPost = this.postFacade.findByMuroIdUsuario(id_usuario);
         

@@ -12,6 +12,9 @@ p<%--
 
 <%-- declaracion  y asignación de variables --%>
 <%
+ Usuario usuario=(Usuario)session.getAttribute("usuario");
+ Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
+ 
 List<Post> listaPost;
 listaPost = (List) request.getAttribute("postGrupo");
 
@@ -27,8 +30,7 @@ listaGrupos = (List) request.getAttribute("listaGrupos");
 List<Grupo> listaGruposMiembro;
 listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
 
-Usuario userLogin;
-userLogin = (Usuario) request.getSession().getAttribute("user");
+
 %>
 
 
@@ -71,7 +73,7 @@ userLogin = (Usuario) request.getSession().getAttribute("user");
                                             <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"></input>
                                             <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar" href=""></input>
                                         </form>
-                                        <% if (g.getIdAdministrador().equals(userLogin.getIdUsuario())){ %>    
+                                        <% if (g.getIdAdministrador().equals(usuario.getIdUsuario())){ %>    
                                             <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
                                                 <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
                                                 <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
@@ -155,9 +157,9 @@ userLogin = (Usuario) request.getSession().getAttribute("user");
                                                 
                                             </form>
                                         </div>
-                                        <% for (int i = listaPost.size() - 1; i >= 0; i--) {
-                                                Post p = listaPost.get(i);
-                                                //for (Post p : listaPost) {
+                                        <% //for (int i = listaPost.size() - 1; i >= 0; i--) {
+                                             //   Post p = listaPost.get(i);
+                                                for (Post p : listaPost) {
                                         %>
                                         <div class="panel panel-default">
                                             <% if (p.getImagen() != null) {%>

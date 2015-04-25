@@ -1,4 +1,4 @@
-<%@page import="java.math.BigDecimal"%>
+
 <%@page import="ea.entity.Usuario"%>
 66<%-- 
     Document   : postAdd
@@ -8,9 +8,10 @@
 <% 
     HttpSession sesion = request.getSession();
     Usuario usuario = (Usuario)sesion.getAttribute("usuario");
-    Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
     
-//    BigDecimal idUsuarioSesion=new BigDecimal(request.getParameter("idUsuario"));
+    Usuario usuarioMuro = (Usuario)request.getAttribute("usuarioMuro");
+    
+   // BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuarioMuro"));
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -40,8 +41,8 @@
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
                                                         <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores%>"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
+                                                                <a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%=usuario.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores</a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%=usuario.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo</a></li></br>
                                                      
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">

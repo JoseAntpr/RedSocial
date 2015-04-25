@@ -3,6 +3,8 @@
     Created on : 24-abr-2015, 17:43:24
     Author     : Azahar
 --%>
+  
+
 <div class="navbar navbar-blue navbar-static-top">  
     <div class="navbar-header">
 	<a  class="navbar-brand logo">Rs</a>
@@ -18,15 +20,15 @@
 	</form>
 	<ul class="nav navbar-nav">
             <li>
-                <a href="MuroServlet?inicio=true"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                <a href="MuroServlet?usuarioMuro=<%= usuario.getIdUsuario()  %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
             </li>
             <li>
                 <% if(usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){ %>
-                    <a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+                    <a href="postAddIntermedioServlet?usuarioMuro=<%=usuarioMuro.getIdUsuario()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
                 <% }else{}%>
             </li>
             <li>
-                <a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
+                <a href="ListarSeguidoresServlet?x=usuariosSeguir&usuarioMuro=<%= usuario.getIdUsuario() %>"><span class="badge">Usuarios</span></a>
             </li>
             <li>
 		<a href="#"><span class="badge">Grupos</span></a>
@@ -37,7 +39,7 @@
                 <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
                     <li role="presentation">
                         <form method="POST" action="EditarUsuarioServlet"> 
-                            <input type='hidden' name="idUser" placeholder="Fecha" value="<%= usuario.getIdUsuario()%>"/>                                                                                                                                                   
+                            <input type='hidden' name="idUsuarioMuro" placeholder="Fecha" value="<%= usuarioMuro.getIdUsuario()%>"/>                                                                                                                                                   
                             <button class="btn btn-link" type="submit">Editar perfil</button>
                         </form>
                     </li>
