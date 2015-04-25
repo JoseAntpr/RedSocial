@@ -77,6 +77,7 @@ public class PostFacade extends AbstractFacade<Post> {
         // Parametros del form
         String description = null;
         String url_image = null;
+        String id_grupo = null;
 
         boolean isMultiPart;
         String filePath;
@@ -117,6 +118,8 @@ public class PostFacade extends AbstractFacade<Post> {
                     String value = item.getString();
                     if (name.equals("description_post_grupo")) {
                         description = value;
+                    }else if(name.equals("id_grupo")){
+                        id_grupo = value;
                     }
                 } else {
                     // ProcessUploadedFile
@@ -171,6 +174,7 @@ public class PostFacade extends AbstractFacade<Post> {
         }
         mapDatos.put("descripcion",description);
         mapDatos.put("imagen",url_image);
+        mapDatos.put("id_grupo", id_grupo);
  
         return mapDatos;
     }

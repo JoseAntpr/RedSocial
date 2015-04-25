@@ -4,39 +4,48 @@
 <%@page import="ea.entity.Post"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="ShowError.jsp" %>
-p<%-- 
+<%-- 
     Document   : grupo
     Created on : 25-mar-2015, 14:27:55
     Author     : fran
 --%>
-
-<%-- declaracion  y asignación de variables --%>
 <%
- Usuario usuario=(Usuario)session.getAttribute("usuario");
- Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
- 
-List<Post> listaPost;
-listaPost = (List) request.getAttribute("postGrupo");
+HttpSession sesion = request.getSession();
+Usuario usuario=(Usuario)sesion.getAttribute("usuario");
+Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
 
-List<Usuario> listaMiembros;
-listaMiembros = (List) request.getAttribute("miembrosGrupo");
 
-Grupo grupo;
-grupo =(Grupo) request.getAttribute("grupo");
+List<Grupo> listaGruposUsuario = null;
 
-List<Grupo> listaGrupos;
-listaGrupos = (List) request.getAttribute("listaGrupos");
+Grupo grupo = null;
+List<Post> listaPostGrupo = null;
+List<Usuario> listaMiembrosGrupo = null;
 
-List<Grupo> listaGruposMiembro;
-listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
+Boolean tieneGrupos = (Boolean)request.getAttribute("tieneGrupos");
+if (tieneGrupos){
+    // Lista de Grupos donde usuario es miembro
+    listaGruposUsuario = (List)request.getAttribute("listaGruposUsuario");
+    
+    // primer grupo de la lista
+    grupo =(Grupo) request.getAttribute("grupo");
+    
+    // Lista de post
+    listaPostGrupo = (List<Post>)request.getAttribute("listaPostGrupo");
+    
+    // Lista de miembros
+    listaMiembrosGrupo = (List<Usuario>)request.getAttribute("listaMiembrosGrupo");
+}
+
+//listaPost = (List) request.getAttribute("postGrupo");
+
+//listaMiembros = (List) request.getAttribute("miembrosGrupo");
+
+//List<Grupo> listaGruposUsuario;
+//listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
 
 
 %>
 
-
-
-
-<%-- Enumeration atributosSesion = session.getAttributeNames(); --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -65,8 +74,8 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
                         </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="crearGrupo.jsp"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
-                            <% for(Grupo g : listaGrupos){ 
-                                if(listaGruposMiembro.contains(g)){ %>
+                            <%if(tieneGrupos){
+                                for(Grupo g : listaGruposUsuario){ %>
                                     <li class="active list-group">
                                         <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
                                         <form class="pull-right col-xs-offset-1" method="post" action="AbandonarGrupoServlet">
@@ -80,19 +89,9 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
                                             </form>
                                         <% } %>
                                     </li>
-                                <% }else{ %>
-                                    <li class="active list-group">
-                                        <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
-                                        <form class="pull-right col-xs-offset-1" method="post" action="UnirseGrupoServlet">
-                                            <input type="hidden" name="idGrupoUnir" value="<%=g.getIdGrupo()%>"></input>
-                                            <input class="btnEliminar botonEliminar" type="submit" name="unir" value="Unirse" href=""></input>
-                                        </form>
-                                    </li>
-                                    
-                                <% }
-                            } %>
-                            
-                        </ul>
+                            <% }
+                            }%>
+                         </ul>
 
                         <!-- tiny only nav-->
                         <ul class="nav visible-xs" id="xs-menu">
@@ -119,70 +118,67 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
 
                                     <!-- main col left --> 
                                     <div class="col-sm-5">
-
-                                        <div class="panel panel-default">
-                                            <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
-                                            <div class="panel-body">
-                                                <p class="lead"><%= grupo.getNombre()%></p>
-                                                <p><%= listaMiembros.size()%> Miembros, <%= listaPost.size()%> Posts</p>
-                                                <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
-                                                 <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
-                                                </form>
+                                        <%if(tieneGrupos){ %>
+                                            <div class="panel panel-default">
+                                                <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
+                                                <div class="panel-body">
+                                                        <p class="lead"><%= grupo.getNombre()%></p>
+                                                        <p><%= listaMiembrosGrupo.size()%> Miembros, <%= listaPostGrupo.size()%> Posts</p>
+                                                        <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
+                                                            <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
+                                                        </form>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading"> <h4>Miembros</h4></div>
-                                            <% for (Usuario m : listaMiembros) {%>
-                                            <div class="panel-body">
-                                                <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="MuroServlet?usuarioMuro=<%=m.getIdUsuario() %>"><%= m.getNombre()%></a>
-                                                <div class="clearfix"></div>
-                                                <hr>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"> <h4>Miembros</h4></div>
+                                                <% for (Usuario m : listaMiembrosGrupo) {%>
+                                                <div class="panel-body">
+                                                    <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="MuroServlet?usuarioMuro=<%=m.getIdUsuario() %>"><%= m.getNombre()%></a>
+                                                    <div class="clearfix"></div>
+                                                    <hr>
+                                                </div>
+                                                <% }%>
                                             </div>
-                                            <% }%>
-                                        </div>
+                                        <%}else{%>
+                                            <p class="lead">NO HAY GRUPOS</p>
+                                        <%}%>
                                     </div>
 
                                     <!-- main col right -->
                                     <div class="col-sm-7">
+                                        <%if(tieneGrupos){ %>
+                                            <div class="well"> 
+                                                <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                                    <h4>¿Qué te cuentas?</h4>
+                                                    <div class="form-group" style="padding:14px;">
+                                                        <input class="form-control" name="id_grupo" type="hidden" value="<%=grupo.getIdGrupo()%>"/>
+                                                        <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
+                                                        <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
+                                                        <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
+                                                        <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
+                                                    </div>
 
-                                        <div class="well"> 
-                                            <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
-                                                <h4>¿Que te cuentas?</h4>
-                                                <div class="form-group" style="padding:14px;">
-                                                    <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
-                                                    <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
-                                                    <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
-                                                    <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
-                                                </div>
-                                                
-                                            </form>
-                                        </div>
-                                        <% //for (int i = listaPost.size() - 1; i >= 0; i--) {
-                                             //   Post p = listaPost.get(i);
-                                                for (Post p : listaPost) {
-                                        %>
-                                        <div class="panel panel-default">
-                                            <% if (p.getImagen() != null) {%>
-                                            <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
-                                            <div class="panel-body">
-                                                <% }%>
-
-                                                <p><%=p.getDescripcion()%></p>
-
-                                                <form name="delete" action="PostDeleteServlet" method="post">                                                                   
-                                                    <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
-                                                    <input type="hidden" name="tipo_borrado" value="grupo"/>
-                                                    <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
                                                 </form>
-
-                                                <!--<p>
-                                                      <img src="assets/img/photo.jpg" height="28px" width="28px">
-                                                      <img src="assets/img/photo.png" height="28px" width="28px">
-                                                      <img src="assets/img/photo_002.jpg" height="28px" width="28px">
-                                                </p>-->
                                             </div>
-                                        </div>
-                                        <% }%>
+                                            <%for (Post p : listaPostGrupo) {%>
+                                                <div class="panel panel-default">
+                                                    <% if (p.getImagen() != null) {%>
+                                                    <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                    <div class="panel-body">
+                                                        <% }%>
+
+                                                        <p><%=p.getDescripcion()%></p>
+
+                                                        <form name="delete" action="PostDeleteServlet" method="post">                                                                   
+                                                            <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
+                                                            <input type="hidden" name="tipo_borrado" value="from_grupo"/>
+                                                            <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            <% }
+                                        }// fin tieneGrupos%>
                                     </div>
                                 </div><!--/row-->
                                 <div class="row" id="footer">    
@@ -203,29 +199,7 @@ listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
 
 
         <!--post modal-->
-        <div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
-                        Update Status
-                    </div>
-                    <div class="modal-body">
-                        <form class="form center-block">
-                            <div class="form-group">
-                                <textarea class="form-control input-lg" autofocus="" placeholder="What do you want to share?"></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <div>
-                            <button class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
-                            <ul class="pull-left list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
-                        </div>	
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <script type="text/javascript" src="assets/js/jquery.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.js"></script>

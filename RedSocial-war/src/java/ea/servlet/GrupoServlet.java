@@ -5,14 +5,12 @@
  */
 package ea.servlet;
 
-import ea.ejb.GrupoFacade;
 import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
+import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -29,10 +27,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
-    @EJB
-    private GrupoFacade grupoFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,56 +42,47 @@ public class GrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         //Recuperamos la sesion completa
         HttpSession session = request.getSession();
-//        
-//        Usuario usuario = (Usuario)session.getAttribute("usuario");
-//        BigDecimal id_usuario = usuario.getIdUsuario();
+        
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        String id = request.getParameter("usuarioMuro");
+        BigDecimal idUsuarioMuro = new BigDecimal(id);
+        Usuario usuarioMuro = usuarioFacade.find(idUsuarioMuro);
+
+        // Lista de Grupos donde usuario es miembro
+        List<Grupo> listaGruposUsuario = (List) usuario.getGrupoCollection();
         
 
+        Grupo grupo;
+        List<Post> listaPostGrupo;
+        List<Usuario> listaMiembrosGrupo;
         
-        //prueba
-//        BigDecimal id_usuario = new BigDecimal(1.0);
-//        Usuario usuario = usuarioFacade.find(id_usuario);
-        
-        Usuario usuario = (Usuario)session.getAttribute("usuario");
-        String id= request.getParameter("usuarioMuro");
-        BigDecimal idUsuarioMuro= new BigDecimal(id);
-        
-        Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
-        
-//        List<Grupo> listaGruposMiembro = grupoFacade.findGruposByIdMiembro(id_usuario);
-        List<Grupo> listaGruposMiembro = (List)usuario.getGrupoCollection();
-        
-        Grupo grupo = listaGruposMiembro.get(0);
-        
-        
-        
-        
-        
-        // Posts del grupo actual
-        Collection postCollection;
-        postCollection = grupo.getPostCollection();
-        request.setAttribute("postGrupo", postCollection);
-       
-        // Miembros del grupo actual
-        Collection miembroCollection;
-        miembroCollection = grupo.getUsuarioCollection();
-        request.setAttribute("miembrosGrupo", miembroCollection);
-        
-        // Nombre del grupo actual
-        request.setAttribute("grupo", grupo);
-        
-        // Lista de todos los grupos
-        Collection listaGrupos;
-        listaGrupos = grupoFacade.findAll();
-        request.setAttribute("listaGrupos", listaGrupos);
-        
-        // Lista de Grupos donde usuario es miembro
-        request.setAttribute("listaGruposMiembro", listaGruposMiembro);
-        
+        Boolean tieneGrupos = listaGruposUsuario.size() > 0;
+        request.setAttribute("tieneGrupos", tieneGrupos);
+        if (tieneGrupos) {
+            request.setAttribute("listaGruposUsuario", listaGruposUsuario);
+            
+            // primer grupo de la lista
+            grupo = (Grupo) listaGruposUsuario.get(0);
+            request.setAttribute("grupo", grupo);
+
+            // Lista de post
+            listaPostGrupo = (List<Post>) grupo.getPostCollection();
+            request.setAttribute("listaPostGrupo", listaPostGrupo);
+
+            // Lista de miembros
+            listaMiembrosGrupo = (List<Usuario>) grupo.getUsuarioCollection();
+            request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
+
+            
+        }
+
+        // Usuario Muro
         request.setAttribute("usuarioMuro", usuarioMuro);
+
         // Request Dispatcher
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");

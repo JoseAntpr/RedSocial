@@ -25,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -58,18 +59,19 @@ public class GrupoCrearPostServlet extends HttpServlet {
             throws ServletException, IOException, Exception {
 
         //get session of the request
-//        HttpSession session = request.getSession();
+        HttpSession sesion = request.getSession();
+        Usuario miembro = (Usuario) sesion.getAttribute("usuario");
 //        BigDecimal id_miembro = session.getAttribute("idUser");
         // recuperamos el miembro
-        BigDecimal id_miembro = new BigDecimal(1.0);
-        Usuario miembro = usuarioFacade.find(id_miembro);
-
-        // recuperamos el grupo
-        BigDecimal id_grupo = new BigDecimal(1.0);
-        Grupo grupo = grupoFacade.find(id_grupo);
+//        BigDecimal id_miembro = new BigDecimal(1.0);
+//        Usuario miembro = usuarioFacade.find(id_miembro);
 
         // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
         Map<String,String> mapDatos = postFacade.obtenerDatosPost(request);
+        
+        // Recuperamos el grupo
+        BigDecimal id_grupo = new BigDecimal(mapDatos.get("id_grupo"));
+        Grupo grupo = grupoFacade.find(id_grupo);
         
         // Creamos el Post
         Post post = new Post();
@@ -97,7 +99,7 @@ public class GrupoCrearPostServlet extends HttpServlet {
         usuarioFacade.edit(miembro);
 
         //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioGrupo=" + miembro.getIdUsuario());
 
     }
     

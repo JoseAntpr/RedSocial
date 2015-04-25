@@ -42,26 +42,20 @@ public class PostDeleteServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        
-        
-        
+        Usuario usuario=(Usuario)request.getSession().getAttribute("usuario");
+
         String tipoBorrado=request.getParameter("tipo_borrado");
         String idGuardada=request.getParameter("idGuardada");
-        
-        
         BigDecimal idPost=new BigDecimal(idGuardada);
         
         postFacade.deletePost(idPost);
         
         if(tipoBorrado.equals("usuario")){
-            Usuario usuario=(Usuario)request.getSession().getAttribute("usuario");
             response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
-        }else if(tipoBorrado.equals("grupo")){
-            response.sendRedirect(request.getContextPath()+"/GrupoServlet");
+        }else if(tipoBorrado.equals("from_grupo")){
+            postFacade.remove(postFacade.find(idPost));
+            response.sendRedirect(request.getContextPath()+"/GrupoServlet?usuarioMuro="+usuario.getIdUsuario());
         }
-        
-        
-        
         
     }
 
