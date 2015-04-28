@@ -8,7 +8,6 @@ package ea.servlet;
 import ea.ejb.UsuarioFacade;
 import ea.entity.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -37,7 +36,6 @@ public class NuevoUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
         String nombre = (String) request.getParameter("nombre"); 
         String apellidos = (String) request.getParameter("apellidos"); 
@@ -51,17 +49,19 @@ public class NuevoUsuarioServlet extends HttpServlet {
         Usuario user = usuarioFacade.buscarEmail(email);
         
         if (user == null) {
+            
             user=usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
            
             BigDecimal idUser = user.getIdUsuario();
             request.getSession().setAttribute("idUser", idUser);
             response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+            
         }else{
+            
             String mensaje = "El email ya esta registrado en nuestra red social.";
             request.setAttribute("mensaje", mensaje);                
             this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
-        } 
-        
+        }  
                
     }
 

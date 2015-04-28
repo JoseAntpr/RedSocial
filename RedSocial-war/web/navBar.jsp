@@ -37,12 +37,16 @@
 	<ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="fat-menu"> <a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><%= usuario.getNombre()+" "+usuario.getApellidos() %> <b class="caret"></b></a>
                 <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
-                    <li role="presentation">
+                  <!--  <li role="presentation">
+                        
                         <form method="POST" action="EditarUsuarioServlet"> 
                             <input type='hidden' name="idUsuarioMuro" placeholder="Fecha" value="<%= usuarioMuro.getIdUsuario()%>"/>                                                                                                                                                   
                             <button class="btn btn-link" type="submit">Editar perfil</button>
                         </form>
-                    </li>
+                       
+                    </li> -->
+                    <li role="presentation"><a href="editarUsuario.jsp" tabindex="-1" role="menuitem">Editar Perfil</a></li>
+                    <li role="presentation"><a href="editarPassword.jsp" tabindex="-1" role="menuitem"</a>Cambiar Contraseña</li>
                     <li class="divider" role="presentation"></li>
                     <li role="presentation"><a href="LogoutServlet" tabindex="-1" role="menuitem">Cerrar Sesión</a></li>
                 </ul>

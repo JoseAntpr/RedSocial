@@ -86,5 +86,26 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
              return user;
          
     }
+     //Azahar: Método para cuando el usuario cambia sus datos.
+     public void editarUsuario(Usuario usuario, String nombre, String apellidos, String direccion, String localidad, String provincia, String pais, String email) {
+
+            usuario.setNombre(nombre);
+            usuario.setApellidos(apellidos);
+            usuario.setDireccion(direccion);
+            usuario.setLocalidad(localidad);
+            usuario.setProvincia(provincia);
+            usuario.setPais(pais);
+            usuario.setEmail(email);
+
+            edit(usuario);               
+         
+    }
+     //Azahar: Método para cuando el usuario quiera cambiar su contraseña.
+     public void editarPass(Usuario usuario, String pass) {
+    
+            usuario.setPassword(pass);
+            edit(usuario);               
+         
+    }
     
 }
