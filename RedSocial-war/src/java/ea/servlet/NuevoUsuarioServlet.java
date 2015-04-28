@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -53,8 +54,16 @@ public class NuevoUsuarioServlet extends HttpServlet {
             user=usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
            
             BigDecimal idUser = user.getIdUsuario();
-            request.getSession().setAttribute("idUser", idUser);
-            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+//            request.getSession().setAttribute("idUser", idUser);
+            //USUARIO SESIÓN
+            HttpSession sesion = request.getSession();
+            sesion.setAttribute("usuario", user);
+                
+            //USUARIO CAMBIANTE
+            sesion.setAttribute("usuarioMuro", user);
+            
+            response.sendRedirect(request.getContextPath()+"/MuroServlet");
+//            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
             
         }else{
             
