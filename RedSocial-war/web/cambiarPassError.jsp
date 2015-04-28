@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : 19-mar-2015, 11:02:07
+    Document   : cambiarPassError
+    Created on : 28-abr-2015, 20:09:20
     Author     : Azahar
 --%>
 
@@ -20,6 +20,7 @@
     */
     Usuario usuarioMuro  = (Usuario) session.getAttribute("usuario");
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    String mensaje = (String) request.getAttribute("mensaje");
 
     //lista = (List) request.getAttribute("listaPost");
     
@@ -84,33 +85,10 @@
                             <%  } --%>
                             <!-- content -->                      
                                 <div class="col-sm-8">                                   
-                                <form method="POST" action="EditarUsuarioServlet">
-                                    <h4 class="form-signin-heading">Editar perfil:</h4> 
-                                    <div class="col-sm-4">
-                                    Nombre <input type="text" name="nombre" value="<%= usuario.getNombre() %>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-6">
-                                    Appelidos <input type="text" name="apellidos" value="<%= usuario.getApellidos()%>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-6">
-                                    Direccion <input type="text" name="direccion" value="<%= usuario.getDireccion()%>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-4">
-                                    Localidad <input type="text" name="localidad" value="<%= usuario.getLocalidad()%>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-4">
-                                    Provincia <input type="text" name="provincia" value="<%= usuario.getProvincia()%>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-4">
-                                    Pais <input type="text" name="pais" value="<%= usuario.getPais()%>"  class="form-control" required autofocus></br>
-                                    </div>
-                                    <div class="col-sm-10">
-                                    Email <input type="text" name="email" value="<%= usuario.getEmail()%>"  class="form-control" required autofocus></br>
-                                    </div>                                                                    
-                                    <div class="col-sm-4">
-                                    <button class="btn btn-success btn-block" type="submit">Guardar</button>
-                                    </div>
-                                </form>                                    
+                                <div class="row">                                   
+                                    <% out.println(mensaje); %></br>
+                                    <a href="editarPassword.jsp">Volver.</a>
+                                </div><!--/row-->                                   
                             </div><!--/row-->
                         </div><!-- /col-9 -->  
                     </div><!-- /padding -->

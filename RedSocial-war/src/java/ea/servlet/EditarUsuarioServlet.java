@@ -4,14 +4,11 @@
  * and open the template in the editor.
  */
 package ea.servlet;
-
 import ea.ejb.UsuarioFacade;
 import ea.entity.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,15 +36,24 @@ public class EditarUsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-      
-        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("idUsuarioMuro"));
-        Usuario usuarioMuro = usuarioFacade.find(idUsuarioMuro);
+            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 
-         //request.setAttribute("usuarioSesion", user);
-        request.setAttribute("usuarioMuro", usuarioMuro);
-        
-        this.getServletContext().getRequestDispatcher("/editarUsuario.jsp").forward(request, response); 
+            String nombre = (String) request.getParameter("nombre"); 
+            String apellidos = (String) request.getParameter("apellidos"); 
+            String direccion = (String) request.getParameter("direccion"); 
+            String localidad = (String) request.getParameter("localidad"); 
+            String provincia = (String) request.getParameter("provincia"); 
+            String pais = (String) request.getParameter("pais"); 
+            String email = (String) request.getParameter("email"); 
+
+            usuarioFacade.editarUsuario(usuario, nombre, apellidos, direccion, localidad, provincia, pais, email); 
+
+            //Esto es por como esta implementado el muro:
+            BigDecimal idUser = usuario.getIdUsuario();
+            request.getSession().setAttribute("idUser", idUser);
             
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+              
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

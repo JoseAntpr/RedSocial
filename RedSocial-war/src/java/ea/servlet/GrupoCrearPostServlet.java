@@ -61,25 +61,23 @@ public class GrupoCrearPostServlet extends HttpServlet {
         //get session of the request
         HttpSession sesion = request.getSession();
         Usuario miembro = (Usuario) sesion.getAttribute("usuario");
-//        BigDecimal id_miembro = session.getAttribute("idUser");
-        // recuperamos el miembro
-//        BigDecimal id_miembro = new BigDecimal(1.0);
-//        Usuario miembro = usuarioFacade.find(id_miembro);
 
         // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
-        Map<String,String> mapDatos = postFacade.obtenerDatosPost(request);
+//        Map<String,String> mapDatosForm = postFacade.obtenerDatosPost(request);
+        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
+        
         
         // Recuperamos el grupo
-        BigDecimal id_grupo = new BigDecimal(mapDatos.get("id_grupo"));
+        BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
         Grupo grupo = grupoFacade.find(id_grupo);
         
         // Creamos el Post
         Post post = new Post();
         post.setIdUsuario(miembro);
         post.setIdGrupo(grupo);
-        post.setDescripcion(mapDatos.get("descripcion"));
+        post.setDescripcion(mapDatosForm.get("descripcion"));
         post.setFecha( new Date());
-        post.setImagen(mapDatos.get("imagen"));
+        post.setImagen(mapDatosForm.get("imagen"));
 
         // Añadimos el post a la DB
         postFacade.create(post);
@@ -88,14 +86,14 @@ public class GrupoCrearPostServlet extends HttpServlet {
         Collection postCollectionGrupo = grupo.getPostCollection();
         postCollectionGrupo.add(post);
 
-        // Actualizamos la relacion POST-GRUPO (MURO_GRUPO)
+        // Actualizamos el grupo con el post ya añadido
         grupoFacade.edit(grupo);
 
         // Añadimos el post a la coleccion de post del miembro creador
         Collection postCollectionUser = miembro.getPostCollection();
         postCollectionUser.add(post);
 
-        // Actualizamos la relacion USUARIO-POST (MURO)
+        // Actualizamos el usuario con el post ya añadido
         usuarioFacade.edit(miembro);
 
         //redirect to the grupo servlet 
@@ -104,10 +102,6 @@ public class GrupoCrearPostServlet extends HttpServlet {
     }
     
     
-
-    void depura(String cadena) {
-        System.out.println("El error es " + cadena);
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

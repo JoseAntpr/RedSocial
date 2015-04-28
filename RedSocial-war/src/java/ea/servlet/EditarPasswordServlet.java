@@ -5,8 +5,12 @@
  */
 package ea.servlet;
 
+import ea.ejb.UsuarioFacade;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +21,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Azahar
  */
-@WebServlet(name = "ModificarUsuarioServlet", urlPatterns = {"/ModificarUsuarioServlet"})
-public class ModificarUsuarioServlet extends HttpServlet {
+@WebServlet(name = "EditarPasswordServlet", urlPatterns = {"/EditarPasswordServlet"})
+public class EditarPasswordServlet extends HttpServlet {
+    @EJB
+    private UsuarioFacade usuarioFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +37,27 @@ public class ModificarUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //este servlet no se usa, habría que borrarlo.
+         
+            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
+            String password = (String) request.getParameter("password"); 
+            String passwordR = (String) request.getParameter("passwordR"); 
+           
+            if (password.compareTo(passwordR)==0){
+                usuarioFacade.editarPass(usuario, password);
+                
+                 //Esto es por como esta implementado el muro:
+            BigDecimal idUser = usuario.getIdUsuario();
+            request.getSession().setAttribute("idUser", idUser);
+            
+            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+            }
+            else{
+                
+               String mensaje = "Las contraseñas no coinciden.";
+               request.setAttribute("mensaje", mensaje);                
+               this.getServletContext().getRequestDispatcher("/cambiarPassError.jsp").forward(request, response);      
+            }         
+           
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
