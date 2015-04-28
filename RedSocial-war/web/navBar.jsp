@@ -20,12 +20,18 @@
 	</form>
 	<ul class="nav navbar-nav">
             <li>
+                <a href="MuroServlet"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                <!--
                 <a href="MuroServlet?usuarioMuro=<%= usuario.getIdUsuario()  %>"><i class="glyphicon glyphicon-home"></i> Inicio</a>
+                -->         
             </li>
             <li>
                 <% if(usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){ %>
+                    <a href="postAdd.jsp" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
+                    <!--
                     <a href="postAddIntermedioServlet?usuarioMuro=<%=usuarioMuro.getIdUsuario()%>" role="button" ><i class="glyphicon glyphicon-plus"></i> Post</a>
-                <% }else{}%>
+                    --> 
+               <% }%>
             </li>
             <li>
                 <a href="ListarSeguidoresServlet?x=usuariosSeguir&usuarioMuro=<%= usuario.getIdUsuario() %>"><span class="badge">Usuarios</span></a>

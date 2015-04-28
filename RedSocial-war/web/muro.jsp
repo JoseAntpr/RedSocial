@@ -13,10 +13,9 @@
     List<Post> lista;
     
     HttpSession sesion = request.getSession();
-//    u = (Usuario) request.getAttribute("usuarioSesion");
     Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-    Usuario usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
-    //Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+    Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+//  Usuario usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
     
@@ -52,15 +51,16 @@
                         <li class="active">Vive en <%= usuarioMuro.getLocalidad()+", "+usuarioMuro.getProvincia()+", "+usuarioMuro.getPais() %></li></br>
                         <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso() %></li></br>
 			<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
+                        <li><a href="GrupoServlet"><i class="glyphicon glyphicon-align-right"></i> Grupos</a></li>                       
+                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
+                        
+                        <!--
                         <li><a href="GrupoServlet?usuarioMuro=<%= usuarioMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-align-right"></i> Grupos</a></li>
-                       
                         <li><a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
                         <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%= usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
-                        
-                        <!--<li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
-                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
-                        -->
-                        </ul>
+                        -->  
+                    </ul>
                     <ul class="list-unstyled hidden-xs" id="sidebar-footer"></ul>
                     <!-- tiny only nav-->
                     <ul class="nav visible-xs" id="xs-menu">
