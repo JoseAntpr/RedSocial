@@ -50,24 +50,16 @@ public class MuroServlet extends HttpServlet {
        
         HttpSession sesion = request.getSession();
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        //Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
-        
-        // inicion proviene de seguidoes
-       // boolean inicio = new Boolean(request.getParameter("inicio"));
-        /*if(inicio){
-            usuarioMuro = usuario;
-        }*/
+        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
         
         List<Post> listaPost=null;
        
         
-        BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
-        //BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
-//        BigDecimal idUsuario =(BigDecimal)request.getSession().getAttribute("idUser");
-        BigDecimal idUsuario = usuario.getIdUsuario();
+//       BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
+//       Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
         
-//        Usuario usuario =usuarioFacade.find(idUsuario);
-       Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
+        BigDecimal idUsuario = usuario.getIdUsuario();
+        BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
         
         String mensaje=null;
 //      
@@ -75,7 +67,7 @@ public class MuroServlet extends HttpServlet {
             listaPost=postFacade.findByMuroIdUsuario(idUsuario);
 
         }else{
-//            if(usuario.siguesUsuario(usuarioMuro).equals("si")){
+
             if(usuario.siguesUsuario(usuarioMuro).equals("si")){
                 
                 listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
@@ -83,18 +75,13 @@ public class MuroServlet extends HttpServlet {
                 
             }else{
                 listaPost=postFacade.findByMuroIdUsuario(idUsuario);
-//                usuarioMuro=usuario;
                 usuarioMuro = usuario;
                 mensaje = "Error, no puedes ver el muro de un usuario que no sigues."; 
             }
         }
         
         request.setAttribute("mensajeErrorMuroOtro", mensaje);
-//        request.setAttribute("usuarioSesion", usuario);
 //        request.setAttribute("usuarioMuro", usuarioMuro);
-        request.setAttribute("usuarioMuro", usuarioMuro);
-        //sesion.setAttribute("usuarioMuro", usuarioMuro);
-        
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;
