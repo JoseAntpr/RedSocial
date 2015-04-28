@@ -1,3 +1,4 @@
+<%@page import="java.util.Collections.list(Enumeration)"%>
 <%@page import="ea.entity.Grupo"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="ea.entity.Usuario"%>
@@ -10,7 +11,7 @@
     Author     : fran
 --%>
 <%
-HttpSession sesion = request.getSession();
+
 Usuario usuario=(Usuario)sesion.getAttribute("usuario");
 Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
 
@@ -69,11 +70,8 @@ if (tieneGrupos){
                     <!-- LISTADO GRUPOS -->
                     <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
-                        <ul class="nav">
-                            <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-                        </ul>
                         <ul class="nav hidden-xs" id="lg-menu">
-                            <li class="active"><a href="crearGrupo.jsp"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
+                            <li class="active"><a href="crearGrupo.jsp?usurioMuro=<%=usuarioMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
                             <%if(tieneGrupos){
                                 for(Grupo g : listaGruposUsuario){ %>
                                     <li class="active list-group">
@@ -92,23 +90,14 @@ if (tieneGrupos){
                             <% }
                             }%>
                          </ul>
-
-                        <!-- tiny only nav-->
-                        <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                            <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
-                            <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
-                        </ul>
-
-                    </div>
+                    </div> <!-- fin LISTADO GRUPOS -->
                     <!-- /sidebar -->
 
                     <!-- main right col -->
                     <div class="column col-sm-10 col-xs-11" id="main">
 
                        <!-- top nav -->
-                        <%@include file="navBar.jsp" %>
+                        <%@include file="/navBarServlet?usuarioMuro=<%=usuarioMuro.getIdUsuario()%>" %>
 
                         <div class="padding">
                             <div class="full col-sm-9">
@@ -119,6 +108,8 @@ if (tieneGrupos){
                                     <!-- main col left --> 
                                     <div class="col-sm-5">
                                         <%if(tieneGrupos){ %>
+                                        
+                                            <!-- INFO DEL GRUPO -->
                                             <div class="panel panel-default">
                                                 <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
                                                 <div class="panel-body">
@@ -128,7 +119,9 @@ if (tieneGrupos){
                                                             <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
                                                         </form>
                                                 </div>
-                                            </div>
+                                            </div> <!-- fin INFO DEL GRUPO -->
+                                            
+                                            <!-- MIEMBROS DEL GRUPO -->
                                             <div class="panel panel-default">
                                                 <div class="panel-heading"> <h4>Miembros</h4></div>
                                                 <% for (Usuario m : listaMiembrosGrupo) {%>
@@ -138,15 +131,19 @@ if (tieneGrupos){
                                                     <hr>
                                                 </div>
                                                 <% }%>
-                                            </div>
+                                            </div> <!-- fin MIEMBROS DEL GRUPO -->
                                         <%}else{%>
                                             <p class="lead">NO HAY GRUPOS</p>
                                         <%}%>
                                     </div>
 
                                     <!-- main col right -->
+                                    
+                                    
                                     <div class="col-sm-7">
                                         <%if(tieneGrupos){ %>
+                                        
+                                        <!-- CREAR POST GRUPO -->
                                             <div class="well"> 
                                                 <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                                                     <h4>¿Qué te cuentas?</h4>
@@ -159,13 +156,15 @@ if (tieneGrupos){
                                                     </div>
 
                                                 </form>
-                                            </div>
+                                            </div> <!-- fin CREAR POST GRUPO -->
+                                            
+                                        <!-- LISTAR POST GRUPO -->
                                             <%for (Post p : listaPostGrupo) {%>
                                                 <div class="panel panel-default">
-                                                    <% if (p.getImagen() != null) {%>
+                                                <% if (p.getImagen() != null) {%>
                                                     <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
                                                     <div class="panel-body">
-                                                        <% }%>
+                                                <% }%>
 
                                                         <p><%=p.getDescripcion()%></p>
 
@@ -177,7 +176,7 @@ if (tieneGrupos){
 
                                                     </div>
                                                 </div>
-                                            <% }
+                                            <% } // fin LISTAR POST GRUPO
                                         }// fin tieneGrupos%>
                                     </div>
                                 </div><!--/row-->
