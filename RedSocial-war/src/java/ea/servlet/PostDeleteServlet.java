@@ -28,8 +28,7 @@ public class PostDeleteServlet extends HttpServlet {
 
     @EJB
     private PostFacade postFacade;
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,22 +40,31 @@ public class PostDeleteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        Usuario usuario=(Usuario)request.getSession().getAttribute("usuario");
 
-        String tipoBorrado=request.getParameter("tipo_borrado");
-        String idGuardada=request.getParameter("idGuardada");
-        BigDecimal idPost=new BigDecimal(idGuardada);
-        
-        postFacade.deletePost(idPost);
-        
-        if(tipoBorrado.equals("usuario")){
-            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
-        }else if(tipoBorrado.equals("from_grupo")){
+        //get session of the request
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        String tipoBorrado = request.getParameter("tipo_borrado");
+        String idGuardada = request.getParameter("idGuardada");
+        BigDecimal idPost = new BigDecimal(idGuardada);
+
+        if (tipoBorrado.equals("usuario")) {
+
+            //listapostUsuario.remove
+            //postFacade.remove(idPost);
+            //usuarioFacade.edit(usuario)
+            postFacade.deletePost(idPost);
+
+            response.sendRedirect(request.getContextPath() + "/MuroServlet");
+//            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
+        } else if (tipoBorrado.equals("from_grupo")) {
             postFacade.remove(postFacade.find(idPost));
-            response.sendRedirect(request.getContextPath()+"/GrupoServlet?usuarioMuro="+usuario.getIdUsuario());
+            
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+//            response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioMuro=" + usuario.getIdUsuario());
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

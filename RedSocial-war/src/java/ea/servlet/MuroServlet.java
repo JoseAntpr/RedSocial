@@ -54,28 +54,38 @@ public class MuroServlet extends HttpServlet {
         
         List<Post> listaPost=null;
        
+        String idUsuarioMuroGetString=request.getParameter("usuarioMuroGet");
         
-//       BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuarioMuro"));
-//       Usuario usuarioMuro= usuarioFacade.find(idUsuarioMuro);
-        
-        BigDecimal idUsuario = usuario.getIdUsuario();
-        BigDecimal idUsuarioMuro = usuarioMuro.getIdUsuario();
         
         String mensaje=null;
-//      
-        if(idUsuarioMuro.equals(idUsuario)){
-            listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+        
+        if(idUsuarioMuroGetString!=null){
+            BigDecimal idUsuarioMuroGet = new BigDecimal(idUsuarioMuroGetString);
+            Usuario usuarioMuroGet= usuarioFacade.find(idUsuarioMuroGet);
+            if(!usuarioMuro.getIdUsuario().equals(idUsuarioMuroGet)){
+                sesion.setAttribute("usuarioMuro", usuarioMuroGet);
+                usuarioMuro=usuarioMuroGet;
+            }
+        }else{
+            sesion.setAttribute("usuarioMuro", usuario);
+            usuarioMuro=usuario;
+        }
+        
+        if(usuarioMuro.getIdUsuario().equals(usuario.getIdUsuario())){
+            listaPost=postFacade.findByMuroIdUsuario(usuario.getIdUsuario());
 
         }else{
 
             if(usuario.siguesUsuario(usuarioMuro).equals("si")){
                 
-                listaPost=postFacade.findByMuroIdUsuario(idUsuarioMuro);
+                listaPost=postFacade.findByMuroIdUsuario(usuarioMuro.getIdUsuario());
                 
                 
             }else{
-                listaPost=postFacade.findByMuroIdUsuario(idUsuario);
+                listaPost=postFacade.findByMuroIdUsuario(usuario.getIdUsuario());
+                sesion.setAttribute("usuarioMuro", usuario);
                 usuarioMuro = usuario;
+//                response.encodeURL("/MuroServlet"); //QUITAR DE LA URL LA ID DEL usuarioMuro
                 mensaje = "Error, no puedes ver el muro de un usuario que no sigues."; 
             }
         }
@@ -86,13 +96,7 @@ public class MuroServlet extends HttpServlet {
         
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
-       
         rd.forward(request, response);
-            
-        
-        
-      
-        
         
     }
 

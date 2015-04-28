@@ -51,42 +51,25 @@ public class PostAddServlet extends HttpServlet {
         
         //get session of the request
         HttpSession session = request.getSession();
+        Usuario usuario=(Usuario) session.getAttribute("usuario");
+        
         List<Post> listaPost;
         
-//        session.getAttribute("username");
-        
-         BigDecimal idUsuario =((Usuario) session.getAttribute("usuario")).getIdUsuario(); 
-       
-//        listaPost = this.postFacade.findByMuroIdUsuario(id_usuario);
-        
-        
-        //Obtener ID de usuario logeado para pasar a MuroServlet
-//        String id=session.getId();
-//        Usuario u=usuarioFacade.find(id);
         
         String descrip=request.getParameter("descripcion");
         String img=request.getParameter("imagen");
         
         if(!descrip.equals("")){
-        
             
-
             //Lista Post de un Usuario
-            Usuario usuario=usuarioFacade.find(idUsuario);
             listaPost=(List)usuario.getPostCollection();
 
             //Añadir post con facade persist a base de datos
             Post p=new Post();
-    //        p.setIdPost(idPost);
             p.setIdUsuario(usuario);
             p.setDescripcion(descrip); //request.getParameter("postContenido")
             p.setFecha(new Date());
             p.setImagen(img);
-
-    //        //Actualizamos la lista de usuarios en Post
-    //        ArrayList<Usuario> listaUsers = new ArrayList();
-    //        listaUsers.add(usuario);
-    //        p.setUsuarioCollection(listaUsers); 
 
             //Actualizamos la lista de Post del Usuario
             listaPost.add(p);
@@ -94,17 +77,10 @@ public class PostAddServlet extends HttpServlet {
             //Añadimos el post a la BD
             postFacade.create(p);
 
-    //        // Actualizamos la relacion USUARIO-POST (MURO)
+            // Actualizamos la relacion USUARIO-POST (MURO)
             usuarioFacade.edit(usuario);
-
-
-            //Enviarle al MuroServlet la id de usuario
-    //        request.setAttribute("idUsuario", u.getIdUsuario());
-
-
-            //Redirect to MuroServlet que mostrará con findAll todos los post en muro.jsp
             
-            response.sendRedirect(request.getContextPath() + "/MuroServlet?usuarioMuro="+idUsuario);
+            response.sendRedirect(request.getContextPath() + "/MuroServlet");
         }else{
             response.sendRedirect(request.getContextPath() + "/postAdd.jsp");
         }

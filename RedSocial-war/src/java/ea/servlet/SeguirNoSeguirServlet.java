@@ -44,9 +44,7 @@ public class SeguirNoSeguirServlet extends HttpServlet {
         //Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
         
         
-//            BigDecimal idUsuarioPropio=(BigDecimal) request.getSession().getAttribute("idUser");
             BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuariomuro")) ;
-//            Usuario usuarioPropio= usuarioFacade.find(idUsuarioPropio);
             
             BigDecimal idUsuario;
             Usuario usuario;
@@ -63,8 +61,8 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuario);
               usuarioFacade.edit(usuarioPropio);
               
-              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
-              //response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+//              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
+              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
            }else if(button.equals("Siguiendo")){
               idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
               usuario = usuarioFacade.find(idUsuario);
@@ -75,8 +73,8 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuarioPropio);
               
               
-              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
-               // response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+//              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
+                response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
            }
             
     }

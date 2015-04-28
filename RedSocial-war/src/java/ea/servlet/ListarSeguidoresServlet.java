@@ -43,21 +43,14 @@ public class ListarSeguidoresServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession sesion = request.getSession();
-
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+        
         List<Usuario> ListaSeguidores = null;
         String x = (String) request.getParameter("x");
 
-        BigDecimal idUsuario=new BigDecimal( request.getParameter("usuarioMuro"));
-//        BigDecimal idUsuarioSesion=(BigDecimal) request.getSession().getAttribute("idUser");
-//       Usuario usuarioSesion=usuarioFacade.find(idUsuarioSesion);
-        Usuario  usuarioMuro=usuarioFacade.find(idUsuario);
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-       // Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
-
-        // proviene de seguidores.jsp
-        /*if (x.equals("usuariosSeguir")) {
-            usuarioMuro = usuario;
-        }*/
+//        BigDecimal idUsuario=new BigDecimal( request.getParameter("usuarioMuro"));
+//        Usuario  usuarioMuro=usuarioFacade.find(idUsuario);
 
         if (x.equals("seguidores")) {
 
@@ -73,12 +66,11 @@ public class ListarSeguidoresServlet extends HttpServlet {
         }
 
         request.setAttribute("x", x);
-        request.setAttribute("usuarioMuro", usuarioMuro);
-//        request.setAttribute("usuarioS", usuario);
+//        request.setAttribute("usuarioMuro", usuarioMuro);
         request.setAttribute("listaSeguidores", ListaSeguidores);
+        
         RequestDispatcher rd;
         rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
-
         rd.forward(request, response);
 
     }

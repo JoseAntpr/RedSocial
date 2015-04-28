@@ -34,7 +34,10 @@
                <% }%>
             </li>
             <li>
+                <a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
+                <!--
                 <a href="ListarSeguidoresServlet?x=usuariosSeguir&usuarioMuro=<%= usuario.getIdUsuario() %>"><span class="badge">Usuarios</span></a>
+                --> 
             </li>
             <li>
 		<a href="#"><span class="badge">Grupos</span></a>

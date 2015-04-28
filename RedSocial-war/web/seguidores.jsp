@@ -15,12 +15,12 @@
     List<Usuario> listaUsuario;
     String ruta;
     
-    HttpSession sesion = request.getSession();
-    
-    //Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
+    HttpSession sesion = request.getSession(); 
     Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-//    usuario=(Usuario) request.getAttribute("usuarioS");
-    Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
+    Usuario usuarioMuro = (Usuario)sesion.getAttribute("usuarioMuro");
+    
+//    Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
+    
     ruta=(String)  request.getAttribute("x");
     listaUsuario = (List) request.getAttribute("listaSeguidores");
 %>
@@ -59,12 +59,16 @@
 							
 							<li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
                                                         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-list"></i> Grupos</a></li>
-                                                        <li>
-                                                                <a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b> </a>      
-                                                        </li>
+                                                        <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b>  </a></li>
+                                                        <li><a href="ListarSeguidoresServlet?x=Seguir" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%=usuarioMuro.getUsuarioCollection().size() %> </b></a></li></br>
                                                         
-                                                        <li><a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioMuro.getUsuarioCollection().size() %></b></a></li></br>
-                                                     
+                                                        <!--
+                                                        <li>
+                                                            <a href="ListarSeguidoresServlet?x=seguidores&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size() %></b> </a>      
+                                                        </li>
+                                                        <li>
+                                                            <a href="ListarSeguidoresServlet?x=Seguir&usuarioMuro=<%=usuarioMuro.getIdUsuario() %>" name="Seguir" ><i class="glyphicon glyphicon-list"></i> Siguiendo <b><%= usuarioMuro.getUsuarioCollection().size() %></b></a>
+                                                        </li></br>-->
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
 						</ul>
@@ -102,43 +106,39 @@
 
 
 
-                                        <%
-                                           
+                                        <%                                          
                                             String s=null;
                                             for (int i = 0; i < listaUsuario.size(); i++) {
-                                           
-                                                
                                                     Usuario u = listaUsuario.get(i);
-                                                
-                                                    s=usuario.siguesUsuario(u);
-                                             
+                                                    s=usuario.siguesUsuario(u);                                            
                                         %> 
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <%
-                                                    if(u.getIdUsuario().equals(usuario.getIdUsuario())){
-                                                    }else{
-                                                    
+                                                if(!u.getIdUsuario().equals(usuario.getIdUsuario())){                                                 
                                                       if(s.equals("si")){ %>
+                                                        <form action="SeguirNoSeguirServlet" method="post">  
+                                                        <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >
+                                                        <input type="hidden" value="Siguiendo" name="botonSeguir" >
+                                                        <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
+                                                        <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                        <input  class="btn btn-success pull-right" type="submit" name="boton" value="Siguiendo">
+                                                        </form>
+                                                      <% }else{%>
+                                                        <form action="SeguirNoSeguirServlet" method="post">
+                                                        <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioSeguir" >
+                                                        <input type="hidden" value="Seguir" name="botonSeguir" >
+                                                        <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
+                                                        <input type="hidden" value="<%= ruta %>" name="ruta" >
+                                                        <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
+                                                        </form>
+                                                <%      }%>
+                                                      <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuroGet=<%= u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                <%
+                                                }else{ %>
+                                                    <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                <%}%>
                                                 
-                                                <form action="SeguirNoSeguirServlet" method="post">  
-                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioDejarSeguir" >
-                                                <input type="hidden" value="Siguiendo" name="botonSeguir" >
-                                                <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
-                                               <input type="hidden" value="<%= ruta %>" name="ruta" >
-                                                <input  class="btn btn-success pull-right" type="submit" name="boton" value="Siguiendo">
-                                                </form>
-                                                <% }else{%>
-                                                <form action="SeguirNoSeguirServlet" method="post">
-                                                <input type="hidden" value="<%=u.getIdUsuario() %>" name="usuarioSeguir" >
-                                                <input type="hidden" value="Seguir" name="botonSeguir" >
-                                                <input type="hidden" value="<%= usuarioMuro.getIdUsuario() %>" name="usuariomuro" >
-                                                <input type="hidden" value="<%= ruta %>" name="ruta" >
-                                                <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
-                                                </form>
-                                                <%}
-                                                    }%>
-                                                <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuro=<%=u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                 
 
                                             </div>
