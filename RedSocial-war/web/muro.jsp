@@ -4,6 +4,7 @@
     Author     : Azahar
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="ea.entity.Usuario"%>
 <%@page import="ea.entity.Post"%>
@@ -20,6 +21,8 @@
     lista = (List) request.getAttribute("listaPost");
     
     String mensaje=(String)request.getAttribute("mensajeErrorMuroOtro");
+    
+    SimpleDateFormat format = new SimpleDateFormat("EEE dd MMM yyyy - HH:mm:ss");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,14 +68,17 @@
                                      %>        
                                      <div class="panel panel-default">
                                         <div class="panel-thumbnail">
+                                            <% if (p.getImagen() != null) {%>
                                             <img src="<%= p.getImagen()%>" class="img-responsive">
+                                            <% }%>
                                         </div>
                                         <div class="panel-body">
-                                            <p><%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></p>
-                                            <p><%= p.getFecha()%></p>
+                                            <p><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
+                                                <%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></p>
+                                            <p><%= format.format(p.getFecha()) %></p>
                                             <p><%= p.getDescripcion()%></p>
                                                 
-                                            <p><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
+                                            <p>
                                                 <% if(usuario.equals(usuarioMuro)){%>
                                                 <form name="delete" action="PostDeleteServlet" method="post">    
                                                     <input type="hidden" value="usuario" name="tipo_borrado"/>

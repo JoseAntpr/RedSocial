@@ -58,11 +58,11 @@ public class PostAddServlet extends HttpServlet {
         
         Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
         
-        String descrip=request.getParameter("descripcion");
+        String descrip=mapDatosForm.get("descripcion");
         descrip = new String(descrip.getBytes("ISO-8859-1"),"UTF8");
-        String img=request.getParameter("imagen");
+//        String img=request.getParameter("imagen");
         
-        if(!descrip.equals("")){
+        if(!descrip.equals("") || descrip!=null){
             
             //Lista Post de un Usuario
             listaPost=(List)usuario.getPostCollection();
