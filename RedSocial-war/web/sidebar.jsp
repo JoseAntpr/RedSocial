@@ -10,7 +10,7 @@
         <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
     </ul>
     <ul class="nav hidden-xs" id="lg-menu"></br></br>
-        <li><img src="assets/img/bg_5.jpg" class="img-responsive"></li></br>							
+        <li><img src="assets/img/Avatar.jpg" class="img-responsive"></li></br>							
         <li class="active"><%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></li></br>
         <li class="active">Vive en <%= usuarioMuro.getLocalidad() + ", " + usuarioMuro.getProvincia() + ", " + usuarioMuro.getPais()%></li></br>
         <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso()%></li></br>
