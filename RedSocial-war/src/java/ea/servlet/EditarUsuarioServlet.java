@@ -39,12 +39,19 @@ public class EditarUsuarioServlet extends HttpServlet {
             Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 
             String nombre = (String) request.getParameter("nombre"); 
+            nombre = new String(nombre.getBytes("ISO-8859-1"),"UTF8");
             String apellidos = (String) request.getParameter("apellidos"); 
-            String direccion = (String) request.getParameter("direccion"); 
-            String localidad = (String) request.getParameter("localidad"); 
+            apellidos = new String(apellidos.getBytes("ISO-8859-1"),"UTF8");
+            String direccion = (String) request.getParameter("direccion");
+            direccion = new String(direccion.getBytes("ISO-8859-1"),"UTF8");
+            String localidad = (String) request.getParameter("localidad");
+            localidad = new String(localidad.getBytes("ISO-8859-1"),"UTF8");
             String provincia = (String) request.getParameter("provincia"); 
+            provincia= new String(provincia.getBytes("ISO-8859-1"),"UTF8");
             String pais = (String) request.getParameter("pais"); 
+             pais = new String(pais.getBytes("ISO-8859-1"),"UTF8");
             String email = (String) request.getParameter("email"); 
+            email = new String(email.getBytes("ISO-8859-1"),"UTF8");
 
             usuarioFacade.editarUsuario(usuario, nombre, apellidos, direccion, localidad, provincia, pais, email); 
 

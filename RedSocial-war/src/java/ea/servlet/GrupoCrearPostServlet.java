@@ -97,7 +97,7 @@ public class GrupoCrearPostServlet extends HttpServlet {
         usuarioFacade.edit(miembro);
 
         //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioGrupo=" + miembro.getIdUsuario());
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
 
     }
     

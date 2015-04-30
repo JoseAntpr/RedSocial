@@ -6,6 +6,7 @@
 package ea.ejb;
 
 import ea.entity.Grupo;
+import ea.entity.Usuario;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -28,10 +29,10 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return em;
     }
     
-    public Grupo nuevoGrupo(BigDecimal administrador,String nombre,String privacidad){
+    public Grupo nuevoGrupo(Usuario administrador,String nombre,String privacidad){
         Grupo grupo = new Grupo();
         
-        grupo.setIdAdministrador(new BigInteger(administrador.toString()));
+        grupo.setIdAdministrador(new BigInteger(administrador.getIdUsuario().toString()));
         grupo.setNombre(nombre);
         grupo.setImagen("imagen");
         
@@ -45,7 +46,6 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
     }
     
     public void eliminarGrupo(Grupo grupo){
-        System.err.println("El id de grupo es " + grupo.getIdGrupo());
         remove(grupo);
     }
 
