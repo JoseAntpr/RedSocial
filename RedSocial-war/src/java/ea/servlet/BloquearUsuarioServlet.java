@@ -4,23 +4,28 @@
  * and open the template in the editor.
  */
 package ea.servlet;
+
 import ea.ejb.UsuarioFacade;
 import ea.entity.Usuario;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Azahar
  */
-@WebServlet(name = "EditarUsuarioServlet", urlPatterns = {"/EditarUsuarioServlet"})
-public class EditarUsuarioServlet extends HttpServlet {
+@WebServlet(name = "BloquearUsuarioServlet", urlPatterns = {"/BloquearUsuarioServlet"})
+public class BloquearUsuarioServlet extends HttpServlet {
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -35,32 +40,32 @@ public class EditarUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+            String button = (String) request.getParameter("button");
+            BigDecimal idUsuario;
+            Usuario usuario;
 
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-
-            String nombre = (String) request.getParameter("nombre"); 
-            nombre = new String(nombre.getBytes("ISO-8859-1"),"UTF8");
-            String apellidos = (String) request.getParameter("apellidos"); 
-            apellidos = new String(apellidos.getBytes("ISO-8859-1"),"UTF8");
-            String direccion = (String) request.getParameter("direccion");
-            direccion = new String(direccion.getBytes("ISO-8859-1"),"UTF8");
-            String localidad = (String) request.getParameter("localidad");
-            localidad = new String(localidad.getBytes("ISO-8859-1"),"UTF8");
-            String provincia = (String) request.getParameter("provincia"); 
-            provincia= new String(provincia.getBytes("ISO-8859-1"),"UTF8");
-            String pais = (String) request.getParameter("pais"); 
-             pais = new String(pais.getBytes("ISO-8859-1"),"UTF8");
-            String email = (String) request.getParameter("email"); 
-            email = new String(email.getBytes("ISO-8859-1"),"UTF8");
-
-            usuarioFacade.editarUsuario(usuario, nombre, apellidos, direccion, localidad, provincia, pais, email); 
-
-            //Esto es por como esta implementado el muro:
-            BigDecimal idUser = usuario.getIdUsuario();
-            request.getSession().setAttribute("idUser", idUser);
-            
-            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+            if(button.equals("Bloquear")){  
+                
+              idUsuario = new BigDecimal(request.getParameter("idUser")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.setEstado(true);
               
+            }else if (button.equals("Bloqueado")){
+              
+              idUsuario = new BigDecimal(request.getParameter("idUser")) ;
+              usuario = usuarioFacade.find(idUsuario);
+              usuario.setEstado(false);
+            
+            }
+            
+            List<Usuario> lista = usuarioFacade.findAll();            
+            
+            request.setAttribute("listaUsuarios", lista);
+
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/bloquearUsuario.jsp");
+            rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

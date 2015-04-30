@@ -57,6 +57,7 @@ public class PostAddServlet extends HttpServlet {
         
         
         String descrip=request.getParameter("descripcion");
+        descrip = new String(descrip.getBytes("ISO-8859-1"),"UTF8");
         String img=request.getParameter("imagen");
         
         if(!descrip.equals("")){
