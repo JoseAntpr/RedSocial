@@ -65,20 +65,20 @@
                                             <div class="panel-heading">
                                                 <%
                                                 if(!u.getIdUsuario().equals(usuario.getIdUsuario())){                                                 
-                                                      if(u.getEstado()){ 
+                                                    //  if(u.getEstado()){ 
                                                 %>
                                                 <form action="BloquearUsuarioServlet" method="post">  
                                                     <input type="hidden" value="<%=u.getIdUsuario() %>" name="idUser" >
                                                     <input type="hidden" value="Bloqueado" name="button" >
                                                     <input  class="btn btn-danger pull-right" type="submit" value="Bloqueado">
-                                                </form>
-                                                <%    }else{%>
+                                                </form><!--
+                                                <%   // }else{%>
                                                 <form action="BloquearUsuarioServlet" method="post">
                                                     <input type="hidden" value="<%=u.getIdUsuario() %>" name="idUser" >
                                                      <input type="hidden" value="Bloquear" name="button" >
                                                     <input  class="btn btn-primary pull-right" type="submit" value="Bloquear">
                                                 </form>
-                                                <%    }%>
+                                                <%    //}%>-->
                                                 <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuroGet=<%= u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                     <%
                                                 }else{ %>

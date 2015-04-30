@@ -49,13 +49,13 @@ public class BloquearUsuarioServlet extends HttpServlet {
                 
               idUsuario = new BigDecimal(request.getParameter("idUser")) ;
               usuario = usuarioFacade.find(idUsuario);
-              usuario.setEstado(true);
+              //usuario.setEstado(true);
               
             }else if (button.equals("Bloqueado")){
               
               idUsuario = new BigDecimal(request.getParameter("idUser")) ;
               usuario = usuarioFacade.find(idUsuario);
-              usuario.setEstado(false);
+              //usuario.setEstado(false);
             
             }
             
