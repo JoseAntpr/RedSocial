@@ -64,7 +64,9 @@ if (tieneGrupos){
                     <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
                         <ul class="nav hidden-xs" id="lg-menu">
-                            <li class="active"><a href="crearGrupo.jsp?usurioMuro=<%=usuarioMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
+                            <%if(usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){%>
+                            <li class="active"><a href="crearGrupo.jsp?usurioMuro=<%=usuarioMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li> 
+                            <%}%>
                             <%if(tieneGrupos){
                                 for(Grupo g : listaGruposUsuarioMuro){ %>
                                     <li class="active list-group">
@@ -102,8 +104,13 @@ if (tieneGrupos){
                                                 <div class="panel-body">
                                                         <p class="lead"><%= grupo.getNombre()%></p>
                                                         <p><%= listaMiembrosGrupo.size()%> Miembros, <%= listaPostGrupo.size()%> Posts</p>
+                                                        
+                                                        <form method="POST" action="EditarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
+                                                            <button class="btn btn-warning btn-block" type="submit">Editar grupo</button>   
+                                                        </form>
+                                                            
                                                         <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
-                                                            <button class="btn btn-danger btn-block" type="submit">Eliminar</button>   
+                                                            <button class="btn btn-danger btn-block" type="submit">Eliminar grupo</button>   
                                                         </form>
                                                 </div>
                                             </div> <!-- fin INFO DEL GRUPO -->
@@ -111,6 +118,16 @@ if (tieneGrupos){
                                             <!-- MIEMBROS DEL GRUPO -->
                                             <div class="panel panel-default">
                                                 <div class="panel-heading"> <h4>Miembros</h4></div>
+                                                <div class="panel panel-body">
+                                                    <form method="POST" action="editarGrupo.jsp?grupo=<%=grupo%>">
+                                                        <button class="btn btn-success  btn-group col-sm-8" type="submit">Añadir miembro</button>   
+                                                    </form>
+
+                                                    <form method="POST" action="EliminarGrupoServlet">
+                                                        <button class="btn btn-danger btn-group col-sm-4" type="submit">Eliminar miembro</button>   
+                                                    </form>
+                                                </div>
+                                                    
                                                 <% for (Usuario m : listaMiembrosGrupo) {%>
                                                 <div class="panel-body">
                                                     <img src="assets/img/150x150.gif" class="img-circle pull-right"> <a href="MuroServlet?usuarioMuro=<%=m.getIdUsuario() %>"><%= m.getNombre()%></a>

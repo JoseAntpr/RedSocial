@@ -3,6 +3,7 @@
   <persistence-unit name="RedSocial-ejbPU" transaction-type="JTA">
     <jta-data-source>TAW_JNDI</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+    </properties>
   </persistence-unit>
 </persistence>

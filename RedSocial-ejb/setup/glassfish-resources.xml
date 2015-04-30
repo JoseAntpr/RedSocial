@@ -11,14 +11,14 @@
                           is-connection-validation-required="false" is-isolation-level-guaranteed="true" 
                           lazy-connection-association="false" lazy-connection-enlistment="false"
                           match-connections="false" max-connection-usage-count="0" max-pool-size="32"
-                          max-wait-time-in-millis="60000" name="oracle-thin_taw_taw5Pool" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
+                          max-wait-time-in-millis="60000" name="oracle-thin_taw_taw2Pool" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
         <property name="serverName" value="olimpia.lcc.uma.es"/>
         <property name="portNumber" value="1521"/>
         <property name="databaseName" value="taw"/>
-        <property name="User" value="taw5"/>
-        <property name="Password" value="taw5"/>
+        <property name="User" value="taw2"/>
+        <property name="Password" value="taw2"/>
         <property name="URL" value="jdbc:oracle:thin:@olimpia.lcc.uma.es:1521:taw"/>
         <property name="driverClass" value="oracle.jdbc.OracleDriver"/>
     </jdbc-connection-pool>
-    <jdbc-resource enabled="true" jndi-name="TAW_JNDI" object-type="user" pool-name="oracle-thin_taw_taw5Pool"/>
+    <jdbc-resource enabled="true" jndi-name="TAW_JNDI" object-type="user" pool-name="oracle-thin_taw_taw2Pool"/>
 </resources>
