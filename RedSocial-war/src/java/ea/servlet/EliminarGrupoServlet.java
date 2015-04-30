@@ -7,6 +7,7 @@ package ea.servlet;
 
 import ea.ejb.GrupoFacade;
 import ea.entity.Grupo;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,13 +43,26 @@ public class EliminarGrupoServlet extends HttpServlet {
             throws ServletException, IOException {
 //        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
 //        Grupo grupo = grupoFacade.find(idGrupo);
+        HttpSession session = request.getSession();
+        
+        Usuario usuario = (Usuario)session.getAttribute("usuario");
+        Usuario usuarioMuro = (Usuario)session.getAttribute("usuarioMuro");
+        
 
-        BigDecimal idGrupoEliminiar = new BigDecimal(request.getParameter("idGrupoEliminar"));
+        BigDecimal idGrupoEliminiar = new BigDecimal((String)request.getParameter("idGrupo"));
+        
         Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
         
         grupoFacade.eliminarGrupo(grupoEliminar);
         
-        this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
+        usuario.getGrupoCollection().remove(grupoEliminar);
+        
+        session.setAttribute("usuario", usuario);
+        session.setAttribute("usuarioMuro", usuario);
+        
+        
+        
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -47,6 +47,7 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
     
     public void eliminarGrupo(Grupo grupo){
         remove(grupo);
+        
     }
 
     public GrupoFacade() {

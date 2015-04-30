@@ -6,6 +6,8 @@
 package ea.servlet;
 
 import ea.ejb.GrupoFacade;
+import ea.ejb.UsuarioFacade;
+import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -22,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "CrearGrupoServlet", urlPatterns = {"/CrearGrupoServlet"})
 public class CrearGrupoServlet extends HttpServlet {
+    @EJB
+    private UsuarioFacade usuarioFacade;
     
     @EJB
     private GrupoFacade grupoFacade;
@@ -37,13 +42,25 @@ public class CrearGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        
         String nombre = (String) request.getParameter("nombre");            
         String privacidad = (String) request.getParameter("privacidad");
         
 //        BigDecimal sesion = (BigDecimal) request.getSession().getAttribute("idUser");
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
         
-        grupoFacade.nuevoGrupo(usuario,nombre, privacidad);
+        
+        Grupo grupo = grupoFacade.nuevoGrupo(usuario,nombre, privacidad);
+        
+        grupo.getUsuarioCollection().add(usuario);
+        
+        grupoFacade.edit(grupo);
+        
+        usuario.getGrupoCollection().add(grupo);
+        usuarioFacade.edit(usuario);
+        
+        session.setAttribute("usuarioMuro", usuario);
         
         this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
         //this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);

@@ -73,12 +73,6 @@ if (tieneGrupos){
                                             <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"/>
                                             <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar"/>
                                         </form>
-                                        <% if (g.getIdAdministrador().equals(usuario.getIdUsuario())){ %>    
-                                            <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" >
-                                                <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"/>
-                                                <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" />
-                                            </form>
-                                        <% } %>
                                     </li>
                             <% }
                             }%>
