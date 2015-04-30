@@ -4,6 +4,7 @@
     Author     : Azahar
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <!-- sidebar -->
 <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
     <ul class="nav">
@@ -13,7 +14,10 @@
         <li><img src="assets/img/Avatar.jpg" class="img-responsive"></li></br>							
         <li class="active"><%= usuarioMuro.getNombre() + " " + usuarioMuro.getApellidos()%></li></br>
         <li class="active">Vive en <%= usuarioMuro.getLocalidad() + ", " + usuarioMuro.getProvincia() + ", " + usuarioMuro.getPais()%></li></br>
-        <li class="active">Fecha ingreso:  <%= usuarioMuro.getFechaIngreso()%></li></br>
+        <%!
+        SimpleDateFormat formatSidebar = new SimpleDateFormat("EEE dd MMM yyyy");
+        %>
+        <li class="active">Fecha ingreso:  <%= formatSidebar.format(usuarioMuro.getFechaIngreso()) %></li></br>
         <li>Descripción desdes desdes desdesdesdes desdesdesdes desdesdesdes</li></br>
         <li><a href="GrupoServlet"><i class="glyphicon glyphicon-align-right"></i> Grupos</a></li>                       
         <li><a href="ListarSeguidoresServlet?x=seguidores"><i class="glyphicon glyphicon-list"></i> Seguidores <b><%=usuarioMuro.getUsuarioCollection1().size()%></b>  </a></li>

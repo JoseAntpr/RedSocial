@@ -208,6 +208,7 @@ h1,h2,h3 {
 
 .col-sm-9.full {
     width: 100%;
+    height: 90%;
 }
 
 .modal-header, .modal-footer {

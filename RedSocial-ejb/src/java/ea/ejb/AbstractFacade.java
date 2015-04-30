@@ -125,7 +125,7 @@ public abstract class AbstractFacade<T> {
                     // ProcessFormField
                     String name = item.getFieldName();
                     String value = item.getString();
-                    if (name.equals("description_post_grupo")) {
+                    if (name.equals("description_post_grupo") || name.equals("descripcion")) {
                         description = value;
                     }else if(name.equals("id_grupo")){
                         id_grupo = value;

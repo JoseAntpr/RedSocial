@@ -166,7 +166,7 @@ if (tieneGrupos){
                                             <%for (Post p : listaPostGrupo) {%>
                                                 <div class="panel panel-default">
                                                 <% if (p.getImagen() != null) {%>
-                                                    <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                    <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
                                                     <div class="panel-body">
                                                 <% }%>
 

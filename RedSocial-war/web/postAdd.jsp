@@ -51,7 +51,7 @@
 
                                         <!-- POST --> 
                                         <div class="well"> 
-                                            <form class="form-horizontal" role="form" name="add" action="PostAddServlet" method="post" > <!-- enctype="multipart/form-data" -->
+                                            <form class="form-horizontal" role="form" name="add" action="PostAddServlet" method="post" enctype="multipart/form-data">
                                                 <h4>¿Qué estás pensando?</h4>
                                                 <div class="form-group" style="padding:14px;">
                                                     <textarea class="form-control" name="descripcion" placeholder="Escriba el contenido del post"></textarea>
@@ -71,15 +71,15 @@
 
 
 
-                                <div class="row" id="footer">    
+                                <!--<div class="row" id="footer">    
                                     <div class="col-sm-6">
 
                                     </div>
 
-                                </div>
+                                </div>-->
 
-                            </div><!-- /col-9 -->
-                        </div><!-- /padding -->
+                            </div> <!--/col-9 -->
+                       </div> <!-- /padding -->
                     </div>
                     <!-- /main -->
 
@@ -89,6 +89,7 @@
 
 
         <!--post modal-->
+        <!--
         <div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -111,7 +112,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <script type="text/javascript" src="assets/js/jquery.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.js"></script>
