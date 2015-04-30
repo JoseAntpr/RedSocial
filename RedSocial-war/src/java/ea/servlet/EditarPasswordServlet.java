@@ -40,7 +40,9 @@ public class EditarPasswordServlet extends HttpServlet {
          
             Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
             String password = (String) request.getParameter("password"); 
+            password = new String(password.getBytes("ISO-8859-1"),"UTF8");
             String passwordR = (String) request.getParameter("passwordR"); 
+            passwordR = new String(passwordR.getBytes("ISO-8859-1"),"UTF8");
            
             if (password.compareTo(passwordR)==0){
                 usuarioFacade.editarPass(usuario, password);
