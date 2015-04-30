@@ -5,6 +5,7 @@
  */
 package ea.servlet;
 
+import ea.ejb.GrupoFacade;
 import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
 import ea.entity.Post;
@@ -27,6 +28,8 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
+    @EJB
+    private GrupoFacade grupoFacade;
 
     @EJB
     private UsuarioFacade usuarioFacade;
@@ -50,11 +53,11 @@ public class GrupoServlet extends HttpServlet {
         Usuario usuarioMuro = (Usuario) session.getAttribute("usuarioMuro");
         
         // Lista de Grupos donde usuario es miembro
-        List<Grupo> listaGruposUsuarioMuro;
+        List<Grupo> listaGruposUsuarioMuro = null;
         
-        Grupo grupo;
-        List<Post> listaPostGrupo;
-        List<Usuario> listaMiembrosGrupo;
+        Grupo grupo = null;
+        List<Post> listaPostGrupo = null;
+        List<Usuario> listaMiembrosGrupo = null;
         
         // Obtiene grupos públicos y no los privados si usuario != usuarioMuro
         Boolean muroDeOtro = !usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario());
@@ -74,8 +77,11 @@ public class GrupoServlet extends HttpServlet {
              // Lista de grupos del usuario
             request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
             
-            // primer grupo de la lista
+            //primer grupo de la lista
             grupo = (Grupo) listaGruposUsuarioMuro.get(0);
+            
+            
+//            grupo = (Grupo) grupoFacade.find(listaGruposUsuarioMuro.get(0).getIdGrupo());
 
             // Lista de post
             listaPostGrupo = (List) grupo.getPostCollection();

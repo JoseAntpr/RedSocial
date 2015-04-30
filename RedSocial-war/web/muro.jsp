@@ -62,7 +62,7 @@
                             <!-- content -->                      
                             <div class="row">
 				<!-- main col left --> 
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     <%for (int i=0;i<lista.size();i++) { 
                                         Post p=lista.get(i);
                                      %>        
@@ -91,6 +91,9 @@
                                     </div>
                                     <% } %>  
                                 </div>
+                                <!-- Include sidebar -->
+                                    <%@include file="postAmigos.jsp" %>                    
+                                <!-- /Include sidebar -->
                             </div>
                         </div><!-- /col-9 -->  
                     </div><!-- /padding -->
