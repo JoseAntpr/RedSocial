@@ -84,7 +84,7 @@
 
                                         <!-- POST --> 
                                         <div class="well"> 
-                                            <form class="form-horizontal" role="form" name="add" action="PostAddServlet" method="post" > <!-- enctype="multipart/form-data" -->
+                                            <form class="form-horizontal" role="form" name="add" action="PostAddServlet" method="post" enctype="multipart/form-data"> <!-- enctype="multipart/form-data" -->
                                                 <h4>¿Qué estás pensando?</h4>
                                                 <div class="form-group" style="padding:14px;">
                                                     <textarea class="form-control" name="descripcion" placeholder="Escriba el contenido del post"></textarea>

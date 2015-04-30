@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,9 +56,10 @@ public class PostAddServlet extends HttpServlet {
         
         List<Post> listaPost;
         
+        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
         
         String descrip=request.getParameter("descripcion");
-        String img=request.getParameter("imagen");
+//        String img=request.getParameter("imagen");
         
         if(!descrip.equals("")){
             
@@ -69,7 +71,7 @@ public class PostAddServlet extends HttpServlet {
             p.setIdUsuario(usuario);
             p.setDescripcion(descrip); //request.getParameter("postContenido")
             p.setFecha(new Date());
-            p.setImagen(img);
+            p.setImagen(mapDatosForm.get("imagen"));
 
             //Actualizamos la lista de Post del Usuario
             listaPost.add(p);
