@@ -5,9 +5,13 @@
  */
 package ea.ejb;
 
+import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -106,6 +110,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             usuario.setPassword(pass);
             edit(usuario);               
          
+    }
+     
+    public List gruposPublicosDeUsuario(Usuario u) {
+        List grupos = new LinkedList();
+        BigInteger privacidad = new BigInteger("0");
+        for (Grupo g : u.getGrupoCollection()) {
+            if (g.getPrivacidad().equals(privacidad)) {
+                grupos.add(g);
+            }
+        }
+        return grupos;
     }
     
 }

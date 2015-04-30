@@ -10,7 +10,7 @@ import ea.entity.Grupo;
 import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -47,41 +47,44 @@ public class GrupoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-
-        String id = request.getParameter("usuarioMuro");
-        BigDecimal idUsuarioMuro = new BigDecimal(id);
-        Usuario usuarioMuro = usuarioFacade.find(idUsuarioMuro);
-
-        // Lista de Grupos donde usuario es miembro
-        List<Grupo> listaGruposUsuario = (List) usuario.getGrupoCollection();
+        Usuario usuarioMuro = (Usuario) session.getAttribute("usuarioMuro");
         
-
+        // Lista de Grupos donde usuario es miembro
+        List<Grupo> listaGruposUsuarioMuro;
+        
         Grupo grupo;
         List<Post> listaPostGrupo;
         List<Usuario> listaMiembrosGrupo;
         
-        Boolean tieneGrupos = listaGruposUsuario.size() > 0;
+        // Obtiene grupos públicos y no los privados si usuario != usuarioMuro
+        Boolean muroDeOtro = !usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario());
+        request.setAttribute("muroDeOtro", muroDeOtro);
+        if (muroDeOtro){
+            listaGruposUsuarioMuro = (List)usuarioFacade.gruposPublicosDeUsuario(usuarioMuro);
+        }else{
+            listaGruposUsuarioMuro = (List) usuarioMuro.getGrupoCollection();
+        }
+
+        
+        
+        Boolean tieneGrupos = listaGruposUsuarioMuro.size() > 0;
         request.setAttribute("tieneGrupos", tieneGrupos);
         if (tieneGrupos) {
-            request.setAttribute("listaGruposUsuario", listaGruposUsuario);
+            
+             // Lista de grupos del usuario
+            request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
             
             // primer grupo de la lista
-            grupo = (Grupo) listaGruposUsuario.get(0);
-            request.setAttribute("grupo", grupo);
+            grupo = (Grupo) listaGruposUsuarioMuro.get(0);
 
             // Lista de post
-            listaPostGrupo = (List<Post>) grupo.getPostCollection();
+            listaPostGrupo = (List) grupo.getPostCollection();
             request.setAttribute("listaPostGrupo", listaPostGrupo);
 
             // Lista de miembros
-            listaMiembrosGrupo = (List<Usuario>) grupo.getUsuarioCollection();
+            listaMiembrosGrupo = (List) grupo.getUsuarioCollection();
             request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
-
-            
         }
-
-        // Usuario Muro
-        request.setAttribute("usuarioMuro", usuarioMuro);
 
         // Request Dispatcher
         RequestDispatcher rd;

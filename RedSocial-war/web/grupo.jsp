@@ -1,4 +1,3 @@
-<%@page import="java.util.Collections.list(Enumeration)"%>
 <%@page import="ea.entity.Grupo"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="ea.entity.Usuario"%>
@@ -12,38 +11,32 @@
 --%>
 <%
 
-Usuario usuario=(Usuario)sesion.getAttribute("usuario");
-Usuario usuarioMuro=(Usuario) request.getAttribute("usuarioMuro");
+Usuario usuario=(Usuario)session.getAttribute("usuario");
+Usuario usuarioMuro=(Usuario) session.getAttribute("usuarioMuro");
 
 
-List<Grupo> listaGruposUsuario = null;
+List<Grupo> listaGruposUsuarioMuro = null;
 
 Grupo grupo = null;
 List<Post> listaPostGrupo = null;
 List<Usuario> listaMiembrosGrupo = null;
 
+Boolean muroDeOtro = (Boolean) request.getAttribute("muroDeOtro");
+
 Boolean tieneGrupos = (Boolean)request.getAttribute("tieneGrupos");
 if (tieneGrupos){
     // Lista de Grupos donde usuario es miembro
-    listaGruposUsuario = (List)request.getAttribute("listaGruposUsuario");
+    listaGruposUsuarioMuro = (List)request.getAttribute("listaGruposUsuarioMuro");
     
     // primer grupo de la lista
-    grupo =(Grupo) request.getAttribute("grupo");
+    grupo = listaGruposUsuarioMuro.get(0);
     
     // Lista de post
-    listaPostGrupo = (List<Post>)request.getAttribute("listaPostGrupo");
+    listaPostGrupo = (List)request.getAttribute("listaPostGrupo");
     
     // Lista de miembros
-    listaMiembrosGrupo = (List<Usuario>)request.getAttribute("listaMiembrosGrupo");
+    listaMiembrosGrupo = (List)request.getAttribute("listaMiembrosGrupo");
 }
-
-//listaPost = (List) request.getAttribute("postGrupo");
-
-//listaMiembros = (List) request.getAttribute("miembrosGrupo");
-
-//List<Grupo> listaGruposUsuario;
-//listaGruposMiembro = (List) request.getAttribute("listaGruposMiembro");
-
 
 %>
 
@@ -73,17 +66,17 @@ if (tieneGrupos){
                         <ul class="nav hidden-xs" id="lg-menu">
                             <li class="active"><a href="crearGrupo.jsp?usurioMuro=<%=usuarioMuro.getIdUsuario()%>"><i class="glyphicon glyphicon-list-alt"></i> + Crear grupo </a></li>
                             <%if(tieneGrupos){
-                                for(Grupo g : listaGruposUsuario){ %>
+                                for(Grupo g : listaGruposUsuarioMuro){ %>
                                     <li class="active list-group">
                                         <a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
                                         <form class="pull-right col-xs-offset-1" method="post" action="AbandonarGrupoServlet">
-                                            <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"></input>
-                                            <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar" href=""></input>
+                                            <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"/>
+                                            <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar"/>
                                         </form>
                                         <% if (g.getIdAdministrador().equals(usuario.getIdUsuario())){ %>    
-                                            <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" class="pull-right">
-                                                <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"></input>
-                                                <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" href=""></input>
+                                            <form class="pull-right col-xs-offset-1" method="post" action="EliminarGrupoServlet" >
+                                                <input type="hidden" name="idGrupoEliminar" value="<%=g.getIdGrupo()%>"/>
+                                                <input class="btnEliminar botonEliminar" type="submit" name="eliminiar" value="Borrar" />
                                             </form>
                                         <% } %>
                                     </li>
@@ -97,7 +90,7 @@ if (tieneGrupos){
                     <div class="column col-sm-10 col-xs-11" id="main">
 
                        <!-- top nav -->
-                        <%@include file="/navBarServlet?usuarioMuro=<%=usuarioMuro.getIdUsuario()%>" %>
+                        <%@include file="/navBar.jsp" %>
 
                         <div class="padding">
                             <div class="full col-sm-9">
@@ -141,23 +134,23 @@ if (tieneGrupos){
                                     
                                     
                                     <div class="col-sm-7">
-                                        <%if(tieneGrupos){ %>
-                                        
-                                        <!-- CREAR POST GRUPO -->
-                                            <div class="well"> 
-                                                <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
-                                                    <h4>¿Qué te cuentas?</h4>
-                                                    <div class="form-group" style="padding:14px;">
-                                                        <input class="form-control" name="id_grupo" type="hidden" value="<%=grupo.getIdGrupo()%>"/>
-                                                        <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
-                                                        <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
-                                                        <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
-                                                        <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
-                                                    </div>
+                                        <%if(tieneGrupos){ 
+                                            if(!muroDeOtro){ %>
+                                            <!-- CREAR POST GRUPO -->
+                                                <div class="well"> 
+                                                    <form action="./GrupoCrearPostServlet" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                                        <h4>¿Qué te cuentas?</h4>
+                                                        <div class="form-group" style="padding:14px;">
+                                                            <input class="form-control" name="id_grupo" type="hidden" value="<%=grupo.getIdGrupo()%>"/>
+                                                            <textarea class="form-control" name="description_post_grupo" placeholder="Actualiza tu estado" ></textarea>
+                                                            <input class="filestyle" data-input="false" data-buttonText="Buscar Archivo" name="image_post_grupo" type="file" />
+                                                            <!--<button class="btn btn-primary pull-right" type="submit">Post</button>-->
+                                                            <input type="submit" class="btn btn-primary pull-right" name="btnPost" value="Post"/>
+                                                        </div>
 
-                                                </form>
-                                            </div> <!-- fin CREAR POST GRUPO -->
-                                            
+                                                    </form>
+                                                </div> <!-- fin CREAR POST GRUPO -->
+                                            <% } %> 
                                         <!-- LISTAR POST GRUPO -->
                                             <%for (Post p : listaPostGrupo) {%>
                                                 <div class="panel panel-default">
@@ -171,7 +164,7 @@ if (tieneGrupos){
                                                         <form name="delete" action="PostDeleteServlet" method="post">                                                                   
                                                             <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
                                                             <input type="hidden" name="tipo_borrado" value="from_grupo"/>
-                                                            <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                            <input class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
                                                         </form>
 
                                                     </div>
@@ -180,12 +173,6 @@ if (tieneGrupos){
                                         }// fin tieneGrupos%>
                                     </div>
                                 </div><!--/row-->
-                                <div class="row" id="footer">    
-                                    <div class="col-sm-6">
-
-                                    </div>
-                                </div>
-
                                 <hr>
                             </div><!-- /col-9 -->
                         </div><!-- /padding -->
