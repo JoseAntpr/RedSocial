@@ -35,7 +35,7 @@
                         <!-- top nav -->
                         <div class="navbar navbar-blue navbar-static-top">  
                             <div class="navbar-header">
-                                <a  class="navbar-brand logo">Rs</a>
+                                <a  class="navbar-brand logo">R</a>
                             </div>
                             <nav class="collapse navbar-collapse" role="navigation">							
                                 <ul class="nav navbar-nav">						
