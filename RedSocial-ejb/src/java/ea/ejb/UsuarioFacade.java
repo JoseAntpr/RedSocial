@@ -123,4 +123,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return grupos;
     }
     
+    public List buscarUsuarios(String datos){
+        List<Usuario> lista=null;
+        lista=em.createNamedQuery("Usuario.findByNombreApellidos").setParameter("datos","%"+datos+"%").getResultList();
+
+        return lista;
+    }
+    
 }

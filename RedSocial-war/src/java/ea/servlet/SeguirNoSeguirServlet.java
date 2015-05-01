@@ -50,7 +50,7 @@ public class SeguirNoSeguirServlet extends HttpServlet {
             Usuario usuario;
             String ruta= (String) request.getParameter("ruta");
             String button = (String) request.getParameter("botonSeguir");
-            
+            String datos = (String) request.getParameter("datos");
             
            if(button.equals("Seguir")){
               idUsuario=new BigDecimal(request.getParameter("usuarioSeguir")) ;
@@ -61,8 +61,12 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuario);
               usuarioFacade.edit(usuarioPropio);
               
-//              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
-              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+              if(ruta.equals("busquedaUsuarios")){
+                  response.sendRedirect(request.getContextPath()+"/BuscarServlet?buscar="+datos);
+              }else{
+                  response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+              }
+              
            }else if(button.equals("Siguiendo")){
               idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
               usuario = usuarioFacade.find(idUsuario);
@@ -72,9 +76,14 @@ public class SeguirNoSeguirServlet extends HttpServlet {
               usuarioFacade.edit(usuario);
               usuarioFacade.edit(usuarioPropio);
               
+              if(ruta.equals("busquedaUsuarios")){
+                  response.sendRedirect(request.getContextPath()+"/BuscarServlet?buscar="+datos);
+              }else{
+                  response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+              }
               
 //              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
-                response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
+                
            }
             
     }

@@ -12,6 +12,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<Post> lista;
+    List<Post> listaSigues;
     
     HttpSession sesion = request.getSession();
     Usuario usuario = (Usuario) sesion.getAttribute("usuario");
@@ -19,6 +20,7 @@
 //  Usuario usuarioMuro = (Usuario) request.getAttribute("usuarioMuro");
 
     lista = (List) request.getAttribute("listaPost");
+    listaSigues= (List) request.getAttribute("listaPostSigues");
     
     String mensaje=(String)request.getAttribute("mensajeErrorMuroOtro");
     
@@ -61,10 +63,24 @@
                             <%  } %>
                             <!-- content -->                      
                             <div class="row">
-				<!-- main col left --> 
+				<!-- main col left -->
+                                <%
+                                     if(usuario.equals(usuarioMuro)){
+                                %>
                                 <div class="col-sm-6">
+                                
+                                <%
+                                     }else{
+                                %>
+                                 <div class="col-sm-6 centered">
+                                
+                                <%
+                                     }
+                                %>
                                     <%for (int i=0;i<lista.size();i++) { 
                                         Post p=lista.get(i);
+                                        
+                                        if(p.getIdGrupo()==null){
                                      %>        
                                      <div class="panel panel-default">
                                         <div class="panel-thumbnail">
@@ -89,10 +105,19 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <% } %>  
+                                    <%} 
+                                    } %>  
                                 </div>
                                 <!-- Include sidebar -->
-                                    <%@include file="postAmigos.jsp" %>                    
+                                <%
+                                     if(usuario.equals(usuarioMuro)){
+                                %>
+                                <%@include file="postAmigos.jsp" %> 
+                                
+                                <%
+                                     }
+                                %>
+                                                        
                                 <!-- /Include sidebar -->
                             </div>
                         </div><!-- /col-9 -->  

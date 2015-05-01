@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Grupo.findByIdAdministrador", query = "SELECT g FROM Grupo g WHERE g.idAdministrador = :idAdministrador"),
     @NamedQuery(name = "Grupo.findByNombre", query = "SELECT g FROM Grupo g WHERE g.nombre = :nombre"),
     @NamedQuery(name = "Grupo.findByPrivacidad", query = "SELECT g FROM Grupo g WHERE g.privacidad = :privacidad"),
-    @NamedQuery(name = "Grupo.findByImagen", query = "SELECT g FROM Grupo g WHERE g.imagen = :imagen")})
+    @NamedQuery(name = "Grupo.findByImagen", query = "SELECT g FROM Grupo g WHERE g.imagen = :imagen"),
+    @NamedQuery(name = "Grupo.findByNombreBuscar", query = "SELECT g FROM Grupo g WHERE UPPER(g.nombre) LIKE UPPER(:datos)")
+})
 public class Grupo implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

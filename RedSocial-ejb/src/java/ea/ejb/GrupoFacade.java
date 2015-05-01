@@ -54,5 +54,12 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         super(Grupo.class);
     }
     
+    public List buscarGrupos(String datos){
+        List<Grupo> lista=null;
+        lista=em.createNamedQuery("Grupo.findByNombreBuscar").setParameter("datos","%"+datos+"%").getResultList();
+
+        return lista;
+    }
+    
     
 }

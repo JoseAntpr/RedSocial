@@ -10,11 +10,13 @@
 	<a  class="navbar-brand logo">R</a>
     </div>
     <nav class="collapse navbar-collapse" role="navigation">
-        <form class="navbar-form navbar-left">
+        
+        <!--BUSCAR-->
+        <form class="navbar-form navbar-left" action="BuscarServlet" method="post">
             <div class="input-group input-group-sm" style="max-width:360px;">
                 <input class="form-control" placeholder="Search" name="buscar" id="srch-term" type="text">
                 <div class="input-group-btn">
-                    <a href="#" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
+                    <button type="submit" name="botonBuscar" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></button>
                 </div>
             </div>
 	</form>
@@ -33,15 +35,15 @@
                     --> 
                <% }%>
             </li>
-            <li>
+            <!--<li>
                 <a href="ListarSeguidoresServlet?x=usuariosSeguir"><span class="badge">Usuarios</span></a>
-                <!--
-                <a href="ListarSeguidoresServlet?x=usuariosSeguir&usuarioMuro=<%= usuario.getIdUsuario() %>"><span class="badge">Usuarios</span></a>
-                --> 
+                
+               
             </li>
             <li>
 		<a href="#"><span class="badge">Grupos</span></a>
             </li>
+            --> 
 	</ul>
 	<ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="fat-menu"> <a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><%= usuario.getNombre()+" "+usuario.getApellidos() %> <b class="caret"></b></a>

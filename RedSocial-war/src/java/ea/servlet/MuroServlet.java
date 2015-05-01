@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -53,6 +54,7 @@ public class MuroServlet extends HttpServlet {
         Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
         
         List<Post> listaPost=null;
+        List<Post> postSigues=null;
        
         String idUsuarioMuroGetString=request.getParameter("usuarioMuroGet");
         
@@ -72,17 +74,19 @@ public class MuroServlet extends HttpServlet {
         }
         
         if(usuarioMuro.getIdUsuario().equals(usuario.getIdUsuario())){
-            listaPost=postFacade.findByMuroIdUsuario(usuario.getIdUsuario());
+            listaPost=postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
+            List<Usuario> listaSigues=(List)usuario.getUsuarioCollection();
+                
+            postSigues=postFacade.findPostIdUsuarioSeguidoresOrder(usuario.getIdUsuario());
 
         }else{
 
             if(usuario.siguesUsuario(usuarioMuro).equals("si")){
                 
-                listaPost=postFacade.findByMuroIdUsuario(usuarioMuro.getIdUsuario());
-                
+                listaPost=postFacade.findPostIdUsuarioOrder(usuarioMuro.getIdUsuario());
                 
             }else{
-                listaPost=postFacade.findByMuroIdUsuario(usuario.getIdUsuario());
+                listaPost=postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
                 sesion.setAttribute("usuarioMuro", usuario);
                 usuarioMuro = usuario;
 //                response.encodeURL("/MuroServlet"); //QUITAR DE LA URL LA ID DEL usuarioMuro
@@ -92,6 +96,7 @@ public class MuroServlet extends HttpServlet {
         
         request.setAttribute("mensajeErrorMuroOtro", mensaje);
 //        request.setAttribute("usuarioMuro", usuarioMuro);
+        request.setAttribute("listaPostSigues", postSigues);
         request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
         
         RequestDispatcher rd;

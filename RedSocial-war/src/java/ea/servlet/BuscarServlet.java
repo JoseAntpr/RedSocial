@@ -5,11 +5,12 @@
  */
 package ea.servlet;
 
+import ea.ejb.GrupoFacade;
 import ea.ejb.UsuarioFacade;
+import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -18,17 +19,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Joseantpr
  */
-@WebServlet(name = "ListarSeguidoresServlet", urlPatterns = {"/ListarSeguidoresServlet"})
-public class ListarSeguidoresServlet extends HttpServlet {
-
+@WebServlet(name = "BuscarServlet", urlPatterns = {"/BuscarServlet"})
+public class BuscarServlet extends HttpServlet {
+    @EJB
+    private GrupoFacade grupoFacade;
     @EJB
     private UsuarioFacade usuarioFacade;
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,35 +43,19 @@ public class ListarSeguidoresServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession sesion = request.getSession();
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+        String datosBusqueda=request.getParameter("buscar");
+        List<Usuario> listaUsuarios = usuarioFacade.buscarUsuarios(datosBusqueda);
+        List<Grupo> listaGrupos=grupoFacade.buscarGrupos(datosBusqueda);
         
-        List<Usuario> ListaSeguidores = null;
-        String x = (String) request.getParameter("x");
-
-//        BigDecimal idUsuario=new BigDecimal( request.getParameter("usuarioMuro"));
-//        Usuario  usuarioMuro=usuarioFacade.find(idUsuario);
-
-        if (x.equals("seguidores")) {
-
-            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection1();
-
-        } else if (x.equals("Seguir")) {
-
-            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection();
-
-        }
-
-        request.setAttribute("x", x);
-//        request.setAttribute("usuarioMuro", usuarioMuro);
-        request.setAttribute("listaSeguidores", ListaSeguidores);
+        request.setAttribute("listaUsuarios", listaUsuarios);
+        request.setAttribute("listaGrupos", listaGrupos);
+        request.setAttribute("datos", datosBusqueda);
+        
         
         RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
+        rd = this.getServletContext().getRequestDispatcher("/buscar.jsp");
         rd.forward(request, response);
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

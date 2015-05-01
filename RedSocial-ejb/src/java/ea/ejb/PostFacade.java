@@ -47,7 +47,7 @@ public class PostFacade extends AbstractFacade<Post> {
         super(Post.class);
     }
     
-    public List<Post> findByMuroIdUsuario (BigDecimal id_usuario) {
+    public List<Post> findPostIdUsuarioOrder (BigDecimal id_usuario) {
         Query q;
         List<Post> listaPost;        
         
@@ -56,6 +56,18 @@ public class PostFacade extends AbstractFacade<Post> {
         q.setParameter("ID", id_usuario);
         listaPost = q.getResultList();
         return listaPost;
+        
+    }
+    
+    public List<Post> findPostIdUsuarioSeguidoresOrder (BigDecimal id_usuario) {
+        Query q;
+        List<Post> post;        
+        
+        q = em.createQuery("SELECT p FROM Post p, Usuario u ,IN (u.usuarioCollection) us WHERE u.idUsuario=:ID AND p.idUsuario.idUsuario=us.idUsuario ORDER BY p.idPost DESC");
+        
+        q.setParameter("ID", id_usuario);
+        post = (List) q.getResultList();
+        return post;
         
     }
     
