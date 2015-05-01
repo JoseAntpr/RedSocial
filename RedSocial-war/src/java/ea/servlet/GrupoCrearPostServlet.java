@@ -59,8 +59,8 @@ public class GrupoCrearPostServlet extends HttpServlet {
             throws ServletException, IOException, Exception {
 
         //get session of the request
-        HttpSession sesion = request.getSession();
-        Usuario miembro = (Usuario) sesion.getAttribute("usuario");
+        HttpSession session = request.getSession();
+        Usuario miembro = (Usuario) session.getAttribute("usuario");
 
         // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
 //        Map<String,String> mapDatosForm = postFacade.obtenerDatosPost(request);
@@ -83,18 +83,20 @@ public class GrupoCrearPostServlet extends HttpServlet {
         postFacade.create(post);
 
         // Añadimos el post a la coleccion de post del grupo
-        Collection postCollectionGrupo = grupo.getPostCollection();
-        postCollectionGrupo.add(post);
+        grupo.getPostCollection().add(post);
 
         // Actualizamos el grupo con el post ya añadido
         grupoFacade.edit(grupo);
 
         // Añadimos el post a la coleccion de post del miembro creador
-        Collection postCollectionUser = miembro.getPostCollection();
-        postCollectionUser.add(post);
+        miembro.getPostCollection().add(post);
 
         // Actualizamos el usuario con el post ya añadido
         usuarioFacade.edit(miembro);
+        
+        session.setAttribute("usuario", miembro);
+        session.setAttribute("usuarioMuro", miembro);
+        
 
         //redirect to the grupo servlet 
         response.sendRedirect(request.getContextPath() + "/GrupoServlet");

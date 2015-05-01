@@ -11,6 +11,7 @@ import ea.entity.Grupo;
 import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
@@ -78,10 +79,10 @@ public class GrupoServlet extends HttpServlet {
             request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
             
             //primer grupo de la lista
-            grupo = (Grupo) listaGruposUsuarioMuro.get(0);
+//            grupo = (Grupo) listaGruposUsuarioMuro.get(0);
             
-            
-//            grupo = (Grupo) grupoFacade.find(listaGruposUsuarioMuro.get(0).getIdGrupo());
+            BigDecimal idGrupo = listaGruposUsuarioMuro.get(0).getIdGrupo();
+            grupo = (Grupo) grupoFacade.find(idGrupo);
 
             // Lista de post
             listaPostGrupo = (List) grupo.getPostCollection();
