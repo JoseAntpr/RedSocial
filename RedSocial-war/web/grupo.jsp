@@ -166,18 +166,22 @@ if (tieneGrupos){
                                             <%for (Post p : listaPostGrupo) {%>
                                                 <div class="panel panel-default">
                                                 <% if (p.getImagen() != null) {%>
-                                                    <div class="panel-thumbnail"><img src="<%= p.getImagen()%>" class="img-responsive"></div>
+                                                    <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                <% } %>
                                                     <div class="panel-body">
-                                                <% }%>
-
-                                                        <p><%=p.getDescripcion()%></p>
-
+                                                    <p><%=p.getDescripcion()%></p>
+                                                    <% if(p.getIdUsuario().getIdUsuario().equals(usuario.getIdUsuario())){ %>
                                                         <form name="delete" action="PostDeleteServlet" method="post">                                                                   
                                                             <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
                                                             <input type="hidden" name="tipo_borrado" value="from_grupo"/>
-                                                            <input class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                            <input class="btn btn-danger pull-right" type="submit" value="Eliminar" name="eliminar" />
                                                         </form>
-
+                                                        <form name="edit" action="PostEditaServlet" method="post">                                                                   
+                                                            <input type="hidden" name="idGuardada" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al editar post-->
+                                                            <input type="hidden" name="tipo_borrado" value="from_grupo"/>
+                                                            <input class="btn btn-warning pull-right" type="submit" value="Editar" name="editar" />
+                                                        </form>
+                                                    <% }%>
                                                     </div>
                                                 </div>
                                             <% } // fin LISTAR POST GRUPO
