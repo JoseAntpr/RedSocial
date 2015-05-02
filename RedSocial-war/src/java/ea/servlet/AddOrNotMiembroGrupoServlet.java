@@ -12,8 +12,6 @@ import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,14 +24,16 @@ import javax.servlet.http.HttpSession;
  *
  * @author Jose Sánchez Aranda
  */
-@WebServlet(name = "EditarGrupoServlet", urlPatterns = {"/EditarGrupoServlet"})
-public class EditarGrupoServlet extends HttpServlet {
-    @EJB
-    private UsuarioFacade usuarioFacade;
+@WebServlet(name = "AddOrNotMiembroGrupoServlet", urlPatterns = {"/AddOrNotMiembroGrupoServlet"})
+public class AddOrNotMiembroGrupoServlet extends HttpServlet {
     @EJB
     private GrupoFacade grupoFacade;
+    @EJB
+    private UsuarioFacade usuarioFacade;
     
 
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,45 +45,35 @@ public class EditarGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
+HttpSession sesion = request.getSession();
         
-        Usuario usuario =(Usuario) session.getAttribute("usuario");
-        
-        boolean editado=false;
-        
-        if((String)request.getParameter("grupoEditado")!=null){
-           editado=true;  
-        }
-        
-        if(editado){
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            usuario.getGrupoCollection().remove(grupo);
-            grupo.getUsuarioCollection().remove(usuario);
+            BigDecimal idGrupo = new BigDecimal((String)request.getParameter("idGrupo"));
+            BigDecimal idUsuario = new BigDecimal(request.getParameter("idUsuario"));
             
-            grupo.setNombre((String) request.getParameter("nombreGrupo"));
+            Grupo grupo = (Grupo) grupoFacade.find(idGrupo);
+            Usuario usuario = usuarioFacade.find(idUsuario);
+            String button = (String) request.getParameter("boton");
+            String datos = (String) request.getParameter("datos");
             
-            if(((String)request.getParameter("privacidad")).toUpperCase().equals("PRIVADO")){
-               grupo.setPrivacidad(BigInteger.ONE); 
-            }else{
-               grupo.setPrivacidad(BigInteger.ZERO);
+           if(button.charAt(0)=='A'){
+              grupo.getUsuarioCollection().add(usuario);
+              grupoFacade.edit(grupo);
+              
+              usuario.getGrupoCollection().add(grupo);
+              usuarioFacade.edit(usuario);
+              
+           }else{
+              grupo.getUsuarioCollection().remove(usuario);
+              grupoFacade.edit(grupo);
+              
+              usuario.getGrupoCollection().remove(grupo);
+              usuarioFacade.edit(usuario);
             }
-            grupo.getUsuarioCollection().add(usuario);
-            grupoFacade.edit(grupo);
-            
-            //grupo.getUsuarioCollection().add(usuario);
-            usuario.getGrupoCollection().add(grupo);
-       
-            usuarioFacade.edit(usuario);
-            
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
-            
-        }else{
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            request.setAttribute("grupo", grupo);
-            this.getServletContext().getRequestDispatcher("/editarGrupo.jsp").forward(request, response);
-        }
-    }
+           
+            response.sendRedirect(request.getContextPath() + "/AddMiembroGrupoServlet?idGrupo=" + grupo.getIdGrupo().toString());
+           
+           
+}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -4,6 +4,12 @@
     Author     : Jose Sánchez Aranda
 --%>
 
+<%@page import="ea.entity.Usuario"%>
+<%
+Usuario usuario=(Usuario)session.getAttribute("usuario");
+Usuario usuarioMuro=(Usuario) session.getAttribute("usuarioMuro");
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,33 +37,7 @@
                     <div class="column col-sm-10 col-xs-11" id="main">
                         
                         <!-- top nav -->
-                        <div class="navbar navbar-blue navbar-static-top">  
-                            <div class="navbar-header">
-                                <a  class="navbar-brand logo">Rs</a>
-                            </div>
-                            <nav class="collapse navbar-collapse" role="navigation">
-                                <form class="navbar-form navbar-left">
-                                    <div class="input-group input-group-sm" style="max-width:360px;">
-                                        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                                        <div class="input-group-btn">
-                                            <a href="ListarSeguidoresServlet?x=usuariosSeguir" class="btn btn-default" ><i class="glyphicon glyphicon-search"></i></a>
-                                            <!-- <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
-                                        </div>
-                                    </div>
-                                </form>
-                                <ul class="nav navbar-nav">						
-                                     <li>
-                                        <a href="MuroServlet?usuarioMuro=1"><i class="glyphicon glyphicon-home"></i> Inicio</a>
-                                    </li>
-                                   <li>
-                                        <a href="ListarSeguidoresServlet?x=usuariosSeguir&uMuro=1"><span class="badge">Usuarios</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge">Grupos</span></a>
-                                    </li>	                                                       
-                                </ul>							
-                            </nav>
-                        </div>
+                        <%@include file="/navBar.jsp" %>
 
                     <!-- /top nav -->
 
