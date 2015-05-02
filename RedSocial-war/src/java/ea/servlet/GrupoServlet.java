@@ -80,12 +80,21 @@ public class GrupoServlet extends HttpServlet {
              // Lista de grupos del usuario
             request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
             
-            //primer grupo de la lista
-//            grupo = (Grupo) listaGruposUsuarioMuro.get(0);
             
-            BigDecimal idGrupo = listaGruposUsuarioMuro.get(0).getIdGrupo();
-            grupo = (Grupo) grupoFacade.find(idGrupo);
-
+            String idGrupoElegido = (String) request.getParameter("idGrupoElegido");
+            if(idGrupoElegido != null){
+                // Recuperamos el grupo clickado
+                BigDecimal idGrupo = new BigDecimal(idGrupoElegido);
+//                request.setAttribute("idGrupoElegido", idGrupoElegido);
+                grupo = (Grupo) grupoFacade.find(idGrupo);
+            }else{
+                // Mostramos el primer grupo
+                grupo = (Grupo) listaGruposUsuarioMuro.get(0);
+            }
+            
+            // Grupo a mostrar en grupo.jsp
+            request.setAttribute("grupo", grupo);
+            
             // Lista de post
 //            listaPostGrupo = (List) grupo.getPostCollection();
             listaPostGrupo = (List) postFacade.getListaPostGrupo(grupo.getIdGrupo());
@@ -101,6 +110,7 @@ public class GrupoServlet extends HttpServlet {
             if (idPostEditar != null){
                 request.setAttribute("idPostEditar", idPostEditar);
             }
+            
         }
 
         // Request Dispatcher
