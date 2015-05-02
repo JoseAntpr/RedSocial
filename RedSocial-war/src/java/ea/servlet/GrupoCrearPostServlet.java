@@ -104,7 +104,7 @@ public class GrupoCrearPostServlet extends HttpServlet {
         
 
         //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
 
     }
     

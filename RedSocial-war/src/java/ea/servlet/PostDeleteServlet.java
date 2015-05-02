@@ -64,7 +64,7 @@ public class PostDeleteServlet extends HttpServlet {
             postFacade.deletePostGrupo(idPost, usuario);
             
             
-            response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + request.getParameter("idGrupoElegido"));
 //            response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioMuro=" + usuario.getIdUsuario());
         }
 
