@@ -119,6 +119,7 @@ if (tieneGrupos){
                                                         <p class="lead"><%= grupo.getNombre()%></p>
                                                         <p><%= listaMiembrosGrupo.size()%> Miembros, <%= listaPostGrupo.size()%> Posts</p>
                                                         
+                                                        <%if(usuario.getIdUsuario().toString().equals(grupo.getIdAdministrador().toString())){%>
                                                         <form method="POST" action="EditarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
                                                             <button class="btn btn-warning btn-block" type="submit">Editar grupo</button>   
                                                         </form>
@@ -126,21 +127,21 @@ if (tieneGrupos){
                                                         <form method="POST" action="EliminarGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
                                                             <button class="btn btn-danger btn-block" type="submit">Eliminar grupo</button>   
                                                         </form>
+                                                        <%}%>
                                                 </div>
                                             </div> <!-- fin INFO DEL GRUPO -->
                                             
                                             <!-- MIEMBROS DEL GRUPO -->
                                             <div class="panel panel-default">
                                                 <div class="panel-heading"> <h4>Miembros</h4></div>
-                                                <div class="panel panel-body">
-                                                    <form method="POST" action="editarGrupo.jsp?grupo=<%=grupo%>">
-                                                        <button class="btn btn-success  btn-group col-sm-8" type="submit">Añadir miembro</button>   
+                                                <%if(usuario.getIdUsuario().toString().equals(grupo.getIdAdministrador().toString())){%>
+                                                <div class="panel-body">
+                                                    <form method="POST" action="AddMiembroGrupoServlet?idGrupo=<%=grupo.getIdGrupo().toString()%>">
+                                                        <button class="btn btn-primary btn-block" type="submit">Añadir miembro o eliminar miembro</button>   
                                                     </form>
-
-                                                    <form method="POST" action="EliminarGrupoServlet">
-                                                        <button class="btn btn-danger btn-group col-sm-4" type="submit">Eliminar miembro</button>   
-                                                    </form>
-                                                </div>
+                                                </div> 
+                                                <%}%>
+                                              
                                                     
                                                 <% for (Usuario m : listaMiembrosGrupo) {%>
                                                 <div class="panel-body">

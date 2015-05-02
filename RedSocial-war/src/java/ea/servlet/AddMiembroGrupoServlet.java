@@ -12,28 +12,29 @@ import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Jose Sánchez Aranda
  */
-@WebServlet(name = "EditarGrupoServlet", urlPatterns = {"/EditarGrupoServlet"})
-public class EditarGrupoServlet extends HttpServlet {
-    @EJB
-    private UsuarioFacade usuarioFacade;
+@WebServlet(name = "AddMiembroGrupoServlet", urlPatterns = {"/AddMiembroGrupoServlet"})
+public class AddMiembroGrupoServlet extends HttpServlet {
     @EJB
     private GrupoFacade grupoFacade;
+    @EJB
+    private UsuarioFacade usuarioFacade;
     
-
+    
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,44 +46,29 @@ public class EditarGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
         
-        Usuario usuario =(Usuario) session.getAttribute("usuario");
+        Grupo grupo = (Grupo) grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
         
-        boolean editado=false;
+        String datosBusqueda=request.getParameter("buscar");
+        List<Usuario> listaUsuarios;
         
-        if((String)request.getParameter("grupoEditado")!=null){
-           editado=true;  
-        }
+        List<Usuario> listaMiembrosGrupo = (List<Usuario>) grupo.getUsuarioCollection();
+        request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
         
-        if(editado){
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            usuario.getGrupoCollection().remove(grupo);
-            grupo.getUsuarioCollection().remove(usuario);
-            
-            grupo.setNombre((String) request.getParameter("nombreGrupo"));
-            
-            if(((String)request.getParameter("privacidad")).toUpperCase().equals("PRIVADO")){
-               grupo.setPrivacidad(BigInteger.ONE); 
-            }else{
-               grupo.setPrivacidad(BigInteger.ZERO);
-            }
-            grupo.getUsuarioCollection().add(usuario);
-            grupoFacade.edit(grupo);
-            
-            //grupo.getUsuarioCollection().add(usuario);
-            usuario.getGrupoCollection().add(grupo);
-       
-            usuarioFacade.edit(usuario);
-            
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
-            
+        if(datosBusqueda==null){
+            listaUsuarios = (List<Usuario>) usuarioFacade.findAll();
         }else{
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            request.setAttribute("grupo", grupo);
-            this.getServletContext().getRequestDispatcher("/editarGrupo.jsp").forward(request, response);
+            listaUsuarios = (List<Usuario>) usuarioFacade.buscarUsuarios(datosBusqueda);
         }
+        
+        request.setAttribute("listaUsuarios", listaUsuarios);
+        request.setAttribute("datos", datosBusqueda);
+        request.setAttribute("grupo", grupo);
+        
+        
+        RequestDispatcher rd;
+        rd = this.getServletContext().getRequestDispatcher("/addMiembroGrupo.jsp");
+        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
