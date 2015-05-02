@@ -5,7 +5,10 @@
  */
 package ea.servlet;
 
+import ea.ejb.GrupoFacade;
 import ea.ejb.PostFacade;
+import ea.entity.Grupo;
+import ea.entity.Post;
 import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +28,6 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "PostDeleteServlet", urlPatterns = {"/PostDeleteServlet"})
 public class PostDeleteServlet extends HttpServlet {
-
     @EJB
     private PostFacade postFacade;
 
@@ -46,7 +48,7 @@ public class PostDeleteServlet extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         String tipoBorrado = request.getParameter("tipo_borrado");
-        String idGuardada = request.getParameter("idGuardada");
+        String idGuardada = request.getParameter("idPost");
         BigDecimal idPost = new BigDecimal(idGuardada);
 
         if (tipoBorrado.equals("usuario")) {
@@ -59,7 +61,8 @@ public class PostDeleteServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/MuroServlet");
 //            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
         } else if (tipoBorrado.equals("from_grupo")) {
-            postFacade.remove(postFacade.find(idPost));
+            postFacade.deletePostGrupo(idPost, usuario);
+            
             
             response.sendRedirect(request.getContextPath() + "/GrupoServlet");
 //            response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioMuro=" + usuario.getIdUsuario());

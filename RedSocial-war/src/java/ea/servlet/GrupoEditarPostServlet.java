@@ -5,20 +5,40 @@
  */
 package ea.servlet;
 
+import ea.ejb.GrupoFacade;
+import ea.ejb.PostFacade;
+import ea.ejb.UsuarioFacade;
+import ea.entity.Grupo;
+import ea.entity.Post;
+import ea.entity.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author fran
  */
-@WebServlet(name = "PostEditaServlet", urlPatterns = {"/PostEditaServlet"})
-public class PostEditaServlet extends HttpServlet {
+@WebServlet(name = "GrupoEditarPostServlet", urlPatterns = {"/GrupoEditarPostServlet"})
+public class GrupoEditarPostServlet extends HttpServlet {
+    @EJB
+    private UsuarioFacade usuarioFacade;
+    @EJB
+    private GrupoFacade grupoFacade;
+    @EJB
+    private PostFacade postFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,19 +51,88 @@ public class PostEditaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PostEditaServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PostEditaServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        //get session of the request
+        HttpSession session = request.getSession();
+        Usuario miembro = (Usuario) session.getAttribute("usuario");
+        
+        BigDecimal idPostEditar = new BigDecimal(request.getParameter("idPostEditar"));
+
+        // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
+        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
+        
+        // Recuperamos el grupo
+        BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
+        Grupo grupo = grupoFacade.find(id_grupo);
+  
+        // Obtenemos el Post de la BD
+        Post post = postFacade.find(idPostEditar);
+
+        // Editamos los cambios si los hay
+        String description = mapDatosForm.get("descripcion");
+        if(!post.getDescripcion().equals(description)){
+            post.setDescripcion(mapDatosForm.get("descripcion"));
         }
+
+        String imagen = mapDatosForm.get("imagen");
+        if (!imagen.equals("") && !post.getImagen().equals(imagen)){
+            post.setImagen(mapDatosForm.get("imagen"));
+        }
+        
+        // Editamos el post en la DB
+        postFacade.edit(post);
+        
+        // Actualizo el post en la lista del grupo
+        List listPostGrupo = (List)grupo.getPostCollection();
+        Integer posPostGrupo = buscaPosicionPost(listPostGrupo, post);
+        listPostGrupo.set(posPostGrupo, post);
+        grupo.setPostCollection(listPostGrupo);
+        
+        // Actualizo el grupo en la BD
+        grupoFacade.edit(grupo);
+        
+        // Actualizo el post en la lista del miembro
+        List listPostMiembro = (List)miembro.getPostCollection();
+        Integer posPostMiembro = buscaPosicionPost(listPostMiembro, post);
+        listPostMiembro.set(posPostMiembro, post);
+        miembro.setPostCollection(listPostMiembro);
+        
+        // Actualizo el usuraio en la BD
+        usuarioFacade.edit(miembro);
+        
+        
+        
+        
+        
+
+//        // Buscamos el post en la coleccion de post del grupo
+//        grupo.getPostCollection().remove(post);
+//        // Añadimos el post a la coleccion de post del miembro creador
+//        miembro.getPostCollection().remove(post);
+        
+
+        
+        
+//        // Buscamos el post en la coleccion de post del grupo
+//        grupo.getPostCollection().add(post);
+//        // Añadimos el post a la coleccion de post del miembro creador
+//        miembro.getPostCollection().add(post);
+//        
+//        
+//        // Actualizamos el grupo con el post ya añadido
+//        grupoFacade.edit(grupo);
+//
+// 
+//        
+//
+//        // Actualizamos el usuario con el post ya añadido
+//        usuarioFacade.edit(miembro);
+//        
+        session.setAttribute("usuario", miembro);
+        session.setAttribute("usuarioMuro", miembro);
+        
+
+        //redirect to the grupo servlet 
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -84,5 +173,15 @@ public class PostEditaServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    
+    public Integer buscaPosicionPost(Collection posts, Post post){
+        Integer i = 0;
+        List<Post> lista = (List) posts;
+        while (!lista.get(i).equals(post)){
+            i++;
+        }
+        return i;
+    }
 
 }

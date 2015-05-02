@@ -6,6 +6,7 @@
 package ea.servlet;
 
 import ea.ejb.GrupoFacade;
+import ea.ejb.PostFacade;
 import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
 import ea.entity.Post;
@@ -30,8 +31,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
     @EJB
+    private PostFacade postFacade;
+    @EJB
     private GrupoFacade grupoFacade;
-
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -85,12 +87,20 @@ public class GrupoServlet extends HttpServlet {
             grupo = (Grupo) grupoFacade.find(idGrupo);
 
             // Lista de post
-            listaPostGrupo = (List) grupo.getPostCollection();
+//            listaPostGrupo = (List) grupo.getPostCollection();
+            listaPostGrupo = (List) postFacade.getListaPostGrupo(grupo.getIdGrupo());
             request.setAttribute("listaPostGrupo", listaPostGrupo);
 
             // Lista de miembros
             listaMiembrosGrupo = (List) grupo.getUsuarioCollection();
             request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
+            
+            // Recuperamos el post a editar de grupo.jsp si es que lo hay
+            String idPostEditar = (String)request.getParameter("idPostEditar");
+            // Enviamos el post a editar a grupo.jsp para que lo muestre editable
+            if (idPostEditar != null){
+                request.setAttribute("idPostEditar", idPostEditar);
+            }
         }
 
         // Request Dispatcher

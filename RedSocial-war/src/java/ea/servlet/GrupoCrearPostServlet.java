@@ -77,7 +77,12 @@ public class GrupoCrearPostServlet extends HttpServlet {
         post.setIdGrupo(grupo);
         post.setDescripcion(mapDatosForm.get("descripcion"));
         post.setFecha( new Date());
-        post.setImagen(mapDatosForm.get("imagen"));
+        String image = mapDatosForm.get("imagen");
+        if (!image.equals("")){
+            post.setImagen(image);
+        }else{
+            post.setImagen(null);
+        }
 
         // Añadimos el post a la DB
         postFacade.create(post);

@@ -30,6 +30,7 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
  * @author fran
  */
 public abstract class AbstractFacade<T> {
+
     private Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
@@ -76,11 +77,12 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
-    public Map<String,String> obtenerDatosFormConImagen(HttpServletRequest request){
-        
-        Map<String,String> mapDatos = new HashMap();
-        
+
+    // Fran
+    public Map<String, String> obtenerDatosFormConImagen(HttpServletRequest request) {
+
+        Map<String, String> mapDatos = new HashMap();
+
         final String SAVE_DIR = "uploadImages";
 
         // Parametros del form
@@ -127,37 +129,41 @@ public abstract class AbstractFacade<T> {
                     String value = item.getString();
                     if (name.equals("description_post_grupo") || name.equals("descripcion")) {
                         description = value;
-                    }else if(name.equals("id_grupo")){
+                    } else if (name.equals("id_grupo")) {
                         id_grupo = value;
                     }
                 } else {
                     // ProcessUploadedFile
                     try {
-                        url_image = filePathWeb + item.getName();
-                        // read this file into InputStream
-                        inputStream = item.getInputStream();
-                        // write the inputStream to a FileOutputStream
-                        if (file == null) {
-                            String fileDirUpload = filePath + File.separator + item.getName();
-                            file = new File(fileDirUpload);
-                            // crea el archivo en el sistema
-                            file.createNewFile();
-                            if (file.exists()) {
-                                outputStream = new FileOutputStream(file);
+                        String itemName = item.getName();
+                        if (!itemName.equals("")) {
+                            url_image = filePathWeb + item.getName();
+                            // read this file into InputStream
+                            inputStream = item.getInputStream();
+                            // write the inputStream to a FileOutputStream
+                            if (file == null) {
+                                String fileDirUpload = filePath + File.separator + item.getName();
+                                file = new File(fileDirUpload);
+                                // crea el archivo en el sistema
+                                file.createNewFile();
+                                if (file.exists()) {
+                                    outputStream = new FileOutputStream(file);
+                                }
                             }
+
+                            int read = 0;
+                            byte[] bytes = new byte[1024];
+
+                            while ((read = inputStream.read(bytes)) != -1) {
+                                outputStream.write(bytes, offset, read);
+                                leidos += read;
+                            }
+                            offset += leidos;
+                            leidos = 0;
+                            System.out.println("Done!");
+                        } else {
+                            url_image = "";
                         }
-
-                        int read = 0;
-                        byte[] bytes = new byte[1024];
-
-                        while ((read = inputStream.read(bytes)) != -1) {
-                            outputStream.write(bytes, offset, read);
-                            leidos += read;
-                        }
-                        offset += leidos;
-                        leidos = 0;
-                        System.out.println("Done!");
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
@@ -181,10 +187,10 @@ public abstract class AbstractFacade<T> {
 
             }
         }
-        mapDatos.put("descripcion",description);
-        mapDatos.put("imagen",url_image);
+        mapDatos.put("descripcion", description);
+        mapDatos.put("imagen", url_image);
         mapDatos.put("id_grupo", id_grupo);
- 
+
         return mapDatos;
     }
 
@@ -205,5 +211,5 @@ public abstract class AbstractFacade<T> {
         }
         return multipartItems;
     }
-    
+
 }
