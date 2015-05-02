@@ -84,9 +84,10 @@ if (tieneGrupos){
                                 for(Grupo g : listaGruposUsuarioMuro){ %>
                                     <li class="active list-group">
                                         <a href="GrupoServlet?idGrupoElegido=<%=g.getIdGrupo()%>"><i class="glyphicon glyphicon-list-alt"></i> <%=g.getNombre()%> </a>
-                                        <form class="pull-right col-xs-offset-1" method="post" action="AbandonarGrupoServlet">
-                                            <input type="hidden" name="idGrupoAbandonar" value="<%=g.getIdGrupo()%>"/>
-                                            <input class="btnEliminar botonEliminar" type="submit" name="abandonar" value="Abandonar"/>
+                                        <form action="GrupoUnirAbandonarServlet" method="post">
+                                            <input type="hidden" name="accion" value="abandonar"/>
+                                            <input type="hidden" name="idGrupo" value="<%=g.getIdGrupo()%>"/>
+                                            <input  class="btn btn-danger btn-block" type="submit" name="boton" value="Abandonar">
                                         </form>
                                     </li>
                             <% }
