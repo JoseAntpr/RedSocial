@@ -15,10 +15,10 @@
         <property name="serverName" value="olimpia.lcc.uma.es"/>
         <property name="portNumber" value="1521"/>
         <property name="databaseName" value="taw"/>
-        <property name="User" value="taw2"/>
-        <property name="Password" value="taw2"/>
+        <property name="User" value="taw1"/>
+        <property name="Password" value="taw1"/>
         <property name="URL" value="jdbc:oracle:thin:@olimpia.lcc.uma.es:1521:taw"/>
         <property name="driverClass" value="oracle.jdbc.OracleDriver"/>
     </jdbc-connection-pool>
-    <jdbc-resource enabled="true" jndi-name="TAW_JNDI" object-type="user" pool-name="oracle-thin_taw_taw2Pool"/>
+    <jdbc-resource enabled="true" jndi-name="TAW_JNDI" object-type="user" pool-name="oracle-thin_taw_tawPool"/>
 </resources>

@@ -94,15 +94,15 @@
                                             <p><%= format.format(p.getFecha()) %></p>
                                             <p><%= p.getDescripcion()%></p>
                                                 
-                                            <p>
+                                            
                                                 <% if(usuario.equals(usuarioMuro)){%>
                                                 <form name="delete" action="PostDeleteServlet" method="post">    
                                                     <input type="hidden" value="usuario" name="tipo_borrado"/>
                                                     <input type="hidden" value="<%=p.getIdPost()%>" name="idGuardada"/> <!--Guardamos la id para recuperarla al borrar post-->
-                                                    <input href class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
+                                                    <input  class="btnEliminar botonEliminar" type="submit" value="Eliminar" name="eliminar" />
                                                 </form>
                                                 <%} %>
-                                            </p>
+                                        
                                         </div>
                                     </div>
                                     <%} 
@@ -127,6 +127,7 @@
            <!-- /main -->
         </div>
     </div>
+     </div>
 
     <script type="text/javascript" src="assets/js/jquery.js"></script>
     <script type="text/javascript" src="assets/js/bootstrap.js"></script>
