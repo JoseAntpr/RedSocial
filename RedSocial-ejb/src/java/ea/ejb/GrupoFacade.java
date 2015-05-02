@@ -10,10 +10,10 @@ import ea.entity.Usuario;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 /**
  *
@@ -21,6 +21,9 @@ import javax.persistence.Query;
  */
 @Stateless
 public class GrupoFacade extends AbstractFacade<Grupo> {
+
+    @EJB
+    private UsuarioFacade usuarioFacade;
     @PersistenceContext(unitName = "RedSocial-ejbPU")
     private EntityManager em;
 
@@ -28,38 +31,111 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    public Grupo nuevoGrupo(Usuario administrador,String nombre,String privacidad){
+
+    public Grupo nuevoGrupo(Usuario administrador, String nombre, String privacidad) {
         Grupo grupo = new Grupo();
-        
+
         grupo.setIdAdministrador(new BigInteger(administrador.getIdUsuario().toString()));
         grupo.setNombre(nombre);
         grupo.setImagen("imagen");
-        
-        if(privacidad.toUpperCase().equals("PUBLICO")){
+
+        if (privacidad.toUpperCase().equals("PUBLICO")) {
             grupo.setPrivacidad(BigInteger.ZERO);
-        }else{
+        } else {
             grupo.setPrivacidad(BigInteger.ONE);
         }
         create(grupo);
         return grupo;
     }
-    
-    public void eliminarGrupo(Grupo grupo){
+
+    public void eliminarGrupo(Grupo grupo) {
         remove(grupo);
-        
+
     }
 
     public GrupoFacade() {
         super(Grupo.class);
     }
-    
-    public List buscarGrupos(String datos){
-        List<Grupo> lista=null;
-        lista=em.createNamedQuery("Grupo.findByNombreBuscar").setParameter("datos","%"+datos+"%").getResultList();
+
+    public List buscarGrupos(String datos) {
+        List<Grupo> lista = null;
+        lista = em.createNamedQuery("Grupo.findByNombreBuscar").setParameter("datos", "%" + datos + "%").getResultList();
 
         return lista;
     }
-    
-    
+
+    public void abandonarGrupo(String idGrupo, Usuario usuario) {
+        BigDecimal idGrupoAbandonar = new BigDecimal(idGrupo);
+        Grupo grupo = find(idGrupoAbandonar);
+
+        Integer size = grupo.getUsuarioCollection().size();
+        if (size.compareTo(1) == 0) {
+            // Eliminio el grupo del usuario
+            usuario.getGrupoCollection().remove(grupo);
+            // Actualizo el usuario en BD
+            usuarioFacade.edit(usuario);
+            // Borro el grupo de la BD (Se ha quedado sin miembros)
+            remove(grupo);
+        } else if (size >= 2) {
+            // Es el administrador
+            if (usuario.getIdUsuario().equals(new BigDecimal(grupo.getIdAdministrador().doubleValue()))) {
+//            if (usuario.getIdUsuario().equals(new BigDecimal(grupo.getIdAdministrador().toString()))) {
+                
+
+                // Cambio el administrador del grupo
+                List<Usuario> listaUsuarios = (List) grupo.getUsuarioCollection();
+
+                BigInteger nuevoAdmin = null;
+                if(usuario.getIdUsuario().equals(listaUsuarios.get(0).getIdUsuario())){
+                    nuevoAdmin = new BigInteger(listaUsuarios.get(1).getIdUsuario().intValue()+"");
+                }else{
+                    nuevoAdmin = new BigInteger(listaUsuarios.get(0).getIdUsuario().intValue()+"");
+                }
+                grupo.setIdAdministrador(nuevoAdmin);
+                
+                // Eliminio el grupo del usuario
+                usuario.getGrupoCollection().remove(grupo);
+
+                // Elimino el usuario del grupo
+                grupo.getUsuarioCollection().remove(usuario);
+
+                // Actualizo el grupo en BD
+                edit(grupo);
+
+                // Actualizo el usuario en BD
+                usuarioFacade.edit(usuario);
+            } else { // No es el administrador
+                // Elimino el usuario del grupo
+                grupo.getUsuarioCollection().remove(usuario);
+
+                // Eliminio el grupo del usuario
+                usuario.getGrupoCollection().remove(grupo);
+
+                // Actualizo el grupo en BD
+                edit(grupo);
+
+                // Actualizo el usuario en BD
+                usuarioFacade.edit(usuario);
+            }
+        }
+
+    }
+
+    public void unirseGrupo(String idGrupo, Usuario usuario) {
+        BigDecimal idGrupoUnirse = new BigDecimal(idGrupo);
+        Grupo grupo = find(idGrupoUnirse);
+
+        // Elimino el usuario del grupo
+        grupo.getUsuarioCollection().add(usuario);
+
+        // Eliminio el grupo del usuario
+        usuario.getGrupoCollection().add(grupo);
+
+        // Actualizo el grupo en BD
+        edit(grupo);
+
+        // Actualizo el usuario en BD
+        usuarioFacade.edit(usuario);
+    }
+
 }

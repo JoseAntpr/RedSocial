@@ -4,6 +4,7 @@
     Author     : Jesus
 --%>
 
+<%@page import="java.math.BigInteger"%>
 <%@page import="ea.entity.Grupo"%>
 <%@page import="ea.ejb.UsuarioFacade"%>
 <%@page import="java.math.BigDecimal"%>
@@ -101,10 +102,10 @@
                                                         <input  class="btn btn-primary pull-right" type="submit" name="boton" value="Seguir">
                                                         </form>
                                                 <%      }%>
-                                                      <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet?usuarioMuroGet=<%= u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                      <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="MuroServlet?usuarioMuroGet=<%= u.getIdUsuario() %>">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                 <%
                                                 }else{ %>
-                                                    <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="MuroServlet">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
+                                                    <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="MuroServlet">  <%= u.getNombre() + " " + u.getApellidos()%></a></h4>
                                                 <%}%>
                                                 
                                                 
@@ -137,20 +138,50 @@
                                                     Grupo g = listaGrupos.get(i);
                                                                                                 
                                         %> 
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                                                                 
-                                                      
-                                                        <form action="1" method="post">  
-                                                        <input  class="btn btn-success pull-right" type="submit" name="boton" value="Unirse">
-                                                        </form>
-                                                        <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px"> <a href="1">  <%= g.getNombre() %></a></h4>
-                                            </div>
-                                            <div class="panel-body">
-                                                <p>Descripcion... </p> 
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <% // GRUPO PUBLICO
+                                                    if (g.getPrivacidad().equals(BigInteger.ZERO)){ 
+                                                        if (usuario.getGrupoCollection().contains(g)){ %>
+                                                            <p>Grupo p&uacute;blico, eres miembro.</p>
+                                                            <form action="GrupoUnirAbandonarServlet" method="post">
+                                                                <input type="hidden" name="accion" value="abandonar"/>
+                                                                <input type="hidden" name="idGrupo" value="<%=g.getIdGrupo()%>"/>
+                                                                <input type="hidden" name="datosBusqueda" value="<%=datos%>"/>
+                                                                <input  class="btn btn-danger pull-right" type="submit" name="boton" value="Abandonar">
+                                                            </form>
+                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="./GrupoServlet?idGrupoElegido=<%=g.getIdGrupo()%>">  <%= g.getNombre() %></a></h4>
+                                                        <% }else{ %>
+                                                            <p>Grupo p&uacute;blico, no eres miembro.</p>
+                                                            <form action="GrupoUnirAbandonarServlet" method="post">
+                                                                <input type="hidden" name="accion" value="unirse"/>
+                                                                <input type="hidden" name="idGrupo" value="<%=g.getIdGrupo()%>"/>
+                                                                <input type="hidden" name="datosBusqueda" value="<%=datos%>"/>
+                                                                <input  class="btn btn-success pull-right" type="submit" name="boton" value="Unirse">
+                                                            </form>
+                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="./GrupoServlet?idGrupoElegido=<%=g.getIdGrupo()%>">  <%= g.getNombre() %></a></h4>
+                                                        <% }
+                                                    }else { // GRUPO PRIVADO 
+                                                        if (usuario.getGrupoCollection().contains(g)){ %>
+                                                            <p>Grupo privado, eres miembro.</p>
+                                                            <form action="GrupoUnirAbandonarServlet" method="post">
+                                                                <input type="hidden" name="accion" value="abandonar"/>
+                                                                <input type="hidden" name="idGrupo" value="<%=g.getIdGrupo()%>"/>
+                                                                <input type="hidden" name="datosBusqueda" value="<%=datos%>"/>
+                                                                <input  class="btn btn-danger pull-right" type="submit" name="boton" value="Abandonar">
+                                                            </form>
+                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="./GrupoServlet?idGrupoElegido=<%=g.getIdGrupo()%>">  <%= g.getNombre() %></a></h4>
+                                                        <% }else{ %>
+                                                            <p>Grupo privado, no eres miembro.</p>
+                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="1">  <%= g.getNombre() %></a></h4>
+                                                        <%}
+                                                    } %>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <p>Descripcion... </p> 
 
-                                            </div>
-                                        </div> 
+                                                </div>
+                                            </div> 
                                         <%  
                                                 
                                             }%> 
