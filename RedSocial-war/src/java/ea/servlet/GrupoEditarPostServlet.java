@@ -74,8 +74,20 @@ public class GrupoEditarPostServlet extends HttpServlet {
         }
 
         String imagen = mapDatosForm.get("imagen");
-        if (!imagen.equals("") && !post.getImagen().equals(imagen)){
-            post.setImagen(mapDatosForm.get("imagen"));
+        String imagenActual = null;
+        imagenActual = post.getImagen();
+        if (!imagen.equals("")){
+            if (imagenActual != null){
+                if(!imagenActual.equals(imagen)){
+                    post.setImagen(mapDatosForm.get("imagen"));
+                }
+            }else{
+                post.setImagen(mapDatosForm.get("imagen"));
+            }
+        }else{
+            if(imagenActual != null){
+                post.setImagen(mapDatosForm.get("imagen"));
+            }
         }
         
         // Editamos el post en la DB
@@ -99,40 +111,12 @@ public class GrupoEditarPostServlet extends HttpServlet {
         // Actualizo el usuraio en la BD
         usuarioFacade.edit(miembro);
         
-        
-        
-        
-        
-
-//        // Buscamos el post en la coleccion de post del grupo
-//        grupo.getPostCollection().remove(post);
-//        // Añadimos el post a la coleccion de post del miembro creador
-//        miembro.getPostCollection().remove(post);
-        
-
-        
-        
-//        // Buscamos el post en la coleccion de post del grupo
-//        grupo.getPostCollection().add(post);
-//        // Añadimos el post a la coleccion de post del miembro creador
-//        miembro.getPostCollection().add(post);
-//        
-//        
-//        // Actualizamos el grupo con el post ya añadido
-//        grupoFacade.edit(grupo);
-//
-// 
-//        
-//
-//        // Actualizamos el usuario con el post ya añadido
-//        usuarioFacade.edit(miembro);
-//        
         session.setAttribute("usuario", miembro);
         session.setAttribute("usuarioMuro", miembro);
         
 
         //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+        response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

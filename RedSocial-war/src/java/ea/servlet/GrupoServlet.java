@@ -89,7 +89,8 @@ public class GrupoServlet extends HttpServlet {
                 grupo = (Grupo) grupoFacade.find(idGrupo);
             }else{
                 // Mostramos el primer grupo
-                grupo = (Grupo) listaGruposUsuarioMuro.get(0);
+//                grupo = (Grupo) listaGruposUsuarioMuro.get(0);
+                grupo = (Grupo) grupoFacade.find(listaGruposUsuarioMuro.get(0).getIdGrupo());
             }
             
             // Grupo a mostrar en grupo.jsp

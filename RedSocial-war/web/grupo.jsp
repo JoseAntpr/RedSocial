@@ -179,10 +179,10 @@ if (tieneGrupos){
                                                     if(p.getIdPost().equals(idPostEditar)){ %>
                                                         <div class="panel panel-default">
                                                         <% if (p.getImagen() != null) {%>
-                                                        <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                            <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
                                                         <% } %>
                                                         <div class="well"> 
-                                                            <form action="./GrupoEditarPostServlet?idPostEditar=<%=p.getIdPost()%>" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                                            <form action="GrupoEditarPostServlet?idPostEditar=<%=p.getIdPost()%>" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                                                                 <h4>¡Editando Post!</h4>
                                                                 <div class="form-group" style="padding:14px;">
                                                                     <input class="form-control" name="id_grupo" type="hidden" value="<%=grupo.getIdGrupo()%>"/>
@@ -202,12 +202,12 @@ if (tieneGrupos){
                                                             <div class="panel-body">
                                                             <p><%=p.getDescripcion()%></p>
                                                             <% if(p.getIdUsuario().getIdUsuario().equals(usuario.getIdUsuario())){ %>
-                                                                <form name="delete" action="PostDeleteServlet" method="post">                                                                   
+                                                                <form name="delete" action="PostDeleteServlet?idGrupoElegido=<%=grupo.getIdGrupo()%>" method="post">                                                                   
                                                                     <input type="hidden" name="idPost" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
                                                                     <input type="hidden" name="tipo_borrado" value="from_grupo"/>
                                                                     <input class="btn btn-danger pull-right" type="submit" value="Eliminar" name="eliminar" />
                                                                 </form>
-                                                                <form name="edit" action="GrupoServlet?idPostEditar=<%=p.getIdPost()%>" method="post">                                                                   
+                                                                <form name="edit" action="GrupoServlet?idPostEditar=<%=p.getIdPost()%>&idGrupoElegido=<%=grupo.getIdGrupo()%>" method="post">                                                                   
                                                                     <input type="hidden" name="idPost" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al editar post-->
                                                                     <input type="hidden" name="from" value="from_grupo"/>
                                                                     <input class="btn btn-warning pull-right" type="submit" value="Editar" name="editar" />
@@ -224,12 +224,12 @@ if (tieneGrupos){
                                                         <div class="panel-body">
                                                         <p><%=p.getDescripcion()%></p>
                                                         <% if(p.getIdUsuario().getIdUsuario().equals(usuario.getIdUsuario())){ %>
-                                                            <form name="delete" action="PostDeleteServlet" method="post">                                                                   
+                                                            <form name="delete" action="PostDeleteServlet?idGrupoElegido=<%=grupo.getIdGrupo()%>" method="post">                                                                   
                                                                 <input type="hidden" name="idPost" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al borrar post-->
                                                                 <input type="hidden" name="tipo_borrado" value="from_grupo"/>
                                                                 <input class="btn btn-danger pull-right" type="submit" value="Eliminar" name="eliminar" />
                                                             </form>
-                                                            <form name="edit" action="GrupoServlet?idPostEditar=<%=p.getIdPost()%>" method="post">                                                                   
+                                                            <form name="edit" action="GrupoServlet?idPostEditar=<%=p.getIdPost()%>&idGrupoElegido=<%=grupo.getIdGrupo()%>" method="post">                                                                   
                                                                 <input type="hidden" name="idPost" value="<%=p.getIdPost()%>"/> <!--Guardamos la id para recuperarla al editar post-->
                                                                 <input type="hidden" name="from" value="from_grupo"/>
                                                                 <input class="btn btn-warning pull-right" type="submit" value="Editar" name="editar" />
