@@ -25,6 +25,8 @@ List<Usuario> listaMiembrosGrupo = null;
 String idPostEditarString = null;
 BigDecimal idPostEditar = null;
 
+String imagenPost = null;
+
 Boolean muroDeOtro = (Boolean) request.getAttribute("muroDeOtro");
 
 Boolean tieneGrupos = (Boolean)request.getAttribute("tieneGrupos");
@@ -175,11 +177,12 @@ if (tieneGrupos){
                                             <% } %> 
                                         <!-- LISTAR POST GRUPO -->
                                             <%for (Post p : listaPostGrupo) {
+                                                imagenPost = p.getImagen();
                                                  if (idPostEditarString != null){ 
                                                     if(p.getIdPost().equals(idPostEditar)){ %>
                                                         <div class="panel panel-default">
-                                                        <% if (p.getImagen() != null) {%>
-                                                            <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                        <% if (imagenPost != null) {%>
+                                                            <div class="panel-thumbnail"><img src="<%=imagenPost%>" class="img-responsive"></div>
                                                         <% } %>
                                                         <div class="well"> 
                                                             <form action="GrupoEditarPostServlet?idPostEditar=<%=p.getIdPost()%>" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
@@ -196,8 +199,8 @@ if (tieneGrupos){
                                                     </div>
                                                     <%}else{%>
                                                         <div class="panel panel-default">
-                                                            <% if (p.getImagen() != null) {%>
-                                                                <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                            <% if (imagenPost != null) {%>
+                                                                <div class="panel-thumbnail"><img src="<%=imagenPost%>" class="img-responsive"></div>
                                                             <% } %>
                                                             <div class="panel-body">
                                                             <p><%=p.getDescripcion()%></p>
@@ -218,8 +221,8 @@ if (tieneGrupos){
                                                     <%}
                                                 }else{ %>
                                                     <div class="panel panel-default">
-                                                    <% if (p.getImagen() != null) {%>
-                                                        <div class="panel-thumbnail"><img src="<%=p.getImagen()%>" class="img-responsive"></div>
+                                                    <% if (imagenPost != null) {%>
+                                                        <div class="panel-thumbnail"><img src="<%=imagenPost%>" class="img-responsive"></div>
                                                     <% } %>
                                                         <div class="panel-body">
                                                         <p><%=p.getDescripcion()%></p>
