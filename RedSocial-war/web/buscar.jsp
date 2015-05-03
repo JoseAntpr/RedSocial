@@ -173,7 +173,7 @@
                                                             <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="./GrupoServlet?idGrupoElegido=<%=g.getIdGrupo()%>">  <%= g.getNombre() %></a></h4>
                                                         <% }else{ %>
                                                             <p>Grupo privado, no eres miembro.</p>
-                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="1">  <%= g.getNombre() %></a></h4>
+                                                            <h4><img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28" width="28"> <a href="#">  <%= g.getNombre() %></a></h4>
                                                         <%}
                                                     } %>
                                                 </div>

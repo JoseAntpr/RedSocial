@@ -40,41 +40,38 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("usuario") == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-        } else {
-            String email = (String) request.getParameter("email");
-            String password = (String) request.getParameter("password");
 
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
+        String email = (String) request.getParameter("email");
+        String password = (String) request.getParameter("password");
 
-                Usuario usuario = usuarioFacade.login(email, password);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
 
-                //Si el usuario existe en la base de datos
-                if (usuario != null) {
+            Usuario usuario = usuarioFacade.login(email, password);
 
-                    BigDecimal idUsuario = usuario.getIdUsuario();
+            //Si el usuario existe en la base de datos
+            if (usuario != null) {
 
-                    //USUARIO SESIÓN
-                    HttpSession sesion = request.getSession();
-                    sesion.setAttribute("usuario", usuario);
+                BigDecimal idUsuario = usuario.getIdUsuario();
 
-                    //USUARIO CAMBIANTE
-                    sesion.setAttribute("usuarioMuro", usuario);
+                //USUARIO SESIÓN
+                HttpSession sesion = request.getSession();
+                sesion.setAttribute("usuario", usuario);
+
+                //USUARIO CAMBIANTE
+                sesion.setAttribute("usuarioMuro", usuario);
 
 //                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
-                    response.sendRedirect(request.getContextPath() + "/MuroServlet");
+                response.sendRedirect(request.getContextPath() + "/MuroServlet");
 
-                } //Si ha no ha encontrado el usuario:
-                else {
+            } //Si ha no ha encontrado el usuario:
+            else {
 
-                    String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
-                    request.setAttribute("mensaje", mensaje);
-                    this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);
-                }
-
+                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
+                request.setAttribute("mensaje", mensaje);
+                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);
             }
+
         }
     }
 

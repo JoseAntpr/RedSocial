@@ -61,7 +61,7 @@
                     <li class="divider" role="presentation"></li>
                     <li role="presentation"><a href="LogoutServlet" tabindex="-1" role="menuitem">Cerrar Sesión</a></li>
                     <li class="divider" role="presentation"></li>                   
-                    <li role="presentation"><a href="ListarUsuarioServlet" tabindex="-1" role="menuitem">Administrar</a></li>   
+                    <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Administrar</a></li>   
                 </ul>
            </li>	
 	</ul>
