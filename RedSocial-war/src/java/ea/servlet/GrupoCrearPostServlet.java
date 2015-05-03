@@ -70,12 +70,13 @@ public class GrupoCrearPostServlet extends HttpServlet {
         // Recuperamos el grupo
         BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
         Grupo grupo = grupoFacade.find(id_grupo);
-        
+        String descrip = mapDatosForm.get("descripcion");
+        descrip = new String(descrip.getBytes("ISO-8859-1"),"UTF8");
         // Creamos el Post
         Post post = new Post();
         post.setIdUsuario(miembro);
         post.setIdGrupo(grupo);
-        post.setDescripcion(mapDatosForm.get("descripcion"));
+        post.setDescripcion(descrip);
         post.setFecha( new Date());
         String image = mapDatosForm.get("imagen");
         if (!image.equals("")){

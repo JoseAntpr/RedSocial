@@ -44,7 +44,8 @@ public class CrearGrupoServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         
-        String nombre = (String) request.getParameter("nombre");            
+        String nombre = (String) request.getParameter("nombre"); 
+        nombre = new String(nombre.getBytes("ISO-8859-1"),"UTF8");
         String privacidad = (String) request.getParameter("privacidad");
         
 //        BigDecimal sesion = (BigDecimal) request.getSession().getAttribute("idUser");

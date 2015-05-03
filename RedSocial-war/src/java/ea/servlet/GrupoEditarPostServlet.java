@@ -69,8 +69,9 @@ public class GrupoEditarPostServlet extends HttpServlet {
 
         // Editamos los cambios si los hay
         String description = mapDatosForm.get("descripcion");
+        description = new String(description.getBytes("ISO-8859-1"),"UTF8");
         if(!post.getDescripcion().equals(description)){
-            post.setDescripcion(mapDatosForm.get("descripcion"));
+            post.setDescripcion(description);
         }
 
         String imagen = mapDatosForm.get("imagen");

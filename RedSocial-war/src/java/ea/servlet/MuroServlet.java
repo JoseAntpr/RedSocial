@@ -48,10 +48,16 @@ public class MuroServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
        
         HttpSession sesion = request.getSession();
+        
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        
         Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+        
+        
         
         List<Post> listaPost=null;
         List<Post> postSigues=null;

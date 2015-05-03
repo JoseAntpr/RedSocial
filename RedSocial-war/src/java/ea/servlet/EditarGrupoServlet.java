@@ -60,8 +60,10 @@ public class EditarGrupoServlet extends HttpServlet {
             Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
             usuario.getGrupoCollection().remove(grupo);
             grupo.getUsuarioCollection().remove(usuario);
+            String nombreGrupo =(String) request.getParameter("nombreGrupo");
+            nombreGrupo = new String(nombreGrupo.getBytes("ISO-8859-1"),"UTF8");
+            grupo.setNombre(nombreGrupo);
             
-            grupo.setNombre((String) request.getParameter("nombreGrupo"));
             
             if(((String)request.getParameter("privacidad")).toUpperCase().equals("PRIVADO")){
                grupo.setPrivacidad(BigInteger.ONE); 
