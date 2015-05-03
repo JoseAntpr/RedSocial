@@ -26,11 +26,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "BuscarServlet", urlPatterns = {"/BuscarServlet"})
 public class BuscarServlet extends HttpServlet {
+
     @EJB
     private GrupoFacade grupoFacade;
     @EJB
     private UsuarioFacade usuarioFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,19 +43,21 @@ public class BuscarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String datosBusqueda=request.getParameter("buscar");
-        List<Usuario> listaUsuarios = usuarioFacade.buscarUsuarios(datosBusqueda);
-        List<Grupo> listaGrupos=grupoFacade.buscarGrupos(datosBusqueda);
-        
-        request.setAttribute("listaUsuarios", listaUsuarios);
-        request.setAttribute("listaGrupos", listaGrupos);
-        request.setAttribute("datos", datosBusqueda);
-        
-        
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/buscar.jsp");
-        rd.forward(request, response);
-        
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            String datosBusqueda = request.getParameter("buscar");
+            List<Usuario> listaUsuarios = usuarioFacade.buscarUsuarios(datosBusqueda);
+            List<Grupo> listaGrupos = grupoFacade.buscarGrupos(datosBusqueda);
+
+            request.setAttribute("listaUsuarios", listaUsuarios);
+            request.setAttribute("listaGrupos", listaGrupos);
+            request.setAttribute("datos", datosBusqueda);
+
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/buscar.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

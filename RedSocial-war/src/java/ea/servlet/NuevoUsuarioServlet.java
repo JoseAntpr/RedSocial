@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "NuevoUsuarioServlet", urlPatterns = {"/NuevoUsuarioServlet"})
 public class NuevoUsuarioServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -37,56 +38,58 @@ public class NuevoUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String nombre = (String) request.getParameter("nombre"); 
-        nombre = new String(nombre.getBytes("ISO-8859-1"),"UTF8");
-        
-        String apellidos = (String) request.getParameter("apellidos"); 
-        apellidos = new String(apellidos.getBytes("ISO-8859-1"),"UTF8");
-        
-        String direccion = (String) request.getParameter("direccion"); 
-        direccion = new String(direccion.getBytes("ISO-8859-1"),"UTF8");
-        
-        String localidad = (String) request.getParameter("localidad");
-        localidad = new String(localidad.getBytes("ISO-8859-1"),"UTF8");
-        
-        String provincia = (String) request.getParameter("provincia"); 
-        provincia = new String(provincia.getBytes("ISO-8859-1"),"UTF8");
-        
-        String pais = (String) request.getParameter("pais"); 
-        pais = new String(pais.getBytes("ISO-8859-1"),"UTF8");
-        
-        String email = (String) request.getParameter("email"); 
-        email = new String(email.getBytes("ISO-8859-1"),"UTF8");
-        
-        String password = (String) request.getParameter("password");
-        password = new String(password.getBytes("ISO-8859-1"),"UTF8");
-        
-        Usuario user = usuarioFacade.buscarEmail(email);
-        
-        if (user == null) {
-            
-            user=usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password); 
-           
-            BigDecimal idUser = user.getIdUsuario();
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            String nombre = (String) request.getParameter("nombre");
+            nombre = new String(nombre.getBytes("ISO-8859-1"), "UTF8");
+
+            String apellidos = (String) request.getParameter("apellidos");
+            apellidos = new String(apellidos.getBytes("ISO-8859-1"), "UTF8");
+
+            String direccion = (String) request.getParameter("direccion");
+            direccion = new String(direccion.getBytes("ISO-8859-1"), "UTF8");
+
+            String localidad = (String) request.getParameter("localidad");
+            localidad = new String(localidad.getBytes("ISO-8859-1"), "UTF8");
+
+            String provincia = (String) request.getParameter("provincia");
+            provincia = new String(provincia.getBytes("ISO-8859-1"), "UTF8");
+
+            String pais = (String) request.getParameter("pais");
+            pais = new String(pais.getBytes("ISO-8859-1"), "UTF8");
+
+            String email = (String) request.getParameter("email");
+            email = new String(email.getBytes("ISO-8859-1"), "UTF8");
+
+            String password = (String) request.getParameter("password");
+            password = new String(password.getBytes("ISO-8859-1"), "UTF8");
+
+            Usuario user = usuarioFacade.buscarEmail(email);
+
+            if (user == null) {
+
+                user = usuarioFacade.nuevoUser(nombre, apellidos, direccion, localidad, provincia, pais, email, password);
+
+                BigDecimal idUser = user.getIdUsuario();
 //            request.getSession().setAttribute("idUser", idUser);
-            //USUARIO SESIÓN
-            HttpSession sesion = request.getSession();
-            sesion.setAttribute("usuario", user);
-                
-            //USUARIO CAMBIANTE
-            sesion.setAttribute("usuarioMuro", user);
-            
-            response.sendRedirect(request.getContextPath()+"/MuroServlet");
+                //USUARIO SESIÓN
+                HttpSession sesion = request.getSession();
+                sesion.setAttribute("usuario", user);
+
+                //USUARIO CAMBIANTE
+                sesion.setAttribute("usuarioMuro", user);
+
+                response.sendRedirect(request.getContextPath() + "/MuroServlet");
 //            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-            
-        }else{
-            
-            String mensaje = "El email ya esta registrado en nuestra red social.";
-            request.setAttribute("mensaje", mensaje);                
-            this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);  
-        }  
-               
+
+            } else {
+
+                String mensaje = "El email ya esta registrado en nuestra red social.";
+                request.setAttribute("mensaje", mensaje);
+                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

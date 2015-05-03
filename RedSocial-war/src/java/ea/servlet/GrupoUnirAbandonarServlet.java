@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "GrupoUnirAbandonarServlet", urlPatterns = {"/GrupoUnirAbandonarServlet"})
 public class GrupoUnirAbandonarServlet extends HttpServlet {
+
     @EJB
     private GrupoFacade grupoFacade;
 
@@ -36,31 +37,33 @@ public class GrupoUnirAbandonarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        String idGrupo = (String) request.getParameter("idGrupo");
-        String datosBusqueda = (String) request.getParameter("datosBusqueda");
-        
-        String accion = (String) request.getParameter("accion");
-        if (accion.equals("abandonar")){
-            grupoFacade.abandonarGrupo(idGrupo, usuario);
-        }else if (accion.equals("unirse")){
-            grupoFacade.unirseGrupo(idGrupo, usuario);
+            String idGrupo = (String) request.getParameter("idGrupo");
+            String datosBusqueda = (String) request.getParameter("datosBusqueda");
+
+            String accion = (String) request.getParameter("accion");
+            if (accion.equals("abandonar")) {
+                grupoFacade.abandonarGrupo(idGrupo, usuario);
+            } else if (accion.equals("unirse")) {
+                grupoFacade.unirseGrupo(idGrupo, usuario);
+            }
+
+            session.setAttribute("usuario", usuario);
+            session.setAttribute("usuarioMuro", usuario);
+
+            if (datosBusqueda != null) {
+                // Proviene de buscar.jsp
+                response.sendRedirect(request.getContextPath() + "/BuscarServlet?buscar=" + datosBusqueda);
+            } else {
+                // Proviene de grupo.jsp
+                response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+            }
         }
-        
-        session.setAttribute("usuario", usuario);
-        session.setAttribute("usuarioMuro", usuario);
-        
-        if(datosBusqueda != null){
-            // Proviene de buscar.jsp
-            response.sendRedirect(request.getContextPath() + "/BuscarServlet?buscar=" + datosBusqueda);
-        }else{
-            // Proviene de grupo.jsp
-            response.sendRedirect(request.getContextPath() + "/GrupoServlet");
-        }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

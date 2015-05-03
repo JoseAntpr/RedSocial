@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "BloquearUsuarioServlet", urlPatterns = {"/BloquearUsuarioServlet"})
 public class BloquearUsuarioServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -40,32 +41,35 @@ public class BloquearUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
             String button = (String) request.getParameter("button");
             BigDecimal idUsuario;
             Usuario usuario;
 
-            if(button.equals("Bloquear")){  
-                
-              idUsuario = new BigDecimal(request.getParameter("idUser")) ;
-              usuario = usuarioFacade.find(idUsuario);
+            if (button.equals("Bloquear")) {
+
+                idUsuario = new BigDecimal(request.getParameter("idUser"));
+                usuario = usuarioFacade.find(idUsuario);
               //usuario.setEstado(true);
-              
-            }else if (button.equals("Bloqueado")){
-              
-              idUsuario = new BigDecimal(request.getParameter("idUser")) ;
-              usuario = usuarioFacade.find(idUsuario);
+
+            } else if (button.equals("Bloqueado")) {
+
+                idUsuario = new BigDecimal(request.getParameter("idUser"));
+                usuario = usuarioFacade.find(idUsuario);
               //usuario.setEstado(false);
-            
+
             }
-            
-            List<Usuario> lista = usuarioFacade.findAll();            
-            
+
+            List<Usuario> lista = usuarioFacade.findAll();
+
             request.setAttribute("listaUsuarios", lista);
 
             RequestDispatcher rd;
             rd = this.getServletContext().getRequestDispatcher("/bloquearUsuario.jsp");
             rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

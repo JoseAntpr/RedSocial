@@ -24,10 +24,10 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "SeguirNoSeguirServlet", urlPatterns = {"/SeguirNoSeguirServlet"})
 public class SeguirNoSeguirServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
 
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,53 +39,55 @@ public class SeguirNoSeguirServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession sesion = request.getSession();
-        Usuario usuarioPropio = (Usuario) sesion.getAttribute("usuario");
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession sesion = request.getSession();
+            Usuario usuarioPropio = (Usuario) sesion.getAttribute("usuario");
         //Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
-        
-        
-            BigDecimal idUsuarioMuro=new BigDecimal(request.getParameter("usuariomuro")) ;
-            
+
+            BigDecimal idUsuarioMuro = new BigDecimal(request.getParameter("usuariomuro"));
+
             BigDecimal idUsuario;
             Usuario usuario;
-            String ruta= (String) request.getParameter("ruta");
+            String ruta = (String) request.getParameter("ruta");
             String button = (String) request.getParameter("botonSeguir");
             String datos = (String) request.getParameter("datos");
-            
-           if(button.equals("Seguir")){
-              idUsuario=new BigDecimal(request.getParameter("usuarioSeguir")) ;
-              usuario = usuarioFacade.find(idUsuario);
-              usuario.getUsuarioCollection1().add(usuarioPropio);
-              usuarioPropio.getUsuarioCollection().add(usuario);
-              
-              usuarioFacade.edit(usuario);
-              usuarioFacade.edit(usuarioPropio);
-              
-              if(ruta.equals("busquedaUsuarios")){
-                  response.sendRedirect(request.getContextPath()+"/BuscarServlet?buscar="+datos);
-              }else{
-                  response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
-              }
-              
-           }else if(button.equals("Siguiendo")){
-              idUsuario=new BigDecimal(request.getParameter("usuarioDejarSeguir")) ;
-              usuario = usuarioFacade.find(idUsuario);
-              usuario.getUsuarioCollection1().remove(usuarioPropio);
-              usuarioPropio.getUsuarioCollection().remove(usuario);
-              
-              usuarioFacade.edit(usuario);
-              usuarioFacade.edit(usuarioPropio);
-              
-              if(ruta.equals("busquedaUsuarios")){
-                  response.sendRedirect(request.getContextPath()+"/BuscarServlet?buscar="+datos);
-              }else{
-                  response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta);
-              }
-              
+
+            if (button.equals("Seguir")) {
+                idUsuario = new BigDecimal(request.getParameter("usuarioSeguir"));
+                usuario = usuarioFacade.find(idUsuario);
+                usuario.getUsuarioCollection1().add(usuarioPropio);
+                usuarioPropio.getUsuarioCollection().add(usuario);
+
+                usuarioFacade.edit(usuario);
+                usuarioFacade.edit(usuarioPropio);
+
+                if (ruta.equals("busquedaUsuarios")) {
+                    response.sendRedirect(request.getContextPath() + "/BuscarServlet?buscar=" + datos);
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/ListarSeguidoresServlet?x=" + ruta);
+                }
+
+            } else if (button.equals("Siguiendo")) {
+                idUsuario = new BigDecimal(request.getParameter("usuarioDejarSeguir"));
+                usuario = usuarioFacade.find(idUsuario);
+                usuario.getUsuarioCollection1().remove(usuarioPropio);
+                usuarioPropio.getUsuarioCollection().remove(usuario);
+
+                usuarioFacade.edit(usuario);
+                usuarioFacade.edit(usuarioPropio);
+
+                if (ruta.equals("busquedaUsuarios")) {
+                    response.sendRedirect(request.getContextPath() + "/BuscarServlet?buscar=" + datos);
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/ListarSeguidoresServlet?x=" + ruta);
+                }
+
 //              response.sendRedirect(request.getContextPath()+"/ListarSeguidoresServlet?x="+ruta+"&usuarioMuro="+idUsuarioMuro);
-                
-           }
-            
+            }
+
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

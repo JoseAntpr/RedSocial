@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "GrupoEditarPostServlet", urlPatterns = {"/GrupoEditarPostServlet"})
 public class GrupoEditarPostServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
@@ -51,73 +52,76 @@ public class GrupoEditarPostServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //get session of the request
-        HttpSession session = request.getSession();
-        Usuario miembro = (Usuario) session.getAttribute("usuario");
-        
-        BigDecimal idPostEditar = new BigDecimal(request.getParameter("idPostEditar"));
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //get session of the request
+            HttpSession session = request.getSession();
+            Usuario miembro = (Usuario) session.getAttribute("usuario");
 
-        // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
-        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
-        
-        // Recuperamos el grupo
-        BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
-        Grupo grupo = grupoFacade.find(id_grupo);
-  
-        // Obtenemos el Post de la BD
-        Post post = postFacade.find(idPostEditar);
+            BigDecimal idPostEditar = new BigDecimal(request.getParameter("idPostEditar"));
 
-        // Editamos los cambios si los hay
-        String description = mapDatosForm.get("descripcion");
-        description = new String(description.getBytes("ISO-8859-1"),"UTF8");
-        if(!post.getDescripcion().equals(description)){
-            post.setDescripcion(description);
-        }
+            // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
+            Map<String, String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
 
-        String imagen = mapDatosForm.get("imagen");
-        String imagenActual = null;
-        imagenActual = post.getImagen();
-        if (!imagen.equals("")){
-            if (imagenActual != null){
-                if(!imagenActual.equals(imagen)){
+            // Recuperamos el grupo
+            BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
+            Grupo grupo = grupoFacade.find(id_grupo);
+
+            // Obtenemos el Post de la BD
+            Post post = postFacade.find(idPostEditar);
+
+            // Editamos los cambios si los hay
+            String description = mapDatosForm.get("descripcion");
+            description = new String(description.getBytes("ISO-8859-1"), "UTF8");
+            if (!post.getDescripcion().equals(description)) {
+                post.setDescripcion(description);
+            }
+
+            String imagen = mapDatosForm.get("imagen");
+            String imagenActual = null;
+            imagenActual = post.getImagen();
+            if (!imagen.equals("")) {
+                if (imagenActual != null) {
+                    if (!imagenActual.equals(imagen)) {
+                        post.setImagen(mapDatosForm.get("imagen"));
+                    }
+                } else {
                     post.setImagen(mapDatosForm.get("imagen"));
                 }
-            }else{
-                post.setImagen(mapDatosForm.get("imagen"));
+            } else {
+                if (imagenActual != null) {
+                    post.setImagen(mapDatosForm.get("imagen"));
+                }
             }
-        }else{
-            if(imagenActual != null){
-                post.setImagen(mapDatosForm.get("imagen"));
-            }
-        }
-        
-        // Editamos el post en la DB
-        postFacade.edit(post);
-        
-        // Actualizo el post en la lista del grupo
-        List listPostGrupo = (List)grupo.getPostCollection();
-        Integer posPostGrupo = buscaPosicionPost(listPostGrupo, post);
-        listPostGrupo.set(posPostGrupo, post);
-        grupo.setPostCollection(listPostGrupo);
-        
-        // Actualizo el grupo en la BD
-        grupoFacade.edit(grupo);
-        
-        // Actualizo el post en la lista del miembro
-        List listPostMiembro = (List)miembro.getPostCollection();
-        Integer posPostMiembro = buscaPosicionPost(listPostMiembro, post);
-        listPostMiembro.set(posPostMiembro, post);
-        miembro.setPostCollection(listPostMiembro);
-        
-        // Actualizo el usuraio en la BD
-        usuarioFacade.edit(miembro);
-        
-        session.setAttribute("usuario", miembro);
-        session.setAttribute("usuarioMuro", miembro);
-        
 
-        //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
+            // Editamos el post en la DB
+            postFacade.edit(post);
+
+            // Actualizo el post en la lista del grupo
+            List listPostGrupo = (List) grupo.getPostCollection();
+            Integer posPostGrupo = buscaPosicionPost(listPostGrupo, post);
+            listPostGrupo.set(posPostGrupo, post);
+            grupo.setPostCollection(listPostGrupo);
+
+            // Actualizo el grupo en la BD
+            grupoFacade.edit(grupo);
+
+            // Actualizo el post en la lista del miembro
+            List listPostMiembro = (List) miembro.getPostCollection();
+            Integer posPostMiembro = buscaPosicionPost(listPostMiembro, post);
+            listPostMiembro.set(posPostMiembro, post);
+            miembro.setPostCollection(listPostMiembro);
+
+            // Actualizo el usuraio en la BD
+            usuarioFacade.edit(miembro);
+
+            session.setAttribute("usuario", miembro);
+            session.setAttribute("usuarioMuro", miembro);
+
+            //redirect to the grupo servlet 
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -158,12 +162,11 @@ public class GrupoEditarPostServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    
-    public Integer buscaPosicionPost(Collection posts, Post post){
+
+    public Integer buscaPosicionPost(Collection posts, Post post) {
         Integer i = 0;
         List<Post> lista = (List) posts;
-        while (!lista.get(i).equals(post)){
+        while (!lista.get(i).equals(post)) {
             i++;
         }
         return i;

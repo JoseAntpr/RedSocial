@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
+
     @EJB
     private PostFacade postFacade;
     @EJB
@@ -48,76 +49,76 @@ public class GrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //Recuperamos la sesion completa
+            HttpSession session = request.getSession();
 
-        //Recuperamos la sesion completa
-        HttpSession session = request.getSession();
-        
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        Usuario usuarioMuro = (Usuario) session.getAttribute("usuarioMuro");
-        
-        // Lista de Grupos donde usuario es miembro
-        List<Grupo> listaGruposUsuarioMuro = null;
-        
-        Grupo grupo = null;
-        List<Post> listaPostGrupo = null;
-        List<Usuario> listaMiembrosGrupo = null;
-        
-        // Obtiene grupos públicos y no los privados si usuario != usuarioMuro
-        Boolean muroDeOtro = !usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario());
-        request.setAttribute("muroDeOtro", muroDeOtro);
-        if (muroDeOtro){
-            listaGruposUsuarioMuro = (List)usuarioFacade.gruposPublicosDeUsuario(usuarioMuro);
-        }else{
-            listaGruposUsuarioMuro = (List) usuarioMuro.getGrupoCollection();
-        }
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            Usuario usuarioMuro = (Usuario) session.getAttribute("usuarioMuro");
 
-        
-        
-        Boolean tieneGrupos = listaGruposUsuarioMuro.size() > 0;
-        request.setAttribute("tieneGrupos", tieneGrupos);
-        if (tieneGrupos) {
-            
-             // Lista de grupos del usuario
-            request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
-            
-            
-            String idGrupoElegido = (String) request.getParameter("idGrupoElegido");
-            if(idGrupoElegido != null){
-                // Recuperamos el grupo clickado
-                BigDecimal idGrupo = new BigDecimal(idGrupoElegido);
+            // Lista de Grupos donde usuario es miembro
+            List<Grupo> listaGruposUsuarioMuro = null;
+
+            Grupo grupo = null;
+            List<Post> listaPostGrupo = null;
+            List<Usuario> listaMiembrosGrupo = null;
+
+            // Obtiene grupos públicos y no los privados si usuario != usuarioMuro
+            Boolean muroDeOtro = !usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario());
+            request.setAttribute("muroDeOtro", muroDeOtro);
+            if (muroDeOtro) {
+                listaGruposUsuarioMuro = (List) usuarioFacade.gruposPublicosDeUsuario(usuarioMuro);
+            } else {
+                listaGruposUsuarioMuro = (List) usuarioMuro.getGrupoCollection();
+            }
+
+            Boolean tieneGrupos = listaGruposUsuarioMuro.size() > 0;
+            request.setAttribute("tieneGrupos", tieneGrupos);
+            if (tieneGrupos) {
+
+                // Lista de grupos del usuario
+                request.setAttribute("listaGruposUsuarioMuro", listaGruposUsuarioMuro);
+
+                String idGrupoElegido = (String) request.getParameter("idGrupoElegido");
+                if (idGrupoElegido != null) {
+                    // Recuperamos el grupo clickado
+                    BigDecimal idGrupo = new BigDecimal(idGrupoElegido);
 //                request.setAttribute("idGrupoElegido", idGrupoElegido);
-                grupo = (Grupo) grupoFacade.find(idGrupo);
-            }else{
-                // Mostramos el primer grupo
+                    grupo = (Grupo) grupoFacade.find(idGrupo);
+                } else {
+                    // Mostramos el primer grupo
 //                grupo = (Grupo) listaGruposUsuarioMuro.get(0);
-                grupo = (Grupo) grupoFacade.find(listaGruposUsuarioMuro.get(0).getIdGrupo());
-            }
-            
-            // Grupo a mostrar en grupo.jsp
-            request.setAttribute("grupo", grupo);
-            
-            // Lista de post
+                    grupo = (Grupo) grupoFacade.find(listaGruposUsuarioMuro.get(0).getIdGrupo());
+                }
+
+                // Grupo a mostrar en grupo.jsp
+                request.setAttribute("grupo", grupo);
+
+                // Lista de post
 //            listaPostGrupo = (List) grupo.getPostCollection();
-            listaPostGrupo = (List) postFacade.getListaPostGrupo(grupo.getIdGrupo());
-            request.setAttribute("listaPostGrupo", listaPostGrupo);
+                listaPostGrupo = (List) postFacade.getListaPostGrupo(grupo.getIdGrupo());
+                request.setAttribute("listaPostGrupo", listaPostGrupo);
 
-            // Lista de miembros
-            listaMiembrosGrupo = (List) grupo.getUsuarioCollection();
-            request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
-            
-            // Recuperamos el post a editar de grupo.jsp si es que lo hay
-            String idPostEditar = (String)request.getParameter("idPostEditar");
-            // Enviamos el post a editar a grupo.jsp para que lo muestre editable
-            if (idPostEditar != null){
-                request.setAttribute("idPostEditar", idPostEditar);
+                // Lista de miembros
+                listaMiembrosGrupo = (List) grupo.getUsuarioCollection();
+                request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
+
+                // Recuperamos el post a editar de grupo.jsp si es que lo hay
+                String idPostEditar = (String) request.getParameter("idPostEditar");
+                // Enviamos el post a editar a grupo.jsp para que lo muestre editable
+                if (idPostEditar != null) {
+                    request.setAttribute("idPostEditar", idPostEditar);
+                }
+
             }
-            
-        }
 
-        // Request Dispatcher
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");
-        rd.forward(request, response);
+            // Request Dispatcher
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/grupo.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

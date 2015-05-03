@@ -27,14 +27,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AddMiembroGrupoServlet", urlPatterns = {"/AddMiembroGrupoServlet"})
 public class AddMiembroGrupoServlet extends HttpServlet {
+
     @EJB
     private GrupoFacade grupoFacade;
     @EJB
     private UsuarioFacade usuarioFacade;
-    
-    
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,29 +44,32 @@ public class AddMiembroGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        Grupo grupo = (Grupo) grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-        
-        String datosBusqueda=request.getParameter("buscar");
-        List<Usuario> listaUsuarios;
-        
-        List<Usuario> listaMiembrosGrupo = (List<Usuario>) grupo.getUsuarioCollection();
-        request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
-        
-        if(datosBusqueda==null){
-            listaUsuarios = (List<Usuario>) usuarioFacade.findAll();
-        }else{
-            listaUsuarios = (List<Usuario>) usuarioFacade.buscarUsuarios(datosBusqueda);
+
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            Grupo grupo = (Grupo) grupoFacade.find(new BigDecimal((String) request.getParameter("idGrupo")));
+
+            String datosBusqueda = request.getParameter("buscar");
+            List<Usuario> listaUsuarios;
+
+            List<Usuario> listaMiembrosGrupo = (List<Usuario>) grupo.getUsuarioCollection();
+            request.setAttribute("listaMiembrosGrupo", listaMiembrosGrupo);
+
+            if (datosBusqueda == null) {
+                listaUsuarios = (List<Usuario>) usuarioFacade.findAll();
+            } else {
+                listaUsuarios = (List<Usuario>) usuarioFacade.buscarUsuarios(datosBusqueda);
+            }
+
+            request.setAttribute("listaUsuarios", listaUsuarios);
+            request.setAttribute("datos", datosBusqueda);
+            request.setAttribute("grupo", grupo);
+
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/addMiembroGrupo.jsp");
+            rd.forward(request, response);
         }
-        
-        request.setAttribute("listaUsuarios", listaUsuarios);
-        request.setAttribute("datos", datosBusqueda);
-        request.setAttribute("grupo", grupo);
-        
-        
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/addMiembroGrupo.jsp");
-        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

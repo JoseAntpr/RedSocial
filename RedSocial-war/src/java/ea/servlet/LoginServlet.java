@@ -25,9 +25,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
-    
+
     @EJB
-    private UsuarioFacade usuarioFacade;    
+    private UsuarioFacade usuarioFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,43 +39,44 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {      
-        
-        String email = (String) request.getParameter("email");            
-        String password = (String) request.getParameter("password");
-        
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            Usuario usuario = usuarioFacade.login(email, password);
-            
-            //Si el usuario existe en la base de datos
-            if (usuario !=null){
-                
-                BigDecimal idUsuario = usuario.getIdUsuario();
-                
-                //USUARIO SESIÓN
-                HttpSession sesion = request.getSession();
-                sesion.setAttribute("usuario", usuario);
-                
-                //USUARIO CAMBIANTE
-                sesion.setAttribute("usuarioMuro", usuario);
-              
+            throws ServletException, IOException {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            String email = (String) request.getParameter("email");
+            String password = (String) request.getParameter("password");
+
+            response.setContentType("text/html;charset=UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+
+                Usuario usuario = usuarioFacade.login(email, password);
+
+                //Si el usuario existe en la base de datos
+                if (usuario != null) {
+
+                    BigDecimal idUsuario = usuario.getIdUsuario();
+
+                    //USUARIO SESIÓN
+                    HttpSession sesion = request.getSession();
+                    sesion.setAttribute("usuario", usuario);
+
+                    //USUARIO CAMBIANTE
+                    sesion.setAttribute("usuarioMuro", usuario);
+
 //                response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
-                response.sendRedirect(request.getContextPath()+"/MuroServlet");
-            
+                    response.sendRedirect(request.getContextPath() + "/MuroServlet");
+
+                } //Si ha no ha encontrado el usuario:
+                else {
+
+                    String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
+                    request.setAttribute("mensaje", mensaje);
+                    this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);
+                }
+
             }
-            //Si ha no ha encontrado el usuario:
-            else{
-                
-                String mensaje = "Nombre de usuario o contraseña incorrectos, vuelva a intentarlo por favor.";
-                request.setAttribute("mensaje", mensaje);                
-                this.getServletContext().getRequestDispatcher("/loginError.jsp").forward(request, response);                 
-            }
-            
-        }      
+        }
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -26,14 +26,12 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AddOrNotMiembroGrupoServlet", urlPatterns = {"/AddOrNotMiembroGrupoServlet"})
 public class AddOrNotMiembroGrupoServlet extends HttpServlet {
+
     @EJB
     private GrupoFacade grupoFacade;
     @EJB
     private UsuarioFacade usuarioFacade;
-    
 
-    
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,35 +43,38 @@ public class AddOrNotMiembroGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-HttpSession sesion = request.getSession();
-        
-            BigDecimal idGrupo = new BigDecimal((String)request.getParameter("idGrupo"));
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession sesion = request.getSession();
+
+            BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
             BigDecimal idUsuario = new BigDecimal(request.getParameter("idUsuario"));
-            
+
             Grupo grupo = (Grupo) grupoFacade.find(idGrupo);
             Usuario usuario = usuarioFacade.find(idUsuario);
             String button = (String) request.getParameter("boton");
             String datos = (String) request.getParameter("datos");
-            
-           if(button.charAt(0)=='A'){
-              grupo.getUsuarioCollection().add(usuario);
-              grupoFacade.edit(grupo);
-              
-              usuario.getGrupoCollection().add(grupo);
-              usuarioFacade.edit(usuario);
-              
-           }else{
-              grupo.getUsuarioCollection().remove(usuario);
-              grupoFacade.edit(grupo);
-              
-              usuario.getGrupoCollection().remove(grupo);
-              usuarioFacade.edit(usuario);
+
+            if (button.charAt(0) == 'A') {
+                grupo.getUsuarioCollection().add(usuario);
+                grupoFacade.edit(grupo);
+
+                usuario.getGrupoCollection().add(grupo);
+                usuarioFacade.edit(usuario);
+
+            } else {
+                grupo.getUsuarioCollection().remove(usuario);
+                grupoFacade.edit(grupo);
+
+                usuario.getGrupoCollection().remove(grupo);
+                usuarioFacade.edit(usuario);
             }
-           
+
             response.sendRedirect(request.getContextPath() + "/AddMiembroGrupoServlet?idGrupo=" + grupo.getIdGrupo().toString());
-           
-           
-}
+
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

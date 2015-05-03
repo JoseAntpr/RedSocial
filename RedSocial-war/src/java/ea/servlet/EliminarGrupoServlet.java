@@ -27,11 +27,11 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "EliminarGrupoServlet", urlPatterns = {"/EliminarGrupoServlet"})
 public class EliminarGrupoServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
     private GrupoFacade grupoFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,37 +44,35 @@ public class EliminarGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //        BigDecimal idGrupo = new BigDecimal((String) request.getParameter("idGrupo"));
 //        Grupo grupo = grupoFacade.find(idGrupo);
-        HttpSession session = request.getSession();
-        
-        Usuario usuario = (Usuario)session.getAttribute("usuario");
-        Usuario usuarioMuro = (Usuario)session.getAttribute("usuarioMuro");
-        
-        
+            HttpSession session = request.getSession();
 
-        if (usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){
-            
-            BigDecimal idGrupoEliminiar = new BigDecimal((String)request.getParameter("idGrupo"));
-            Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
-            
-            // Solo si el usuario es administrador del grupo puede borrar el grupo
-            if (usuario.getIdUsuario().equals(new BigDecimal(grupoEliminar.getIdAdministrador().doubleValue()))){
-                
-                // Elimina el grupo de todos los miembros y devuelve el usuario sesion actualizado
-                grupoFacade.eliminarGrupo(grupoEliminar, usuario);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            Usuario usuarioMuro = (Usuario) session.getAttribute("usuarioMuro");
 
-                session.setAttribute("usuario", usuario);
-                session.setAttribute("usuarioMuro", usuario);
+            if (usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())) {
+
+                BigDecimal idGrupoEliminiar = new BigDecimal((String) request.getParameter("idGrupo"));
+                Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
+
+                // Solo si el usuario es administrador del grupo puede borrar el grupo
+                if (usuario.getIdUsuario().equals(new BigDecimal(grupoEliminar.getIdAdministrador().doubleValue()))) {
+
+                    // Elimina el grupo de todos los miembros y devuelve el usuario sesion actualizado
+                    grupoFacade.eliminarGrupo(grupoEliminar, usuario);
+
+                    session.setAttribute("usuario", usuario);
+                    session.setAttribute("usuarioMuro", usuario);
+                }
+
             }
 
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet");
         }
-
-        
-        
-        
-        
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

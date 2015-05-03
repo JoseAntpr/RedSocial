@@ -41,35 +41,36 @@ public class ListarSeguidoresServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession sesion = request.getSession();
+            Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+            Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
 
-        HttpSession sesion = request.getSession();
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
-        
-        List<Usuario> ListaSeguidores = null;
-        String x = (String) request.getParameter("x");
+            List<Usuario> ListaSeguidores = null;
+            String x = (String) request.getParameter("x");
 
 //        BigDecimal idUsuario=new BigDecimal( request.getParameter("usuarioMuro"));
 //        Usuario  usuarioMuro=usuarioFacade.find(idUsuario);
+            if (x.equals("seguidores")) {
 
-        if (x.equals("seguidores")) {
+                ListaSeguidores = (List) usuarioMuro.getUsuarioCollection1();
 
-            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection1();
+            } else if (x.equals("Seguir")) {
 
-        } else if (x.equals("Seguir")) {
+                ListaSeguidores = (List) usuarioMuro.getUsuarioCollection();
 
-            ListaSeguidores = (List) usuarioMuro.getUsuarioCollection();
+            }
 
-        }
-
-        request.setAttribute("x", x);
+            request.setAttribute("x", x);
 //        request.setAttribute("usuarioMuro", usuarioMuro);
-        request.setAttribute("listaSeguidores", ListaSeguidores);
-        
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
-        rd.forward(request, response);
+            request.setAttribute("listaSeguidores", ListaSeguidores);
 
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/seguidores.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

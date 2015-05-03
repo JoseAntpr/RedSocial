@@ -35,7 +35,9 @@ public class EditarUsuarioServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        if(request.getSession().getAttribute("usuario") == null){
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }else{
             Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 
             String nombre = (String) request.getParameter("nombre"); 
@@ -60,7 +62,8 @@ public class EditarUsuarioServlet extends HttpServlet {
             request.getSession().setAttribute("idUser", idUser);
             
             response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
-              
+             
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

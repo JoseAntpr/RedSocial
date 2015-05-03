@@ -25,9 +25,10 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "CrearGrupoServlet", urlPatterns = {"/CrearGrupoServlet"})
 public class CrearGrupoServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
-    
+
     @EJB
     private GrupoFacade grupoFacade;
 
@@ -42,29 +43,32 @@ public class CrearGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        
-        String nombre = (String) request.getParameter("nombre"); 
-        nombre = new String(nombre.getBytes("ISO-8859-1"),"UTF8");
-        String privacidad = (String) request.getParameter("privacidad");
-        
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession session = request.getSession();
+
+            String nombre = (String) request.getParameter("nombre");
+            nombre = new String(nombre.getBytes("ISO-8859-1"), "UTF8");
+            String privacidad = (String) request.getParameter("privacidad");
+
 //        BigDecimal sesion = (BigDecimal) request.getSession().getAttribute("idUser");
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        
-        
-        Grupo grupo = grupoFacade.nuevoGrupo(usuario,nombre, privacidad);
-        
-        grupo.getUsuarioCollection().add(usuario);
-        
-        grupoFacade.edit(grupo);
-        
-        usuario.getGrupoCollection().add(grupo);
-        usuarioFacade.edit(usuario);
-        
-        session.setAttribute("usuarioMuro", usuario);
-        
-        this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
-        //this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+            Grupo grupo = grupoFacade.nuevoGrupo(usuario, nombre, privacidad);
+
+            grupo.getUsuarioCollection().add(usuario);
+
+            grupoFacade.edit(grupo);
+
+            usuario.getGrupoCollection().add(grupo);
+            usuarioFacade.edit(usuario);
+
+            session.setAttribute("usuarioMuro", usuario);
+
+            this.getServletContext().getRequestDispatcher("/GrupoServlet").forward(request, response);
+            //this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

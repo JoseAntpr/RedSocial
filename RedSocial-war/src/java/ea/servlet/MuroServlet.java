@@ -30,13 +30,12 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "MuroServlet", urlPatterns = {"/MuroServlet"})
 public class MuroServlet extends HttpServlet {
-    
+
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
     private PostFacade postFacade;
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,67 +47,64 @@ public class MuroServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        
-       
-        HttpSession sesion = request.getSession();
-        
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-        
-        Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
-        
-        
-        
-        List<Post> listaPost=null;
-        List<Post> postSigues=null;
-       
-        String idUsuarioMuroGetString=request.getParameter("usuarioMuroGet");
-        
-        
-        String mensaje=null;
-        
-        if(idUsuarioMuroGetString!=null){
-            BigDecimal idUsuarioMuroGet = new BigDecimal(idUsuarioMuroGetString);
-            Usuario usuarioMuroGet= usuarioFacade.find(idUsuarioMuroGet);
-            if(!usuarioMuro.getIdUsuario().equals(idUsuarioMuroGet)){
-                sesion.setAttribute("usuarioMuro", usuarioMuroGet);
-                usuarioMuro=usuarioMuroGet;
-            }
-        }else{
-            sesion.setAttribute("usuarioMuro", usuario);
-            usuarioMuro=usuario;
-        }
-        
-        if(usuarioMuro.getIdUsuario().equals(usuario.getIdUsuario())){
-            listaPost=postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
-            List<Usuario> listaSigues=(List)usuario.getUsuarioCollection();
-                
-            postSigues=postFacade.findPostIdUsuarioSeguidoresOrder(usuario.getIdUsuario());
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession sesion = request.getSession();
 
-        }else{
+            Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 
-            if(usuario.siguesUsuario(usuarioMuro).equals("si")){
-                
-                listaPost=postFacade.findPostIdUsuarioOrder(usuarioMuro.getIdUsuario());
-                
-            }else{
-                listaPost=postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
+            Usuario usuarioMuro = (Usuario) sesion.getAttribute("usuarioMuro");
+
+            List<Post> listaPost = null;
+            List<Post> postSigues = null;
+
+            String idUsuarioMuroGetString = request.getParameter("usuarioMuroGet");
+
+            String mensaje = null;
+
+            if (idUsuarioMuroGetString != null) {
+                BigDecimal idUsuarioMuroGet = new BigDecimal(idUsuarioMuroGetString);
+                Usuario usuarioMuroGet = usuarioFacade.find(idUsuarioMuroGet);
+                if (!usuarioMuro.getIdUsuario().equals(idUsuarioMuroGet)) {
+                    sesion.setAttribute("usuarioMuro", usuarioMuroGet);
+                    usuarioMuro = usuarioMuroGet;
+                }
+            } else {
                 sesion.setAttribute("usuarioMuro", usuario);
                 usuarioMuro = usuario;
-//                response.encodeURL("/MuroServlet"); //QUITAR DE LA URL LA ID DEL usuarioMuro
-                mensaje = "Error, no puedes ver el muro de un usuario que no sigues."; 
             }
-        }
-        
-        request.setAttribute("mensajeErrorMuroOtro", mensaje);
+
+            if (usuarioMuro.getIdUsuario().equals(usuario.getIdUsuario())) {
+                listaPost = postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
+                List<Usuario> listaSigues = (List) usuario.getUsuarioCollection();
+
+                postSigues = postFacade.findPostIdUsuarioSeguidoresOrder(usuario.getIdUsuario());
+
+            } else {
+
+                if (usuario.siguesUsuario(usuarioMuro).equals("si")) {
+
+                    listaPost = postFacade.findPostIdUsuarioOrder(usuarioMuro.getIdUsuario());
+
+                } else {
+                    listaPost = postFacade.findPostIdUsuarioOrder(usuario.getIdUsuario());
+                    sesion.setAttribute("usuarioMuro", usuario);
+                    usuarioMuro = usuario;
+//                response.encodeURL("/MuroServlet"); //QUITAR DE LA URL LA ID DEL usuarioMuro
+                    mensaje = "Error, no puedes ver el muro de un usuario que no sigues.";
+                }
+            }
+
+            request.setAttribute("mensajeErrorMuroOtro", mensaje);
 //        request.setAttribute("usuarioMuro", usuarioMuro);
-        request.setAttribute("listaPostSigues", postSigues);
-        request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
-        
-        RequestDispatcher rd;
-        rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
-        rd.forward(request, response);
-        
+            request.setAttribute("listaPostSigues", postSigues);
+            request.setAttribute("listaPost", listaPost); //Para mandar listaPost a muro.jsp
+
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/muro.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

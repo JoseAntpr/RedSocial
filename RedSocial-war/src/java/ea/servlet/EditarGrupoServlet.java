@@ -28,11 +28,11 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "EditarGrupoServlet", urlPatterns = {"/EditarGrupoServlet"})
 public class EditarGrupoServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
     @EJB
     private GrupoFacade grupoFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,45 +45,47 @@ public class EditarGrupoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            HttpSession session = request.getSession();
 
-        HttpSession session = request.getSession();
-        
-        Usuario usuario =(Usuario) session.getAttribute("usuario");
-        
-        boolean editado=false;
-        
-        if((String)request.getParameter("grupoEditado")!=null){
-           editado=true;  
-        }
-        
-        if(editado){
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            usuario.getGrupoCollection().remove(grupo);
-            grupo.getUsuarioCollection().remove(usuario);
-            String nombreGrupo =(String) request.getParameter("nombreGrupo");
-            nombreGrupo = new String(nombreGrupo.getBytes("ISO-8859-1"),"UTF8");
-            grupo.setNombre(nombreGrupo);
-            
-            
-            if(((String)request.getParameter("privacidad")).toUpperCase().equals("PRIVADO")){
-               grupo.setPrivacidad(BigInteger.ONE); 
-            }else{
-               grupo.setPrivacidad(BigInteger.ZERO);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+            boolean editado = false;
+
+            if ((String) request.getParameter("grupoEditado") != null) {
+                editado = true;
             }
-            grupo.getUsuarioCollection().add(usuario);
-            grupoFacade.edit(grupo);
-            
-            //grupo.getUsuarioCollection().add(usuario);
-            usuario.getGrupoCollection().add(grupo);
-       
-            usuarioFacade.edit(usuario);
-            
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet");
-            
-        }else{
-            Grupo grupo = grupoFacade.find(new BigDecimal((String)request.getParameter("idGrupo")));
-            request.setAttribute("grupo", grupo);
-            this.getServletContext().getRequestDispatcher("/editarGrupo.jsp").forward(request, response);
+
+            if (editado) {
+                Grupo grupo = grupoFacade.find(new BigDecimal((String) request.getParameter("idGrupo")));
+                usuario.getGrupoCollection().remove(grupo);
+                grupo.getUsuarioCollection().remove(usuario);
+                String nombreGrupo = (String) request.getParameter("nombreGrupo");
+                nombreGrupo = new String(nombreGrupo.getBytes("ISO-8859-1"), "UTF8");
+                grupo.setNombre(nombreGrupo);
+
+                if (((String) request.getParameter("privacidad")).toUpperCase().equals("PRIVADO")) {
+                    grupo.setPrivacidad(BigInteger.ONE);
+                } else {
+                    grupo.setPrivacidad(BigInteger.ZERO);
+                }
+                grupo.getUsuarioCollection().add(usuario);
+                grupoFacade.edit(grupo);
+
+                //grupo.getUsuarioCollection().add(usuario);
+                usuario.getGrupoCollection().add(grupo);
+
+                usuarioFacade.edit(usuario);
+
+                response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+
+            } else {
+                Grupo grupo = grupoFacade.find(new BigDecimal((String) request.getParameter("idGrupo")));
+                request.setAttribute("grupo", grupo);
+                this.getServletContext().getRequestDispatcher("/editarGrupo.jsp").forward(request, response);
+            }
         }
     }
 

@@ -37,7 +37,7 @@ public class PostAddServlet extends HttpServlet {
     private PostFacade postFacade;
     @EJB
     private UsuarioFacade usuarioFacade;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,50 +49,53 @@ public class PostAddServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        //get session of the request
-        HttpSession session = request.getSession();
-        Usuario usuario=(Usuario) session.getAttribute("usuario");
-        
-        List<Post> listaPost;
-        
-        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
-        
-        String descrip=mapDatosForm.get("descripcion");
-        descrip = new String(descrip.getBytes("ISO-8859-1"),"UTF8");
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //get session of the request
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+            List<Post> listaPost;
+
+            Map<String, String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
+
+            String descrip = mapDatosForm.get("descripcion");
+            descrip = new String(descrip.getBytes("ISO-8859-1"), "UTF8");
 //        String img=request.getParameter("imagen");
-        
-        if(!descrip.equals("") || descrip!=null){
-            
-            //Lista Post de un Usuario
-            listaPost=(List)usuario.getPostCollection();
 
-            //Añadir post con facade persist a base de datos
-            Post p=new Post();
-            p.setIdUsuario(usuario);
-            p.setDescripcion(descrip); //request.getParameter("postContenido")
-            p.setFecha(new Date());
-            p.setImagen(mapDatosForm.get("imagen"));
+            if (!descrip.equals("") || descrip != null) {
 
-            //Actualizamos la lista de Post del Usuario
-            listaPost.add(p);
+                //Lista Post de un Usuario
+                listaPost = (List) usuario.getPostCollection();
 
-            //Añadimos el post a la BD
-            postFacade.create(p);
+                //Añadir post con facade persist a base de datos
+                Post p = new Post();
+                p.setIdUsuario(usuario);
+                p.setDescripcion(descrip); //request.getParameter("postContenido")
+                p.setFecha(new Date());
+                p.setImagen(mapDatosForm.get("imagen"));
 
-            // Actualizamos la relacion USUARIO-POST (MURO)
-            usuarioFacade.edit(usuario);
-            
-            response.sendRedirect(request.getContextPath() + "/MuroServlet");
-        }else{
-            response.sendRedirect(request.getContextPath() + "/postAdd.jsp");
-        }
-        
-        //Redirect to newjsp.jsp ####PRUEBAS####
+                //Actualizamos la lista de Post del Usuario
+                listaPost.add(p);
+
+                //Añadimos el post a la BD
+                postFacade.create(p);
+
+                // Actualizamos la relacion USUARIO-POST (MURO)
+                usuarioFacade.edit(usuario);
+
+                response.sendRedirect(request.getContextPath() + "/MuroServlet");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/postAdd.jsp");
+            }
+
+            //Redirect to newjsp.jsp ####PRUEBAS####
 //        request.setAttribute("postContenido", img);
 //        RequestDispatcher rd;
 //        rd= this.getServletContext().getRequestDispatcher("/newjsp.jsp");
 //        rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -31,17 +31,20 @@ public class LogoutServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        /*
-          Ahora mismo no sé que más debería haber en el logout, porque en realidad no usamos la sesión...
-          Le pasamos la id, que le habíamos puesto request.getSession().getAttribute("idUser", idUser);
-          Pero es lo mismo que pasarle solo la variable idUser que ya había, lo he cambiado, pero ya lo veremos 
-          juntos.
-        */
-        
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            /*
+             Ahora mismo no sé que más debería haber en el logout, porque en realidad no usamos la sesión...
+             Le pasamos la id, que le habíamos puesto request.getSession().getAttribute("idUser", idUser);
+             Pero es lo mismo que pasarle solo la variable idUser que ya había, lo he cambiado, pero ya lo veremos 
+             juntos.
+             */
+
 //        request.getSession().setAttribute("user", null); 
-        request.getSession().invalidate();
-        this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response); 
+            request.getSession().invalidate();
+            this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

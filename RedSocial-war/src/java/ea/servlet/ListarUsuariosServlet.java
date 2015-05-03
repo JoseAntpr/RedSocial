@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListarUsuariosServlet", urlPatterns = {"/ListarUsuariosServlet"})
 public class ListarUsuariosServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -38,14 +39,17 @@ public class ListarUsuariosServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-            List<Usuario> lista = usuarioFacade.findAll();            
-            
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            List<Usuario> lista = usuarioFacade.findAll();
+
             request.setAttribute("listaUsuarios", lista);
 
             RequestDispatcher rd;
             rd = this.getServletContext().getRequestDispatcher("/bloquearUsuario.jsp");
             rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

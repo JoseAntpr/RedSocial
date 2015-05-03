@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EditarPasswordServlet", urlPatterns = {"/EditarPasswordServlet"})
 public class EditarPasswordServlet extends HttpServlet {
+
     @EJB
     private UsuarioFacade usuarioFacade;
 
@@ -37,29 +38,30 @@ public class EditarPasswordServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-            String password = (String) request.getParameter("password"); 
-            password = new String(password.getBytes("ISO-8859-1"),"UTF8");
-            String passwordR = (String) request.getParameter("passwordR"); 
-            passwordR = new String(passwordR.getBytes("ISO-8859-1"),"UTF8");
-           
-            if (password.compareTo(passwordR)==0){
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+            String password = (String) request.getParameter("password");
+            password = new String(password.getBytes("ISO-8859-1"), "UTF8");
+            String passwordR = (String) request.getParameter("passwordR");
+            passwordR = new String(passwordR.getBytes("ISO-8859-1"), "UTF8");
+
+            if (password.compareTo(passwordR) == 0) {
                 usuarioFacade.editarPass(usuario, password);
-                
-                 //Esto es por como esta implementado el muro:
-            BigDecimal idUser = usuario.getIdUsuario();
-            request.getSession().setAttribute("idUser", idUser);
-            
-            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+request.getSession().getAttribute("idUser"));
+
+                //Esto es por como esta implementado el muro:
+                BigDecimal idUser = usuario.getIdUsuario();
+                request.getSession().setAttribute("idUser", idUser);
+
+                response.sendRedirect(request.getContextPath() + "/MuroServlet?usuarioMuro=" + request.getSession().getAttribute("idUser"));
+            } else {
+
+                String mensaje = "Las contraseñas no coinciden.";
+                request.setAttribute("mensaje", mensaje);
+                this.getServletContext().getRequestDispatcher("/cambiarPassError.jsp").forward(request, response);
             }
-            else{
-                
-               String mensaje = "Las contraseñas no coinciden.";
-               request.setAttribute("mensaje", mensaje);                
-               this.getServletContext().getRequestDispatcher("/cambiarPassError.jsp").forward(request, response);      
-            }         
-           
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

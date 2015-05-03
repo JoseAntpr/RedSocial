@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "PostDeleteServlet", urlPatterns = {"/PostDeleteServlet"})
 public class PostDeleteServlet extends HttpServlet {
+
     @EJB
     private PostFacade postFacade;
 
@@ -42,32 +43,33 @@ public class PostDeleteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //get session of the request
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        //get session of the request
-        HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+            String tipoBorrado = request.getParameter("tipo_borrado");
+            String idGuardada = request.getParameter("idGuardada");
+            BigDecimal idPost = new BigDecimal(idGuardada);
 
-        String tipoBorrado = request.getParameter("tipo_borrado");
-        String idGuardada = request.getParameter("idGuardada");
-        BigDecimal idPost = new BigDecimal(idGuardada);
-
-        if (tipoBorrado.equals("usuario")) {
+            if (tipoBorrado.equals("usuario")) {
 
             //listapostUsuario.remove
-            //postFacade.remove(idPost);
-            //usuarioFacade.edit(usuario)
-            postFacade.deletePost(idPost);
+                //postFacade.remove(idPost);
+                //usuarioFacade.edit(usuario)
+                postFacade.deletePost(idPost);
 
-            response.sendRedirect(request.getContextPath() + "/MuroServlet");
+                response.sendRedirect(request.getContextPath() + "/MuroServlet");
 //            response.sendRedirect(request.getContextPath()+"/MuroServlet?usuarioMuro="+usuario.getIdUsuario());
-        } else if (tipoBorrado.equals("from_grupo")) {
-            postFacade.deletePostGrupo(idPost, usuario);
-            
-            
-            response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + request.getParameter("idGrupoElegido"));
-//            response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioMuro=" + usuario.getIdUsuario());
-        }
+            } else if (tipoBorrado.equals("from_grupo")) {
+                postFacade.deletePostGrupo(idPost, usuario);
 
+                response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + request.getParameter("idGrupoElegido"));
+//            response.sendRedirect(request.getContextPath() + "/GrupoServlet?usuarioMuro=" + usuario.getIdUsuario());
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

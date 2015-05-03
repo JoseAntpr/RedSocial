@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 /**
  *
  * @author fran
@@ -57,59 +56,58 @@ public class GrupoCrearPostServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
+        if (request.getSession().getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        } else {
+            //get session of the request
+            HttpSession session = request.getSession();
+            Usuario miembro = (Usuario) session.getAttribute("usuario");
 
-        //get session of the request
-        HttpSession session = request.getSession();
-        Usuario miembro = (Usuario) session.getAttribute("usuario");
-
-        // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
+            // OBTENER DESCRIPCIÓN Y SUBIR LA IMAGEN
 //        Map<String,String> mapDatosForm = postFacade.obtenerDatosPost(request);
-        Map<String,String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
-        
-        
-        // Recuperamos el grupo
-        BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
-        Grupo grupo = grupoFacade.find(id_grupo);
-        String descrip = mapDatosForm.get("descripcion");
-        descrip = new String(descrip.getBytes("ISO-8859-1"),"UTF8");
-        // Creamos el Post
-        Post post = new Post();
-        post.setIdUsuario(miembro);
-        post.setIdGrupo(grupo);
-        post.setDescripcion(descrip);
-        post.setFecha( new Date());
-        String image = mapDatosForm.get("imagen");
-        if (!image.equals("")){
-            post.setImagen(image);
-        }else{
-            post.setImagen(null);
+            Map<String, String> mapDatosForm = postFacade.obtenerDatosFormConImagen(request);
+
+            // Recuperamos el grupo
+            BigDecimal id_grupo = new BigDecimal(mapDatosForm.get("id_grupo"));
+            Grupo grupo = grupoFacade.find(id_grupo);
+            String descrip = mapDatosForm.get("descripcion");
+            descrip = new String(descrip.getBytes("ISO-8859-1"), "UTF8");
+            // Creamos el Post
+            Post post = new Post();
+            post.setIdUsuario(miembro);
+            post.setIdGrupo(grupo);
+            post.setDescripcion(descrip);
+            post.setFecha(new Date());
+            String image = mapDatosForm.get("imagen");
+            if (!image.equals("")) {
+                post.setImagen(image);
+            } else {
+                post.setImagen(null);
+            }
+
+            // Añadimos el post a la DB
+            postFacade.create(post);
+
+            // Añadimos el post a la coleccion de post del grupo
+            grupo.getPostCollection().add(post);
+
+            // Actualizamos el grupo con el post ya añadido
+            grupoFacade.edit(grupo);
+
+            // Añadimos el post a la coleccion de post del miembro creador
+            miembro.getPostCollection().add(post);
+
+            // Actualizamos el usuario con el post ya añadido
+            usuarioFacade.edit(miembro);
+
+            session.setAttribute("usuario", miembro);
+            session.setAttribute("usuarioMuro", miembro);
+
+            //redirect to the grupo servlet 
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
+
         }
-
-        // Añadimos el post a la DB
-        postFacade.create(post);
-
-        // Añadimos el post a la coleccion de post del grupo
-        grupo.getPostCollection().add(post);
-
-        // Actualizamos el grupo con el post ya añadido
-        grupoFacade.edit(grupo);
-
-        // Añadimos el post a la coleccion de post del miembro creador
-        miembro.getPostCollection().add(post);
-
-        // Actualizamos el usuario con el post ya añadido
-        usuarioFacade.edit(miembro);
-        
-        session.setAttribute("usuario", miembro);
-        session.setAttribute("usuarioMuro", miembro);
-        
-
-        //redirect to the grupo servlet 
-        response.sendRedirect(request.getContextPath() + "/GrupoServlet?idGrupoElegido=" + grupo.getIdGrupo());
-
     }
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
