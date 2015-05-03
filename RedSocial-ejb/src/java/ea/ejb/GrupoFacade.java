@@ -48,8 +48,22 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return grupo;
     }
 
-    public void eliminarGrupo(Grupo grupo) {
-        remove(grupo);
+    public void eliminarGrupo(Grupo grupoEliminar, Usuario usuario) {
+        
+        // Eliminamos el grupo de cada miembro y lo actualizamos en BD
+        for (Usuario u : grupoEliminar.getUsuarioCollection()){
+            if (u.getIdUsuario().equals(usuario.getIdUsuario())){
+//                u.getGrupoCollection().remove(grupoEliminar);
+//                usuario = u;
+                usuario.getGrupoCollection().remove(grupoEliminar);
+                usuarioFacade.edit(usuario);
+            }
+            u.getGrupoCollection().remove(grupoEliminar);
+            usuarioFacade.edit(u);
+        }
+        
+        // Eliminamos el grupo en la BD
+        remove(grupoEliminar);
 
     }
 

@@ -48,7 +48,7 @@ public class PostDeleteServlet extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         String tipoBorrado = request.getParameter("tipo_borrado");
-        String idGuardada = request.getParameter("idPost");
+        String idGuardada = request.getParameter("idGuardada");
         BigDecimal idPost = new BigDecimal(idGuardada);
 
         if (tipoBorrado.equals("usuario")) {

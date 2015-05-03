@@ -6,6 +6,7 @@
 package ea.servlet;
 
 import ea.ejb.GrupoFacade;
+import ea.ejb.UsuarioFacade;
 import ea.entity.Grupo;
 import ea.entity.Usuario;
 import java.io.IOException;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "EliminarGrupoServlet", urlPatterns = {"/EliminarGrupoServlet"})
 public class EliminarGrupoServlet extends HttpServlet {
+    @EJB
+    private UsuarioFacade usuarioFacade;
     @EJB
     private GrupoFacade grupoFacade;
     
@@ -48,17 +51,26 @@ public class EliminarGrupoServlet extends HttpServlet {
         Usuario usuario = (Usuario)session.getAttribute("usuario");
         Usuario usuarioMuro = (Usuario)session.getAttribute("usuarioMuro");
         
+        
 
-        BigDecimal idGrupoEliminiar = new BigDecimal((String)request.getParameter("idGrupo"));
+        if (usuario.getIdUsuario().equals(usuarioMuro.getIdUsuario())){
+            
+            BigDecimal idGrupoEliminiar = new BigDecimal((String)request.getParameter("idGrupo"));
+            Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
+            
+            // Solo si el usuario es administrador del grupo puede borrar el grupo
+            if (usuario.getIdUsuario().equals(new BigDecimal(grupoEliminar.getIdAdministrador().doubleValue()))){
+                
+                // Elimina el grupo de todos los miembros y devuelve el usuario sesion actualizado
+                grupoFacade.eliminarGrupo(grupoEliminar, usuario);
+
+                session.setAttribute("usuario", usuario);
+                session.setAttribute("usuarioMuro", usuario);
+            }
+
+        }
+
         
-        Grupo grupoEliminar = grupoFacade.find(idGrupoEliminiar);
-        
-        grupoFacade.eliminarGrupo(grupoEliminar);
-        
-        usuario.getGrupoCollection().remove(grupoEliminar);
-        
-        session.setAttribute("usuario", usuario);
-        session.setAttribute("usuarioMuro", usuario);
         
         
         
